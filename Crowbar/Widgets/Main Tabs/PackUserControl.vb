@@ -18,10 +18,10 @@ Public Class PackUserControl
 #Region "Init and Free"
 
 	Private Sub Init()
-		Me.InputComboBox.DisplayMember = "Value"
-		Me.InputComboBox.ValueMember = "Key"
-		Me.InputComboBox.DataSource = EnumHelper.ToList(GetType(PackInputOptions))
-		Me.InputComboBox.DataBindings.Add("SelectedValue", TheApp.Settings, "PackMode", False, DataSourceUpdateMode.OnPropertyChanged)
+		Me.InputComboUserControl.DataSource = EnumHelper.ToList(GetType(PackInputOptions))
+		Me.InputComboUserControl.ValueMember = "Key"
+		Me.InputComboUserControl.DisplayMember = "Value"
+		Me.InputComboUserControl.DataBindings.Add("SelectedValue", TheApp.Settings, "PackMode", False, DataSourceUpdateMode.OnPropertyChanged)
 
 		Me.InputPathFileNameTextBox.DataBindings.Add("Text", TheApp.Settings, "PackInputPath", False, DataSourceUpdateMode.OnValidation)
 
@@ -31,18 +31,18 @@ Public Class PackUserControl
 		Me.UpdateOutputPathWidgets()
 
 		'NOTE: Prevent changing this combobox's SelectedIndex when another combobox's (which also accesses "SelectedIndex" and TheApp.Settings) SelectedIndex changes.
-		Me.GameSetupComboBox.BindingContext = New BindingContext()
+		Me.GameSetupComboUserControl.BindingContext = New BindingContext()
 		'NOTE: The DataSource, DisplayMember, and ValueMember need to be set before DataBindings, or else an exception is raised.
-		Me.GameSetupComboBox.DisplayMember = "GameName"
-		Me.GameSetupComboBox.ValueMember = "GameName"
-		Me.GameSetupComboBox.DataSource = TheApp.Settings.GameSetups
-		Me.GameSetupComboBox.DataBindings.Add("SelectedIndex", TheApp.Settings, "PackGameSetupSelectedIndex", False, DataSourceUpdateMode.OnPropertyChanged)
+		Me.GameSetupComboUserControl.DataSource = TheApp.Settings.GameSetups
+		Me.GameSetupComboUserControl.ValueMember = "GameName"
+		Me.GameSetupComboUserControl.DisplayMember = "GameName"
+		Me.GameSetupComboUserControl.DataBindings.Add("SelectedIndex", TheApp.Settings, "PackGameSetupSelectedIndex", False, DataSourceUpdateMode.OnPropertyChanged)
 
 		Me.InitCrowbarOptions()
 		Me.InitPackerOptions()
 
 		Me.thePackedRelativePathFileNames = New BindingListEx(Of String)
-		Me.PackedFilesComboBox.DataSource = Me.thePackedRelativePathFileNames
+		Me.PackedFilesComboUserControl.DataSource = Me.thePackedRelativePathFileNames
 
 		Me.UpdateWidgets(False)
 		Me.UpdatePackerOptions()
@@ -51,7 +51,9 @@ Public Class PackUserControl
 		AddHandler TheApp.Packer.ProgressChanged, AddressOf Me.PackerBackgroundWorker_ProgressChanged
 		AddHandler TheApp.Packer.RunWorkerCompleted, AddressOf Me.PackerBackgroundWorker_RunWorkerCompleted
 
+		AddHandler Me.InputComboUserControl.SelectedValueChanged, AddressOf Me.InputComboUserControl_SelectedValueChanged
 		AddHandler Me.InputPathFileNameTextBox.DataBindings("Text").Parse, AddressOf FileManager.ParsePath
+		AddHandler Me.OutputPathComboUserControl.SelectedValueChanged, AddressOf Me.OutputPathComboUserControl_SelectedValueChanged
 		AddHandler Me.OutputPathTextBox.DataBindings("Text").Parse, AddressOf FileManager.ParsePathFileName
 	End Sub
 
@@ -59,12 +61,12 @@ Public Class PackUserControl
 		Dim anEnumList As IList
 
 		anEnumList = EnumHelper.ToList(GetType(PackOutputPathOptions))
-		Me.OutputPathComboBox.DataBindings.Clear()
+		Me.OutputPathComboUserControl.DataBindings.Clear()
 		Try
-			Me.OutputPathComboBox.DisplayMember = "Value"
-			Me.OutputPathComboBox.ValueMember = "Key"
-			Me.OutputPathComboBox.DataSource = anEnumList
-			Me.OutputPathComboBox.DataBindings.Add("SelectedValue", TheApp.Settings, "PackOutputFolderOption", False, DataSourceUpdateMode.OnPropertyChanged)
+			Me.OutputPathComboUserControl.DataSource = anEnumList
+			Me.OutputPathComboUserControl.ValueMember = "Key"
+			Me.OutputPathComboUserControl.DisplayMember = "Value"
+			Me.OutputPathComboUserControl.DataBindings.Add("SelectedValue", TheApp.Settings, "PackOutputFolderOption", False, DataSourceUpdateMode.OnPropertyChanged)
 
 			' Do not use this line because it will override the value automatically assigned by the data bindings above.
 			'Me.OutputPathComboBox.SelectedIndex = 0
@@ -101,15 +103,15 @@ Public Class PackUserControl
 		Me.OutputPathTextBox.DataBindings.Clear()
 		Me.OutputParentPathTextBox.DataBindings.Clear()
 
-		Me.GameSetupComboBox.DataSource = Nothing
-		Me.GameSetupComboBox.DataBindings.Clear()
+		Me.GameSetupComboUserControl.DataSource = Nothing
+		Me.GameSetupComboUserControl.DataBindings.Clear()
 
 		Me.FreeCrowbarOptions()
 		Me.FreePackerOptions()
 
-		Me.InputComboBox.DataBindings.Clear()
+		Me.InputComboUserControl.DataBindings.Clear()
 
-		Me.PackedFilesComboBox.DataBindings.Clear()
+		Me.PackedFilesComboUserControl.DataBindings.Clear()
 	End Sub
 
 	Private Sub FreeCrowbarOptions()
@@ -141,7 +143,7 @@ Public Class PackUserControl
 
 		'NOTE: This code prevents Visual Studio or Windows often inexplicably incorrectly positioning or sizing these widgets.
 		Workarounds.WorkaroundForFrameworkAnchorRightLocationBug(Me.SetUpGamesButton)
-		Workarounds.WorkaroundForFrameworkAnchorRightSizingBug(Me.GameSetupComboBox, Me.SetUpGamesButton)
+		Workarounds.WorkaroundForFrameworkAnchorRightSizingBug(Me.GameSetupComboUserControl, Me.SetUpGamesButton)
 
 		'NOTE: This code prevents Visual Studio or Windows often inexplicably incorrectly positioning these widgets.
 		Workarounds.WorkaroundForFrameworkAnchorRightLocationBug(Me.PackOptionsUseDefaultsButton)
@@ -157,6 +159,12 @@ Public Class PackUserControl
 #End Region
 
 #Region "Child Widget Event Handlers"
+
+	Private Sub InputComboUserControl_SelectedValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+		' Because this enum is passed to DataSource as an IList, must manually bind for this direction.
+		TheApp.Settings.PackMode = CType(InputComboUserControl.SelectedValue, PackInputOptions)
+		'Me.UpdateDecompileMode()
+	End Sub
 
 	Private Sub BrowseForInputFolderOrFileNameButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BrowseForInputFolderOrFileNameButton.Click
 		Dim openFileWdw As New OpenFileDialog()
@@ -186,6 +194,12 @@ Public Class PackUserControl
 
 	Private Sub GotoInputPathButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GotoInputPathButton.Click
 		FileManager.OpenWindowsExplorer(TheApp.Settings.PackInputPath)
+	End Sub
+
+	Private Sub OutputPathComboUserControl_SelectedValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+		' Because this enum is passed to DataSource as an IList, must manually bind for this direction.
+		TheApp.Settings.PackOutputFolderOption = CType(OutputPathComboUserControl.SelectedValue, PackOutputPathOptions)
+		'Me.UpdateOutputPathWidgets()
 	End Sub
 
 	Private Sub OutputPathTextBox_DragDrop(sender As Object, e As DragEventArgs) Handles OutputPathTextBox.DragDrop
@@ -250,7 +264,7 @@ Public Class PackUserControl
 
 	Private Sub GotoPackedFileButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GotoPackedFileButton.Click
 		Dim pathFileName As String
-		pathFileName = TheApp.Packer.GetOutputPathFileName(Me.thePackedRelativePathFileNames(Me.PackedFilesComboBox.SelectedIndex))
+		pathFileName = TheApp.Packer.GetOutputPathFileName(Me.thePackedRelativePathFileNames(Me.PackedFilesComboUserControl.SelectedIndex))
 		FileManager.OpenWindowsExplorer(pathFileName)
 	End Sub
 
@@ -348,11 +362,11 @@ Public Class PackUserControl
 	Private Sub UpdateWidgets(ByVal packerIsRunning As Boolean)
 		TheApp.Settings.PackerIsRunning = packerIsRunning
 
-		Me.InputComboBox.Enabled = Not packerIsRunning
+		Me.InputComboUserControl.Enabled = Not packerIsRunning
 		Me.InputPathFileNameTextBox.Enabled = Not packerIsRunning
 		Me.BrowseForInputFolderOrFileNameButton.Enabled = Not packerIsRunning
 
-		Me.OutputPathComboBox.Enabled = Not packerIsRunning
+		Me.OutputPathComboUserControl.Enabled = Not packerIsRunning
 		Me.OutputPathTextBox.Enabled = Not packerIsRunning
 		Me.OutputParentPathTextBox.Enabled = Not packerIsRunning
 		Me.UpdateOutputPathWidgets(packerIsRunning)
@@ -365,9 +379,9 @@ Public Class PackUserControl
 		Me.SkipCurrentFolderButton.Enabled = packerIsRunning
 		Me.UseAllInPublishButton.Enabled = Not packerIsRunning AndAlso Me.thePackedRelativePathFileNames.Count > 0
 
-		Me.PackedFilesComboBox.Enabled = Not packerIsRunning AndAlso Me.thePackedRelativePathFileNames.Count > 0
+		Me.PackedFilesComboUserControl.Enabled = Not packerIsRunning AndAlso Me.thePackedRelativePathFileNames.Count > 0
 		'TODO: Check for the various Pack extensions instead of just for "vpk".
-		Me.UseInPublishButton.Enabled = Not packerIsRunning AndAlso Me.thePackedRelativePathFileNames.Count > 0 AndAlso (Path.GetExtension(Me.thePackedRelativePathFileNames(Me.PackedFilesComboBox.SelectedIndex)) = ".vpk")
+		Me.UseInPublishButton.Enabled = Not packerIsRunning AndAlso Me.thePackedRelativePathFileNames.Count > 0 AndAlso (Path.GetExtension(Me.thePackedRelativePathFileNames(Me.PackedFilesComboUserControl.SelectedIndex)) = ".vpk")
 		Me.GotoPackedFileButton.Enabled = Not packerIsRunning AndAlso Me.thePackedRelativePathFileNames.Count > 0
 	End Sub
 
@@ -377,8 +391,8 @@ Public Class PackUserControl
 			'NOTE: Do not sort because the list is already sorted by file and then by folder.
 			'Me.theCompiledRelativePathFileNames.Sort()
 			'NOTE: Need to set to nothing first to force it to update.
-			Me.PackedFilesComboBox.DataSource = Nothing
-			Me.PackedFilesComboBox.DataSource = Me.thePackedRelativePathFileNames
+			Me.PackedFilesComboUserControl.DataSource = Nothing
+			Me.PackedFilesComboUserControl.DataSource = Me.thePackedRelativePathFileNames
 		End If
 	End Sub
 
@@ -422,9 +436,11 @@ Public Class PackUserControl
 		TheApp.Settings.PackOptionsText = ""
 		Me.PackOptionsTextBox.Text = ""
 		If TheApp.Settings.PackMode = PackInputOptions.ParentFolder Then
-			For Each aChildPath As String In Directory.GetDirectories(TheApp.Settings.PackInputPath)
-				Me.SetPackerOptionsTextPerFolder(aChildPath)
-			Next
+			If TheApp.Settings.PackInputPath <> "" Then
+				For Each aChildPath As String In Directory.GetDirectories(TheApp.Settings.PackInputPath)
+					Me.SetPackerOptionsTextPerFolder(aChildPath)
+				Next
+			End If
 		Else
 			Me.SetPackerOptionsTextPerFolder(TheApp.Settings.PackInputPath)
 		End If

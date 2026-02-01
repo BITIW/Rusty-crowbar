@@ -44,13 +44,10 @@ Partial Class AboutUserControl
 		'
 		'ProductInfoTextBox
 		'
-		Me.ProductInfoTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
-		Me.ProductInfoTextBox.BorderColor = System.Drawing.Color.Green
-		Me.ProductInfoTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+		Me.ProductInfoTextBox.BorderColor = System.Drawing.Color.Empty
 		Me.ProductInfoTextBox.CueBannerText = ""
 		Me.ProductInfoTextBox.DetectUrls = False
 		Me.ProductInfoTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.ProductInfoTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.ProductInfoTextBox.Location = New System.Drawing.Point(3, 203)
 		Me.ProductInfoTextBox.Name = "ProductInfoTextBox"
 		Me.ProductInfoTextBox.ReadOnly = True
@@ -63,13 +60,10 @@ Partial Class AboutUserControl
 		'
 		'ProductDescriptionTextBox
 		'
-		Me.ProductDescriptionTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
-		Me.ProductDescriptionTextBox.BorderColor = System.Drawing.Color.Green
-		Me.ProductDescriptionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+		Me.ProductDescriptionTextBox.BorderColor = System.Drawing.Color.Empty
 		Me.ProductDescriptionTextBox.CueBannerText = ""
 		Me.ProductDescriptionTextBox.DetectUrls = False
 		Me.ProductDescriptionTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.ProductDescriptionTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.ProductDescriptionTextBox.Location = New System.Drawing.Point(175, 3)
 		Me.ProductDescriptionTextBox.Name = "ProductDescriptionTextBox"
 		Me.ProductDescriptionTextBox.ReadOnly = True
@@ -81,7 +75,6 @@ Partial Class AboutUserControl
 		'
 		'ProductLogoButton
 		'
-		Me.ProductLogoButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
 		Me.ProductLogoButton.Cursor = System.Windows.Forms.Cursors.Hand
 		Me.ProductLogoButton.Image = Global.Crowbar.My.Resources.Resources.crowbar_icon_large
 		Me.ProductLogoButton.Location = New System.Drawing.Point(15, 3)
@@ -93,7 +86,6 @@ Partial Class AboutUserControl
 		'
 		'AuthorIconButton
 		'
-		Me.AuthorIconButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
 		Me.AuthorIconButton.Cursor = System.Windows.Forms.Cursors.Hand
 		Me.AuthorIconButton.Image = Global.Crowbar.My.Resources.Resources.macaw
 		Me.AuthorIconButton.Location = New System.Drawing.Point(15, 257)
@@ -105,13 +97,10 @@ Partial Class AboutUserControl
 		'
 		'CreditsTextBox
 		'
-		Me.CreditsTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
-		Me.CreditsTextBox.BorderColor = System.Drawing.Color.Green
-		Me.CreditsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+		Me.CreditsTextBox.BorderColor = System.Drawing.Color.Empty
 		Me.CreditsTextBox.CueBannerText = ""
 		Me.CreditsTextBox.DetectUrls = False
 		Me.CreditsTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.CreditsTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.CreditsTextBox.Location = New System.Drawing.Point(6, 20)
 		Me.CreditsTextBox.Name = "CreditsTextBox"
 		Me.CreditsTextBox.ReadOnly = True
@@ -154,7 +143,6 @@ Partial Class AboutUserControl
 		'
 		'Panel1
 		'
-		Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.Panel1.Controls.Add(Me.ProductLogoButton)
 		Me.Panel1.Controls.Add(Me.ProductNameLinkLabel)
 		Me.Panel1.Controls.Add(Me.ProductInfoTextBox)
@@ -166,7 +154,6 @@ Partial Class AboutUserControl
 		Me.Panel1.Controls.Add(Me.ProductDescriptionTextBox)
 		Me.Panel1.Controls.Add(Me.SpecialThanksGroupBox)
 		Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-		Me.Panel1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.Panel1.Location = New System.Drawing.Point(0, 0)
 		Me.Panel1.Margin = New System.Windows.Forms.Padding(2)
 		Me.Panel1.Name = "Panel1"
@@ -215,11 +202,9 @@ Partial Class AboutUserControl
 		'
 		'SpecialThanksGroupBox
 		'
-		Me.SpecialThanksGroupBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.SpecialThanksGroupBox.Controls.Add(Me.CreditsTextBox)
 		Me.SpecialThanksGroupBox.Controls.Add(Me.Credits2TextBox)
 		Me.SpecialThanksGroupBox.Controls.Add(Me.Credits3TextBox)
-		Me.SpecialThanksGroupBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.SpecialThanksGroupBox.IsReadOnly = False
 		Me.SpecialThanksGroupBox.Location = New System.Drawing.Point(175, 145)
 		Me.SpecialThanksGroupBox.Name = "SpecialThanksGroupBox"
@@ -231,13 +216,10 @@ Partial Class AboutUserControl
 		'
 		'Credits2TextBox
 		'
-		Me.Credits2TextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
-		Me.Credits2TextBox.BorderColor = System.Drawing.Color.Green
-		Me.Credits2TextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+		Me.Credits2TextBox.BorderColor = System.Drawing.Color.Empty
 		Me.Credits2TextBox.CueBannerText = ""
 		Me.Credits2TextBox.DetectUrls = False
 		Me.Credits2TextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.Credits2TextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.Credits2TextBox.Location = New System.Drawing.Point(203, 20)
 		Me.Credits2TextBox.Name = "Credits2TextBox"
 		Me.Credits2TextBox.ReadOnly = True
@@ -252,13 +234,10 @@ Partial Class AboutUserControl
 		'
 		'Credits3TextBox
 		'
-		Me.Credits3TextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
-		Me.Credits3TextBox.BorderColor = System.Drawing.Color.Green
-		Me.Credits3TextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+		Me.Credits3TextBox.BorderColor = System.Drawing.Color.Empty
 		Me.Credits3TextBox.CueBannerText = ""
 		Me.Credits3TextBox.DetectUrls = False
 		Me.Credits3TextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.Credits3TextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.Credits3TextBox.Location = New System.Drawing.Point(400, 20)
 		Me.Credits3TextBox.Name = "Credits3TextBox"
 		Me.Credits3TextBox.ReadOnly = True

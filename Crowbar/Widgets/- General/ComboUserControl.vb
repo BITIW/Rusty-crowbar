@@ -2,6 +2,8 @@
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms.VisualStyles
 
+'[30-Jan-2026] For now, must set these 3 properties in this order: DataSource, ValueMember, DisplayMember
+
 Public Class ComboUserControl
 
 #Region "Creation and Destruction"
@@ -156,13 +158,13 @@ Public Class ComboUserControl
 		End Get
 		Set
 			If Me.TextHistoryDataGridView.Rows.Count > 0 Then
-				If Me.TextHistoryDataGridView.SelectedRows.Count > 0 Then
-					Me.TextHistoryDataGridView.SelectedRows(0).Selected = False
+				Dim row As DataGridViewRow = Me.TextHistoryDataGridView.Rows(Value)
+				If Not row.Selected Then
+					If Me.TextHistoryDataGridView.SelectedRows.Count > 0 Then
+						Me.TextHistoryDataGridView.SelectedRows(0).Selected = False
+					End If
+					row.Selected = True
 				End If
-				Me.TextHistoryDataGridView.Rows(Value).Selected = True
-				'Me.ComboTextBox.Text = CStr(Me.TextHistoryDataGridView.Rows(Value).Cells(0).Value)
-				'RaiseEvent SelectedIndexChanged(Me, New EventArgs())
-				'RaiseEvent SelectedValueChanged(Me, New EventArgs())
 				Me.UpdateTextBoxWithSelectedHistoryText()
 			End If
 		End Set
@@ -183,17 +185,25 @@ Public Class ComboUserControl
 			Return aSelectedValue
 		End Get
 		Set
+			'[30-Jan-2026] https://stackoverflow.com/questions/56428261/why-is-it-that-unrelated-properties-are-also-being-called-multiple-times-in-winf
+			' According to this article, a call to any Property.Get in a Class 
+			' with INotifyPropertyChanged.PropertyChanged can ALSO call to any other Property.Get in the Class.
+			' I am seeing this with a call to Property.Set, so probably related.
+			' Thus, it is important to only set property if a new value is given, 
+			' to prevent unwanted updates that can lead to stack overflow.
 			If Me.TextHistoryDataGridView.Rows.Count > 0 Then
-				If Me.TextHistoryDataGridView.SelectedRows.Count > 0 Then
-					Me.TextHistoryDataGridView.SelectedRows(0).Selected = False
-				End If
 				For Each row As DataGridViewRow In Me.TextHistoryDataGridView.Rows
 					If Value.ToString() = row.Cells(0).Value.ToString() Then
-						row.Selected = True
-						Me.UpdateTextBoxWithSelectedHistoryText()
+						If Not row.Selected Then
+							If Me.TextHistoryDataGridView.SelectedRows.Count > 0 Then
+								Me.TextHistoryDataGridView.SelectedRows(0).Selected = False
+							End If
+							row.Selected = True
+						End If
 						Exit For
 					End If
 				Next
+				Me.UpdateTextBoxWithSelectedHistoryText()
 			End If
 		End Set
 	End Property
@@ -902,9 +912,11 @@ Public Class ComboUserControl
 				aSelectedValue = CStr(Me.TextHistoryDataGridView.SelectedRows(0).Cells(0).Value)
 			End If
 		End If
-		Me.Text = aSelectedValue
-		RaiseEvent SelectedIndexChanged(Me, New EventArgs())
-		RaiseEvent SelectedValueChanged(Me, New EventArgs())
+		If Me.Text <> aSelectedValue Then
+			Me.Text = aSelectedValue
+			RaiseEvent SelectedIndexChanged(Me, New EventArgs())
+			RaiseEvent SelectedValueChanged(Me, New EventArgs())
+		End If
 	End Sub
 
 #End Region
@@ -917,6 +929,7 @@ Public Class ComboUserControl
 	'Private theOriginalFont As Font
 	Protected theControlIsReadOnly As Boolean
 	Protected theComboPanelBorderColor As Color
+	Protected theDefaultSize As Size
 
 	Private WithEvents CustomMenu As ContextMenuStrip
 	Private WithEvents UndoToolStripMenuItem As New ToolStripMenuItem("&Undo")

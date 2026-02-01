@@ -4,8 +4,8 @@
 	Public Sub New()
 		MyBase.New()
 
-		Me.BackColor = WidgetConstants.WidgetBackColor
-		Me.Renderer = New ToolStripRendererOverride()
+		' Without explicitly setting any colors in the override, this seems to use Windows theme colors on Win11.
+		'Me.Renderer = New ToolStripRendererOverride()
 	End Sub
 
 	'Public Overloads Property Renderer() As ToolStripRenderer

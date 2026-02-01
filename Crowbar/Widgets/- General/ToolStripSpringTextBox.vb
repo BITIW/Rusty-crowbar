@@ -8,9 +8,6 @@ Public Class ToolStripSpringTextBox
 	Public Sub New()
 		MyBase.New()
 
-		Me.ForeColor = WidgetTextColor
-		Me.BackColor = WidgetDeepBackColor
-
 		'NOTE: Disable to use custom.
 		MyBase.BorderStyle = BorderStyle.FixedSingle
 	End Sub

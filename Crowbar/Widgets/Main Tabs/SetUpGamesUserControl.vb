@@ -16,14 +16,8 @@ Public Class SetUpGamesUserControl
 #Region "Init and Free"
 
 	Protected Sub Init()
-		'Me.GameSetupComboBox.DisplayMember = "GameName"
-		'Me.GameSetupComboBox.ValueMember = "GameName"
-		'Me.GameSetupComboBox.DataSource = TheApp.Settings.GameSetups
-		'Me.GameSetupComboBox.DataBindings.Add("SelectedIndex", TheApp.Settings, "SetUpGamesGameSetupSelectedIndex", False, DataSourceUpdateMode.OnPropertyChanged)
-
-		'NOTE: For ListBox (which is inside ComboUserControl), must assign DataSource before ValueMember.
+		'NOTE: For ComboUserControl, must assign DataSource before ValueMember.
 		Me.GameSetupComboUserControl.DataSource = TheApp.Settings.GameSetups
-		'Me.ComboUserControl1.DisplayMember = "GameName"
 		Me.GameSetupComboUserControl.ValueMember = "GameName"
 		Me.GameSetupComboUserControl.DataBindings.Add("SelectedIndex", TheApp.Settings, "SetUpGamesGameSetupSelectedIndex", False, DataSourceUpdateMode.OnPropertyChanged)
 
@@ -82,6 +76,8 @@ Public Class SetUpGamesUserControl
 
 		AddHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
 		AddHandler TheApp.Settings.GameSetups.ListChanged, AddressOf Me.GameSetups_ListChanged
+		AddHandler Me.GameSetupComboUserControl.SelectedIndexChanged, AddressOf Me.GameSetupComboUserControl_SelectedIndexChanged
+		AddHandler Me.EngineComboUserControl.SelectedValueChanged, AddressOf Me.EngineComboUserControl_SelectedValueChanged
 		AddHandler Me.SteamLibraryPathsDataGridView.SetMacroInSelectedGameSetupToolStripMenuItem.Click, AddressOf Me.SetMacroInSelectedGameSetupToolStripMenuItem_Click
 		AddHandler Me.SteamLibraryPathsDataGridView.SetMacroInAllGameSetupsToolStripMenuItem.Click, AddressOf Me.SetMacroInAllGameSetupsToolStripMenuItem_Click
 		AddHandler Me.SteamLibraryPathsDataGridView.ClearMacroInSelectedGameSetupToolStripMenuItem.Click, AddressOf Me.ClearMacroInSelectedGameSetupToolStripMenuItem_Click
@@ -93,6 +89,8 @@ Public Class SetUpGamesUserControl
 	Protected Sub Free()
 		RemoveHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
 		RemoveHandler TheApp.Settings.GameSetups.ListChanged, AddressOf Me.GameSetups_ListChanged
+		RemoveHandler Me.GameSetupComboUserControl.SelectedIndexChanged, AddressOf Me.GameSetupComboUserControl_SelectedIndexChanged
+		RemoveHandler Me.EngineComboUserControl.SelectedValueChanged, AddressOf Me.EngineComboUserControl_SelectedValueChanged
 		RemoveHandler Me.GamePathFileNameTextBox.DataBindings("Text").Parse, AddressOf Me.ParsePathFileName
 		RemoveHandler Me.SteamLibraryPathsDataGridView.SetMacroInSelectedGameSetupToolStripMenuItem.Click, AddressOf Me.SetMacroInSelectedGameSetupToolStripMenuItem_Click
 		RemoveHandler Me.SteamLibraryPathsDataGridView.SetMacroInAllGameSetupsToolStripMenuItem.Click, AddressOf Me.SetMacroInAllGameSetupsToolStripMenuItem_Click
@@ -127,20 +125,13 @@ Public Class SetUpGamesUserControl
 
 #Region "Child Widget Event Handlers"
 
-	'Private Sub GameSetupComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GameSetupComboBox.SelectedIndexChanged
-	'	Me.UpdateWidgets()
-	'	Me.UpdateWidgetsBasedOnGameEngine()
-	'End Sub
-	'------
-	'TODO: Instead of this Handles, use AddHandler after the DataSource and DataBindings are set to prevent unneeded processing.
-	Private Sub GameSetupComboUserControl_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GameSetupComboUserControl.SelectedIndexChanged
+	Private Sub GameSetupComboUserControl_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
 		Me.UpdateWidgets()
 		Me.UpdateWidgetsBasedOnGameEngine()
 	End Sub
 
-	'TODO: Instead of this Handles, use AddHandler after the DataSource and DataBindings are set to prevent unneeded processing.
-	Private Sub EngineComboUserControl_SelectedValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EngineComboUserControl.SelectedValueChanged
-		' Because GameEngine is passed to DataSource as an IList, must manually bind for this direction.
+	Private Sub EngineComboUserControl_SelectedValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+		' Because this enum is passed to DataSource as an IList, must manually bind for this direction.
 		Me.theSelectedGameSetup.GameEngine = CType(EngineComboUserControl.SelectedValue, GameEngine)
 		Me.UpdateWidgetsBasedOnGameEngine()
 	End Sub
@@ -554,12 +545,9 @@ Public Class SetUpGamesUserControl
 	End Sub
 
 	Private Sub UpdateGameEngineComboUserControl()
-		Dim anEnumList As IList
-
-		anEnumList = EnumHelper.ToList(GetType(GameEngine))
+		Dim anEnumList As IList = EnumHelper.ToList(GetType(GameEngine))
 		'NOTE: For now, remove the Source 2 value.
 		EnumHelper.RemoveFromList(GameEngine.Source2, anEnumList)
-
 		Me.EngineComboUserControl.DataBindings.Clear()
 		Try
 			Me.EngineComboUserControl.DataSource = anEnumList

@@ -31,15 +31,14 @@ Public Class UnpackUserControl
 
 		Me.PackagePathFileNameTextBox.DataBindings.Add("Text", TheApp.Settings, "UnpackPackagePathFolderOrFileName", False, DataSourceUpdateMode.OnValidation)
 
+		Me.InitOutputPathComboBox()
 		Me.OutputPathTextBox.DataBindings.Add("Text", TheApp.Settings, "UnpackOutputFullPath", False, DataSourceUpdateMode.OnValidation)
 		Me.OutputSamePathTextBox.DataBindings.Add("Text", TheApp.Settings, "UnpackOutputSamePath", False, DataSourceUpdateMode.OnValidation)
 		Me.OutputSubfolderTextBox.DataBindings.Add("Text", TheApp.Settings, "UnpackOutputSubfolderName", False, DataSourceUpdateMode.OnValidation)
-		Me.UpdateOutputPathComboBox()
 		Me.UpdateOutputPathWidgets()
 
 		'NOTE: Adding folder icon here means it is first in the image list, which is the icon used by default 
-		Dim anIcon As Bitmap
-		anIcon = Win32Api.GetShellIcon("folder", Win32Api.FILE_ATTRIBUTE_DIRECTORY)
+		Dim anIcon As Bitmap = Win32Api.GetShellIcon("folder", Win32Api.FILE_ATTRIBUTE_DIRECTORY)
 		Me.ImageList1.Images.Add("<Folder>", anIcon)
 		'NOTE: The TreeView.Sorted property does not show in Intellisense or Properties window.
 		Me.PackageTreeView.Sorted = True
@@ -76,12 +75,6 @@ Public Class UnpackUserControl
 		AddHandler Me.OutputPathTextBox.DataBindings("Text").Parse, AddressOf FileManager.ParsePathFileName
 	End Sub
 
-	Private Sub InitUnpackerOptions()
-		Me.FolderForEachPackageCheckBox.DataBindings.Add("Checked", TheApp.Settings, "UnpackFolderForEachPackageIsChecked", False, DataSourceUpdateMode.OnPropertyChanged)
-		Me.KeepFullPathCheckBox.DataBindings.Add("Checked", TheApp.Settings, "UnpackKeepFullPathIsChecked", False, DataSourceUpdateMode.OnPropertyChanged)
-		Me.LogFileCheckBox.DataBindings.Add("Checked", TheApp.Settings, "UnpackLogFileIsChecked", False, DataSourceUpdateMode.OnPropertyChanged)
-	End Sub
-
 	Private Sub Free()
 		RemoveHandler Me.PackagePathFileNameTextBox.DataBindings("Text").Parse, AddressOf FileManager.ParsePathFileName
 		RemoveHandler Me.OutputPathTextBox.DataBindings("Text").Parse, AddressOf FileManager.ParsePathFileName
@@ -99,10 +92,40 @@ Public Class UnpackUserControl
 		Me.OutputPathTextBox.DataBindings.Clear()
 		Me.OutputSamePathTextBox.DataBindings.Clear()
 		Me.OutputSubfolderTextBox.DataBindings.Clear()
+		Me.FreeOutputPathComboBox()
 
 		Me.FreeUnpackerOptions()
 
 		Me.UnpackedFilesComboBox.DataSource = Nothing
+	End Sub
+
+	Private Sub InitOutputPathComboBox()
+		Dim anEnumList As IList = EnumHelper.ToList(GetType(UnpackOutputPathOptions))
+		Me.OutputPathComboBox.DataBindings.Clear()
+		Try
+			'TODO: Delete this line when game addons folder option is implemented.
+			anEnumList.RemoveAt(UnpackOutputPathOptions.GameAddonsFolder)
+
+			Me.OutputPathComboBox.DataSource = anEnumList
+			Me.OutputPathComboBox.ValueMember = "Key"
+			Me.OutputPathComboBox.DisplayMember = "Value"
+			Me.OutputPathComboBox.DataBindings.Add("SelectedValue", TheApp.Settings, "UnpackOutputFolderOption", False, DataSourceUpdateMode.OnPropertyChanged)
+		Catch ex As Exception
+			Dim debug As Integer = 4242
+		End Try
+
+		AddHandler Me.OutputPathComboBox.SelectedValueChanged, AddressOf Me.OutputPathComboBox_SelectedValueChanged
+	End Sub
+
+	Private Sub FreeOutputPathComboBox()
+		RemoveHandler Me.OutputPathComboBox.SelectedValueChanged, AddressOf Me.OutputPathComboBox_SelectedValueChanged
+		Me.OutputPathComboBox.DataBindings.Clear()
+	End Sub
+
+	Private Sub InitUnpackerOptions()
+		Me.FolderForEachPackageCheckBox.DataBindings.Add("Checked", TheApp.Settings, "UnpackFolderForEachPackageIsChecked", False, DataSourceUpdateMode.OnPropertyChanged)
+		Me.KeepFullPathCheckBox.DataBindings.Add("Checked", TheApp.Settings, "UnpackKeepFullPathIsChecked", False, DataSourceUpdateMode.OnPropertyChanged)
+		Me.LogFileCheckBox.DataBindings.Add("Checked", TheApp.Settings, "UnpackLogFileIsChecked", False, DataSourceUpdateMode.OnPropertyChanged)
 	End Sub
 
 	Private Sub FreeUnpackerOptions()
@@ -239,6 +262,11 @@ Public Class UnpackUserControl
 		FileManager.OpenWindowsExplorer(TheApp.Settings.UnpackPackagePathFolderOrFileName)
 	End Sub
 
+	Private Sub OutputPathComboBox_SelectedValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+		' Because UnpackOutputPathOptions is passed to DataSource as an IList, must manually bind for this direction.
+		TheApp.Settings.UnpackOutputFolderOption = CType(Me.OutputPathComboBox.SelectedValue, UnpackOutputPathOptions)
+	End Sub
+
 	Private Sub OutputPathTextBox_DragDrop(sender As Object, e As DragEventArgs) Handles OutputPathTextBox.DragDrop
 		Dim pathFileNames() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
 		Dim pathFileName As String = pathFileNames(0)
@@ -319,7 +347,16 @@ Public Class UnpackUserControl
 
 	'NOTE: This is only needed because TreeView BackColor does not automatically change when Windows Theme is switched.
 	Private Sub PackageTreeView_SystemColorsChanged(sender As Object, e As EventArgs) Handles PackageTreeView.SystemColorsChanged
-		Me.PackageTreeView.BackColor = SystemColors.Control
+		Dim theme As TreeViewTheme = Nothing
+		' This check prevents problems with viewing and saving Forms in VS Designer.
+		If TheApp IsNot Nothing Then
+			theme = TheApp.Settings.SelectedAppTheme.TreeViewTheme
+		End If
+		If theme IsNot Nothing Then
+			Me.PackageTreeView.BackColor = theme.EnabledBackColor
+		Else
+			Me.PackageTreeView.BackColor = Control.DefaultBackColor
+		End If
 	End Sub
 
 	Private Sub CustomMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles CustomMenu.Opening
@@ -735,22 +772,43 @@ Public Class UnpackUserControl
 
 #Region "Private Methods"
 
-	Private Sub UpdateOutputPathComboBox()
-		Dim anEnumList As IList
-
-		anEnumList = EnumHelper.ToList(GetType(UnpackOutputPathOptions))
-		Me.OutputPathComboBox.DataBindings.Clear()
+	Private Sub UpdateUnpackMode()
+		Dim anEnumList As IList = EnumHelper.ToList(GetType(InputOptions))
+		Dim previousSelectedInputOption As InputOptions = TheApp.Settings.UnpackMode
+		Me.UnpackComboBox.DataBindings.Clear()
 		Try
-			'TODO: Delete this line when game addons folder option is implemented.
-			anEnumList.RemoveAt(UnpackOutputPathOptions.GameAddonsFolder)
+			If File.Exists(TheApp.Settings.UnpackPackagePathFolderOrFileName) Then
+				' Set file mode when a file is selected.
+				previousSelectedInputOption = InputOptions.File
+			ElseIf Directory.Exists(TheApp.Settings.UnpackPackagePathFolderOrFileName) Then
+				'NOTE: Remove in reverse index order.
+				Dim packageExtensions As List(Of String) = BasePackageFile.GetListOfPackageExtensions()
+				For Each packageExtension As String In packageExtensions
+					For Each anArchivePathFileName As String In Directory.GetFiles(TheApp.Settings.UnpackPackagePathFolderOrFileName, packageExtension)
+						If anArchivePathFileName.Length = 0 Then
+							anEnumList.RemoveAt(InputOptions.Folder)
+							Exit For
+						End If
+					Next
+					If Not anEnumList.Contains(InputOptions.Folder) Then
+						Exit For
+					End If
+				Next
+				anEnumList.RemoveAt(InputOptions.File)
+				'Else
+				'	Exit Try
+			End If
 
-			Me.OutputPathComboBox.DisplayMember = "Value"
-			Me.OutputPathComboBox.ValueMember = "Key"
-			Me.OutputPathComboBox.DataSource = anEnumList
-			Me.OutputPathComboBox.DataBindings.Add("SelectedValue", TheApp.Settings, "UnpackOutputFolderOption", False, DataSourceUpdateMode.OnPropertyChanged)
+			Me.UnpackComboBox.DataSource = anEnumList
+			Me.UnpackComboBox.ValueMember = "Key"
+			Me.UnpackComboBox.DisplayMember = "Value"
+			Me.UnpackComboBox.DataBindings.Add("SelectedValue", TheApp.Settings, "UnpackMode", False, DataSourceUpdateMode.OnPropertyChanged)
 
-			' Do not use this line because it will override the value automatically assigned by the data bindings above.
-			'Me.OutputPathComboBox.SelectedIndex = 0
+			If EnumHelper.Contains(previousSelectedInputOption, anEnumList) Then
+				TheApp.Settings.UnpackMode = previousSelectedInputOption
+			Else
+				TheApp.Settings.UnpackMode = CType(EnumHelper.Key(0, anEnumList), InputOptions)
+			End If
 		Catch ex As Exception
 			Dim debug As Integer = 4242
 		End Try
@@ -908,51 +966,6 @@ Public Class UnpackUserControl
 			Me.UnpackedFilesComboBox.DataSource = Nothing
 			Me.UnpackedFilesComboBox.DataSource = Me.theUnpackedRelativePathFileNames
 		End If
-	End Sub
-
-	Private Sub UpdateUnpackMode()
-		Dim anEnumList As IList
-		Dim previousSelectedInputOption As InputOptions
-
-		anEnumList = EnumHelper.ToList(GetType(InputOptions))
-		previousSelectedInputOption = TheApp.Settings.UnpackMode
-		Me.UnpackComboBox.DataBindings.Clear()
-		Try
-			If File.Exists(TheApp.Settings.UnpackPackagePathFolderOrFileName) Then
-				' Set file mode when a file is selected.
-				previousSelectedInputOption = InputOptions.File
-			ElseIf Directory.Exists(TheApp.Settings.UnpackPackagePathFolderOrFileName) Then
-				'NOTE: Remove in reverse index order.
-				Dim packageExtensions As List(Of String) = BasePackageFile.GetListOfPackageExtensions()
-				For Each packageExtension As String In packageExtensions
-					For Each anArchivePathFileName As String In Directory.GetFiles(TheApp.Settings.UnpackPackagePathFolderOrFileName, packageExtension)
-						If anArchivePathFileName.Length = 0 Then
-							anEnumList.RemoveAt(InputOptions.Folder)
-							Exit For
-						End If
-					Next
-					If Not anEnumList.Contains(InputOptions.Folder) Then
-						Exit For
-					End If
-				Next
-				anEnumList.RemoveAt(InputOptions.File)
-				'Else
-				'	Exit Try
-			End If
-
-			Me.UnpackComboBox.DisplayMember = "Value"
-			Me.UnpackComboBox.ValueMember = "Key"
-			Me.UnpackComboBox.DataSource = anEnumList
-			Me.UnpackComboBox.DataBindings.Add("SelectedValue", TheApp.Settings, "UnpackMode", False, DataSourceUpdateMode.OnPropertyChanged)
-
-			If EnumHelper.Contains(previousSelectedInputOption, anEnumList) Then
-				TheApp.Settings.UnpackMode = previousSelectedInputOption
-			Else
-				TheApp.Settings.UnpackMode = CType(EnumHelper.Key(0, anEnumList), InputOptions)
-			End If
-		Catch ex As Exception
-			Dim debug As Integer = 4242
-		End Try
 	End Sub
 
 	Private Sub UpdateSelectionPathText()

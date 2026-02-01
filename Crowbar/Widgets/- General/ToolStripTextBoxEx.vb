@@ -11,8 +11,6 @@ Public Class ToolStripTextBoxEx
 		Me.theTextBox = CType(Me.Control, RichTextBoxEx)
 		'NOTE: Force to False to allow it to be default value, because RichTextBoxEx default is True.
 		Me.theTextBox.Multiline = False
-
-		Me.BackColor = WidgetConstants.WidgetBackColor
 	End Sub
 
 	'Public ReadOnly Property TextBox As Crowbar.RichTextBoxEx

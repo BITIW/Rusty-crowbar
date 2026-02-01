@@ -105,11 +105,11 @@ Public Class AppTheme
         End Set
     End Property
 
-    Public Property ListViewTheme() As WidgetTheme
+    Public Property ListViewTheme() As ListViewTheme
         Get
             Return Me.theListViewTheme
         End Get
-        Set(ByVal value As WidgetTheme)
+        Set(ByVal value As ListViewTheme)
             Me.theListViewTheme = value
         End Set
     End Property
@@ -132,11 +132,11 @@ Public Class AppTheme
         End Set
     End Property
 
-    Public Property RadioButtonTheme() As WidgetTheme
+    Public Property RadioButtonTheme() As RadioButtonTheme
         Get
             Return Me.theRadioButtonTheme
         End Get
-        Set(ByVal value As WidgetTheme)
+        Set(ByVal value As RadioButtonTheme)
             Me.theRadioButtonTheme = value
         End Set
     End Property
@@ -195,11 +195,20 @@ Public Class AppTheme
         End Set
     End Property
 
-    Public Property TreeViewTheme() As WidgetTheme
+    Public Property ToolStripTheme() As ToolStripTheme
+        Get
+            Return Me.theToolStripTheme
+        End Get
+        Set(ByVal value As ToolStripTheme)
+            Me.theToolStripTheme = value
+        End Set
+    End Property
+
+    Public Property TreeViewTheme() As TreeViewTheme
         Get
             Return Me.theTreeViewTheme
         End Get
-        Set(ByVal value As WidgetTheme)
+        Set(ByVal value As TreeViewTheme)
             Me.theTreeViewTheme = value
         End Set
     End Property
@@ -230,17 +239,18 @@ Public Class AppTheme
     Private theDateTimeTextBoxTheme As WidgetTheme
     Private theGroupBoxTheme As GroupBoxTheme
     Private theListBoxTheme As WidgetTheme
-    Private theListViewTheme As WidgetTheme
+    Private theListViewTheme As ListViewTheme
     Private thePanelTheme As PanelTheme
     Private theProgressBarTheme As ProgressBarTheme
-    Private theRadioButtonTheme As WidgetTheme
+    Private theRadioButtonTheme As RadioButtonTheme
     Private theRichTextBoxTheme As RichTextBoxTheme
     Private theScrollBarTheme As WidgetTheme
     Private theSplitContainerTheme As WidgetTheme
     Private theTabControlTheme As TabControlTheme
     Private theTabPageTheme As WidgetTheme
     Private theTabScrollerTheme As WidgetTheme
-    Private theTreeViewTheme As WidgetTheme
+    Private theToolStripTheme As ToolStripTheme
+    Private theTreeViewTheme As TreeViewTheme
 
 #End Region
 

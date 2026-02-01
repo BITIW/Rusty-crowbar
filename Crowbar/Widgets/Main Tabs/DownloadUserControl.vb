@@ -52,9 +52,8 @@ Public Class DownloadUserControl
 
 		Me.theBackgroundSteamPipe = New BackgroundSteamPipe()
 
+		AddHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
 		AddHandler Me.OutputPathTextBox.DataBindings("Text").Parse, AddressOf FileManager.ParsePathFileName
-
-		AddHandler TheApp.Settings.PropertyChanged, AddressOf AppSettings_PropertyChanged
 	End Sub
 
 	Public Sub Free()
@@ -66,22 +65,20 @@ Public Class DownloadUserControl
 			Me.theBackgroundSteamPipe.Kill()
 		End If
 
-		RemoveHandler Me.OutputPathTextBox.DataBindings("Text").Parse, AddressOf FileManager.ParsePathFileName
-
 		RemoveHandler TheApp.Settings.PropertyChanged, AddressOf AppSettings_PropertyChanged
+		RemoveHandler Me.OutputPathTextBox.DataBindings("Text").Parse, AddressOf FileManager.ParsePathFileName
 
 		Me.FreeDownloadOptions()
 
+		Me.OutputPathTextBox.DataBindings.Clear()
 		Me.FreeOutputPathComboBox()
 
 		Me.ItemIdTextBox.DataBindings.Clear()
 	End Sub
 
 	Private Sub InitOutputPathComboBox()
-		Dim anEnumList As IList
-
 		Me.OutputPathComboBox.DataBindings.Clear()
-		anEnumList = EnumHelper.ToList(GetType(DownloadOutputPathOptions))
+		Dim anEnumList As IList = EnumHelper.ToList(GetType(DownloadOutputPathOptions))
 		Try
 			Me.OutputPathComboBox.DataSource = anEnumList
 			Me.OutputPathComboBox.ValueMember = "Key"
@@ -90,9 +87,12 @@ Public Class DownloadUserControl
 		Catch ex As Exception
 			Dim debug As Integer = 4242
 		End Try
+
+		AddHandler Me.OutputPathComboBox.SelectedValueChanged, AddressOf Me.OutputPathComboBox_SelectedValueChanged
 	End Sub
 
 	Private Sub FreeOutputPathComboBox()
+		RemoveHandler Me.OutputPathComboBox.SelectedValueChanged, AddressOf Me.OutputPathComboBox_SelectedValueChanged
 		Me.OutputPathComboBox.DataBindings.Clear()
 	End Sub
 
@@ -136,9 +136,9 @@ Public Class DownloadUserControl
 		Me.OpenWorkshopPage()
 	End Sub
 
-	Private Sub OutputPathComboBox_SelectedValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OutputPathComboBox.SelectedValueChanged
+	Private Sub OutputPathComboBox_SelectedValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
 		' Because DownloadOutputPathOptions is passed to DataSource as an IList, must manually bind for this direction.
-		TheApp.Settings.DownloadOutputFolderOption = CType(OutputPathComboBox.SelectedValue, DownloadOutputPathOptions)
+		TheApp.Settings.DownloadOutputFolderOption = CType(Me.OutputPathComboBox.SelectedValue, DownloadOutputPathOptions)
 	End Sub
 
 	Private Sub OutputPathTextBox_DragDrop(sender As Object, e As DragEventArgs) Handles OutputPathTextBox.DragDrop

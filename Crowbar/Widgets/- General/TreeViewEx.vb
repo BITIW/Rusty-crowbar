@@ -56,9 +56,6 @@ Public Class TreeViewEx
 		Me.theControlHasShown = False
 
 		Me.theTextFormatFlags = TextFormatFlags.GlyphOverhangPadding Or TextFormatFlags.PreserveGraphicsTranslateTransform
-
-		Me.ForeColor = WidgetTextColor
-		Me.BackColor = WidgetDeepBackColor
 	End Sub
 
 #End Region
@@ -120,85 +117,74 @@ Public Class TreeViewEx
 	End Sub
 
 	'NOTE: Windows calls the default painting AFTER the call to OnDrawNode, so can not modify the default painting here.
+	'NOTE: The e.Bounds seems to be entire width of TreeView, whereas node.Bounds seems to be just the rect of the text area.
 	Protected Overrides Sub OnDrawNode(e As DrawTreeNodeEventArgs)
-		If Me.theMouseWheelHasMoved Then
-			Me.UpdateScrollbars()
-			Me.theMouseWheelHasMoved = False
+		Dim theme As TreeViewTheme = Nothing
+		' This check prevents problems with viewing and saving Forms in VS Designer.
+		If TheApp IsNot Nothing Then
+			theme = TheApp.Settings.SelectedAppTheme.TreeViewTheme
 		End If
-		If e.Node.Bounds.IsEmpty Then
-			Exit Sub
-		End If
-
-		'Dim left As Integer = 0
-		'Dim top As Integer = 0
-		'If Me.CustomHorizontalScrollbar.Visible Then
-		'	left = Me.CustomHorizontalScrollbar.Value
-		'End If
-		'If Me.CustomVerticalScrollBar.Visible Then
-		'	top = Me.CustomVerticalScrollBar.Value
-		'End If
-		'e.Graphics.TranslateTransform(-left, -top)
-
-		Dim nodeRect As Rectangle = e.Bounds
-		Dim expandRect As Rectangle = nodeRect
-		expandRect.X += Me.Indent * e.Node.Level + 4
-		expandRect.Width = 16
-		Dim iconRect As Rectangle = nodeRect
-		iconRect.X += Me.Indent * e.Node.Level + 20
-		iconRect.Width = 16
-
-		' Draw expansion icon.
-		If e.Node.Nodes.Count > 0 Then
-			If e.Node.IsExpanded Then
-				Me.theTreeMinusIcon.DrawBackground(e.Graphics, expandRect)
-			Else
-				Me.theTreePlusIcon.DrawBackground(e.Graphics, expandRect)
+		If theme IsNot Nothing Then
+			If Me.theMouseWheelHasMoved Then
+				Me.UpdateScrollbars()
+				Me.theMouseWheelHasMoved = False
 			End If
-		End If
-
-		' Draw node icon.
-		'Me.ImageList.Draw(e.Graphics, iconRect.X, iconRect.Y, Me.ImageIndex)
-		e.Graphics.DrawImage(Me.ImageList.Images(0), iconRect.X, iconRect.Y)
-
-		' Draw text.
-		Dim textRect As Rectangle = e.Node.Bounds
-		textRect.Width += 2
-		Dim textForeColor As Color = Me.ForeColor
-		Dim textBackColor As Color = Me.BackColor
-		If (e.State And TreeNodeStates.Selected) > 0 Then
-			If (e.State And TreeNodeStates.Focused) > 0 Then
-				'Using backColorBrush As New SolidBrush(textBackColor)
-				'	e.Graphics.FillRectangle(backColorBrush, textRect)
-				'End Using
-				'TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont, textRect, textForeColor, textBackColor, Me.theTextFormatFlags)
-				'textForeColor = WidgetTextColor
-				textBackColor = WidgetConstants.Windows10GlobalAccentColor
-			Else
-				'e.Graphics.FillRectangle(SystemBrushes.ControlDark, textRect)
-				'TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont, textRect, WidgetTextColor, WidgetDeepBackColor, Me.theTextFormatFlags)
-				'textForeColor = WidgetTextColor
-				textBackColor = WidgetHighBackColor
+			Dim node As TreeNode = e.Node
+			Dim textRect As Rectangle = node.Bounds
+			If textRect.IsEmpty Then
+				Exit Sub
 			End If
-			'Else
-			'	Using backColorBrush As New SolidBrush(WidgetDeepBackColor)
-			'		e.Graphics.FillRectangle(backColorBrush, textRect)
-			'	End Using
-			'	TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont, textRect, WidgetTextColor, WidgetDeepBackColor, Me.theTextFormatFlags)
-		End If
-		Using backColorBrush As New SolidBrush(textBackColor)
-			e.Graphics.FillRectangle(backColorBrush, textRect)
-		End Using
-		TextRenderer.DrawText(e.Graphics, e.Node.Text, Me.theOriginalFont, textRect, textForeColor, textBackColor, Me.theTextFormatFlags)
-		Dim textSize As Size = TextRenderer.MeasureText(e.Graphics, e.Node.Text, Me.theOriginalFont, textRect.Size, Me.theTextFormatFlags)
-		If textSize.Width > e.Node.Bounds.Left + e.Node.Bounds.Width Then
-			Dim debug As Integer = 4242
-		End If
-		'e.Node.Tag = e.Node.Bounds.Left + textSize.Width
 
-		e.DrawDefault = False
+			Dim g As Graphics = e.Graphics
+			Dim nodeRect As Rectangle = e.Bounds
+			Dim nodeLevel As Integer = node.Level
+
+			' Draw expansion icon.
+			Dim expandRect As Rectangle = nodeRect
+			expandRect.X += Me.Indent * nodeLevel + 4
+			expandRect.Width = 16
+			If node.Nodes.Count > 0 Then
+				If node.IsExpanded Then
+					Me.theTreeMinusIcon.DrawBackground(g, expandRect)
+				Else
+					Me.theTreePlusIcon.DrawBackground(g, expandRect)
+				End If
+			End If
+
+			' Draw node icon.
+			Dim iconRect As Rectangle = nodeRect
+			iconRect.X += Me.Indent * nodeLevel + 20
+			iconRect.Width = 16
+			g.DrawImage(Me.ImageList.Images(0), iconRect.X, iconRect.Y)
+
+			' Draw text.
+			' Why widen the rect by 2 pixels?
+			textRect.Width += 2
+			Dim textForeColor As Color = theme.EnabledForeColor
+			Dim textBackColor As Color = theme.EnabledBackColor
+			Dim state As TreeNodeStates = e.State
+			If (state And TreeNodeStates.Selected) > 0 Then
+				If (state And TreeNodeStates.Focused) > 0 Then
+					textBackColor = theme.FocusBackColor
+				Else
+					textBackColor = theme.SelectedBackColor
+				End If
+			End If
+			Using backColorBrush As New SolidBrush(textBackColor)
+				g.FillRectangle(backColorBrush, textRect)
+			End Using
+			TextRenderer.DrawText(g, node.Text, Me.theOriginalFont, textRect, textForeColor, textBackColor, Me.theTextFormatFlags)
+			'Dim textSize As Size = TextRenderer.MeasureText(g, node.Text, Me.theOriginalFont, textRect.Size, Me.theTextFormatFlags)
+			'If textSize.Width > node.Bounds.Left + node.Bounds.Width Then
+			'	Dim debug As Integer = 4242
+			'End If
+			'node.Tag = node.Bounds.Left + textSize.Width
+
+			e.DrawDefault = False
+		Else
+			e.DrawDefault = True
+		End If
 		MyBase.OnDrawNode(e)
-
-		'e.Graphics.TranslateTransform(left, top)
 	End Sub
 
 	Protected Overrides Sub OnHandleCreated(e As EventArgs)

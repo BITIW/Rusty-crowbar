@@ -24,7 +24,7 @@ Partial Class CompileUserControl
 	Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.CompilerOptionsTextBox = New Crowbar.RichTextBoxEx()
-        Me.GameSetupComboBox = New Crowbar.ComboBoxEx()
+        Me.GameSetupComboUserControl = New Crowbar.ComboUserControl()
         Me.FolderForEachModelCheckBox = New Crowbar.CheckBoxEx()
         Me.SourceEngineLogFileCheckBox = New Crowbar.CheckBoxEx()
         Me.CompilerOptionDefineBonesCheckBox = New Crowbar.CheckBoxEx()
@@ -47,8 +47,8 @@ Partial Class CompileUserControl
         Me.OutputSubfolderTextBox = New Crowbar.RichTextBoxEx()
         Me.GotoOutputPathButton = New Crowbar.ButtonEx()
         Me.BrowseForOutputPathButton = New Crowbar.ButtonEx()
-        Me.OutputPathComboBox = New Crowbar.ComboBoxEx()
-        Me.CompileComboBox = New Crowbar.ComboBoxEx()
+        Me.OutputPathComboUserControl = New Crowbar.ComboUserControl()
+        Me.CompileComboUserControl = New Crowbar.ComboUserControl()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GotoQcButton = New Crowbar.ButtonEx()
         Me.Options_LogSplitContainer = New System.Windows.Forms.SplitContainer()
@@ -71,7 +71,7 @@ Partial Class CompileUserControl
         Me.CancelCompileButton = New Crowbar.ButtonEx()
         Me.UseAllInPackButton = New Crowbar.ButtonEx()
         Me.PostCompilePanel = New Crowbar.PanelEx()
-        Me.CompiledFilesComboBox = New Crowbar.ComboBoxEx()
+        Me.CompiledFilesComboUserControl = New Crowbar.ComboUserControl()
         Me.UseInViewButton = New Crowbar.ButtonEx()
         Me.RecompileButton = New Crowbar.ButtonEx()
         Me.UseInPackButton = New Crowbar.ButtonEx()
@@ -97,13 +97,11 @@ Partial Class CompileUserControl
         '
         'CompilerOptionsTextBox
         '
-        Me.CompilerOptionsTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.CompilerOptionsTextBox.BorderColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.CompilerOptionsTextBox.CueBannerText = ""
         Me.CompilerOptionsTextBox.DetectUrls = False
         Me.CompilerOptionsTextBox.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CompilerOptionsTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.CompilerOptionsTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.CompilerOptionsTextBox.Location = New System.Drawing.Point(0, 0)
         Me.CompilerOptionsTextBox.MinimumSize = New System.Drawing.Size(0, 37)
         Me.CompilerOptionsTextBox.Name = "CompilerOptionsTextBox"
@@ -115,18 +113,13 @@ Partial Class CompileUserControl
         '
         'GameSetupComboBox
         '
-        Me.GameSetupComboBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.GameSetupComboUserControl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GameSetupComboBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
-        Me.GameSetupComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
-        Me.GameSetupComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.GameSetupComboBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
-        Me.GameSetupComboBox.FormattingEnabled = True
-        Me.GameSetupComboBox.IsReadOnly = False
-        Me.GameSetupComboBox.Location = New System.Drawing.Point(192, 1)
-        Me.GameSetupComboBox.Name = "GameSetupComboBox"
-        Me.GameSetupComboBox.Size = New System.Drawing.Size(473, 23)
-        Me.GameSetupComboBox.TabIndex = 1
+        Me.GameSetupComboUserControl.IsReadOnly = False
+        Me.GameSetupComboUserControl.Location = New System.Drawing.Point(192, 1)
+        Me.GameSetupComboUserControl.Name = "GameSetupComboBox"
+        Me.GameSetupComboUserControl.Size = New System.Drawing.Size(473, 23)
+        Me.GameSetupComboUserControl.TabIndex = 1
         '
         'FolderForEachModelCheckBox
         '
@@ -220,13 +213,11 @@ Partial Class CompileUserControl
         '
         'CompilerOptionDefineBonesFileNameTextBox
         '
-        Me.CompilerOptionDefineBonesFileNameTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
         Me.CompilerOptionDefineBonesFileNameTextBox.BorderColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.CompilerOptionDefineBonesFileNameTextBox.CueBannerText = ""
         Me.CompilerOptionDefineBonesFileNameTextBox.DetectUrls = False
         Me.CompilerOptionDefineBonesFileNameTextBox.Enabled = False
         Me.CompilerOptionDefineBonesFileNameTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.CompilerOptionDefineBonesFileNameTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.CompilerOptionDefineBonesFileNameTextBox.Location = New System.Drawing.Point(109, 18)
         Me.CompilerOptionDefineBonesFileNameTextBox.Multiline = False
         Me.CompilerOptionDefineBonesFileNameTextBox.Name = "CompilerOptionDefineBonesFileNameTextBox"
@@ -246,13 +237,11 @@ Partial Class CompileUserControl
         '
         'DirectCompilerOptionsTextBox
         '
-        Me.DirectCompilerOptionsTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
         Me.DirectCompilerOptionsTextBox.BorderColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.DirectCompilerOptionsTextBox.CueBannerText = ""
         Me.DirectCompilerOptionsTextBox.DetectUrls = False
         Me.DirectCompilerOptionsTextBox.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DirectCompilerOptionsTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.DirectCompilerOptionsTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.DirectCompilerOptionsTextBox.Location = New System.Drawing.Point(0, 0)
         Me.DirectCompilerOptionsTextBox.Multiline = False
         Me.DirectCompilerOptionsTextBox.Name = "DirectCompilerOptionsTextBox"
@@ -265,7 +254,6 @@ Partial Class CompileUserControl
         'BrowseForQcPathFolderOrFileNameButton
         '
         Me.BrowseForQcPathFolderOrFileNameButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BrowseForQcPathFolderOrFileNameButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.BrowseForQcPathFolderOrFileNameButton.Location = New System.Drawing.Point(660, 3)
         Me.BrowseForQcPathFolderOrFileNameButton.Name = "BrowseForQcPathFolderOrFileNameButton"
         Me.BrowseForQcPathFolderOrFileNameButton.Size = New System.Drawing.Size(64, 23)
@@ -285,7 +273,6 @@ Partial Class CompileUserControl
         'SetUpGamesButton
         '
         Me.SetUpGamesButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SetUpGamesButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.SetUpGamesButton.Location = New System.Drawing.Point(671, 0)
         Me.SetUpGamesButton.Name = "SetUpGamesButton"
         Me.SetUpGamesButton.Size = New System.Drawing.Size(90, 23)
@@ -304,7 +291,6 @@ Partial Class CompileUserControl
         '
         'CompileButton
         '
-        Me.CompileButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.CompileButton.Location = New System.Drawing.Point(0, 0)
         Me.CompileButton.Name = "CompileButton"
         Me.CompileButton.Size = New System.Drawing.Size(125, 23)
@@ -316,15 +302,14 @@ Partial Class CompileUserControl
         'Panel1
         '
         Me.Panel1.AutoScroll = True
-        Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.Panel1.Controls.Add(Me.QcPathFileNameTextBox)
         Me.Panel1.Controls.Add(Me.OutputPathTextBox)
         Me.Panel1.Controls.Add(Me.GameModelsOutputPathTextBox)
         Me.Panel1.Controls.Add(Me.OutputSubfolderTextBox)
         Me.Panel1.Controls.Add(Me.GotoOutputPathButton)
         Me.Panel1.Controls.Add(Me.BrowseForOutputPathButton)
-        Me.Panel1.Controls.Add(Me.OutputPathComboBox)
-        Me.Panel1.Controls.Add(Me.CompileComboBox)
+        Me.Panel1.Controls.Add(Me.OutputPathComboUserControl)
+        Me.Panel1.Controls.Add(Me.CompileComboUserControl)
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Controls.Add(Me.GotoQcButton)
         Me.Panel1.Controls.Add(Me.Label6)
@@ -332,7 +317,6 @@ Partial Class CompileUserControl
         Me.Panel1.Controls.Add(Me.Options_LogSplitContainer)
         Me.Panel1.Controls.Add(Me.UseDefaultOutputSubfolderButton)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(2)
         Me.Panel1.Name = "Panel1"
@@ -345,12 +329,10 @@ Partial Class CompileUserControl
         '
         Me.QcPathFileNameTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.QcPathFileNameTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
         Me.QcPathFileNameTextBox.BorderColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.QcPathFileNameTextBox.CueBannerText = ""
         Me.QcPathFileNameTextBox.DetectUrls = False
         Me.QcPathFileNameTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.QcPathFileNameTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.QcPathFileNameTextBox.Location = New System.Drawing.Point(209, 4)
         Me.QcPathFileNameTextBox.Multiline = False
         Me.QcPathFileNameTextBox.Name = "QcPathFileNameTextBox"
@@ -365,12 +347,10 @@ Partial Class CompileUserControl
         Me.OutputPathTextBox.AllowDrop = True
         Me.OutputPathTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.OutputPathTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
         Me.OutputPathTextBox.BorderColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.OutputPathTextBox.CueBannerText = ""
         Me.OutputPathTextBox.DetectUrls = False
         Me.OutputPathTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.OutputPathTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.OutputPathTextBox.Location = New System.Drawing.Point(209, 33)
         Me.OutputPathTextBox.Multiline = False
         Me.OutputPathTextBox.Name = "OutputPathTextBox"
@@ -384,12 +364,10 @@ Partial Class CompileUserControl
         '
         Me.GameModelsOutputPathTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GameModelsOutputPathTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.GameModelsOutputPathTextBox.BorderColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.GameModelsOutputPathTextBox.CueBannerText = ""
         Me.GameModelsOutputPathTextBox.DetectUrls = False
         Me.GameModelsOutputPathTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.GameModelsOutputPathTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.GameModelsOutputPathTextBox.Location = New System.Drawing.Point(209, 32)
         Me.GameModelsOutputPathTextBox.Multiline = False
         Me.GameModelsOutputPathTextBox.Name = "GameModelsOutputPathTextBox"
@@ -404,12 +382,10 @@ Partial Class CompileUserControl
         '
         Me.OutputSubfolderTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.OutputSubfolderTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
         Me.OutputSubfolderTextBox.BorderColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.OutputSubfolderTextBox.CueBannerText = ""
         Me.OutputSubfolderTextBox.DetectUrls = False
         Me.OutputSubfolderTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.OutputSubfolderTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.OutputSubfolderTextBox.Location = New System.Drawing.Point(209, 32)
         Me.OutputSubfolderTextBox.Multiline = False
         Me.OutputSubfolderTextBox.Name = "OutputSubfolderTextBox"
@@ -423,7 +399,6 @@ Partial Class CompileUserControl
         'GotoOutputPathButton
         '
         Me.GotoOutputPathButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GotoOutputPathButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.GotoOutputPathButton.Location = New System.Drawing.Point(730, 32)
         Me.GotoOutputPathButton.Name = "GotoOutputPathButton"
         Me.GotoOutputPathButton.Size = New System.Drawing.Size(43, 23)
@@ -435,7 +410,6 @@ Partial Class CompileUserControl
         'BrowseForOutputPathButton
         '
         Me.BrowseForOutputPathButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BrowseForOutputPathButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.BrowseForOutputPathButton.Enabled = False
         Me.BrowseForOutputPathButton.Location = New System.Drawing.Point(660, 32)
         Me.BrowseForOutputPathButton.Name = "BrowseForOutputPathButton"
@@ -447,29 +421,19 @@ Partial Class CompileUserControl
         '
         'OutputPathComboBox
         '
-        Me.OutputPathComboBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
-        Me.OutputPathComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
-        Me.OutputPathComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.OutputPathComboBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
-        Me.OutputPathComboBox.FormattingEnabled = True
-        Me.OutputPathComboBox.IsReadOnly = False
-        Me.OutputPathComboBox.Location = New System.Drawing.Point(63, 33)
-        Me.OutputPathComboBox.Name = "OutputPathComboBox"
-        Me.OutputPathComboBox.Size = New System.Drawing.Size(140, 23)
-        Me.OutputPathComboBox.TabIndex = 6
+        Me.OutputPathComboUserControl.IsReadOnly = False
+        Me.OutputPathComboUserControl.Location = New System.Drawing.Point(63, 33)
+        Me.OutputPathComboUserControl.Name = "OutputPathComboBox"
+        Me.OutputPathComboUserControl.Size = New System.Drawing.Size(140, 23)
+        Me.OutputPathComboUserControl.TabIndex = 6
         '
         'CompileComboBox
         '
-        Me.CompileComboBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
-        Me.CompileComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
-        Me.CompileComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CompileComboBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
-        Me.CompileComboBox.FormattingEnabled = True
-        Me.CompileComboBox.IsReadOnly = False
-        Me.CompileComboBox.Location = New System.Drawing.Point(63, 4)
-        Me.CompileComboBox.Name = "CompileComboBox"
-        Me.CompileComboBox.Size = New System.Drawing.Size(140, 23)
-        Me.CompileComboBox.TabIndex = 1
+        Me.CompileComboUserControl.IsReadOnly = False
+        Me.CompileComboUserControl.Location = New System.Drawing.Point(63, 4)
+        Me.CompileComboUserControl.Name = "CompileComboBox"
+        Me.CompileComboUserControl.Size = New System.Drawing.Size(140, 23)
+        Me.CompileComboUserControl.TabIndex = 1
         '
         'Label1
         '
@@ -482,7 +446,6 @@ Partial Class CompileUserControl
         'GotoQcButton
         '
         Me.GotoQcButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GotoQcButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.GotoQcButton.Location = New System.Drawing.Point(730, 3)
         Me.GotoQcButton.Name = "GotoQcButton"
         Me.GotoQcButton.Size = New System.Drawing.Size(43, 23)
@@ -520,7 +483,6 @@ Partial Class CompileUserControl
         '
         Me.OptionsGroupBox.Controls.Add(Me.OptionsGroupBoxFillPanel)
         Me.OptionsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.OptionsGroupBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.OptionsGroupBox.IsReadOnly = False
         Me.OptionsGroupBox.Location = New System.Drawing.Point(0, 0)
         Me.OptionsGroupBox.Name = "OptionsGroupBox"
@@ -533,7 +495,6 @@ Partial Class CompileUserControl
         'OptionsGroupBoxFillPanel
         '
         Me.OptionsGroupBoxFillPanel.AutoScroll = True
-        Me.OptionsGroupBoxFillPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.OptionsGroupBoxFillPanel.Controls.Add(Me.CompilerOptionsSourceEnginePanel)
         Me.OptionsGroupBoxFillPanel.Controls.Add(Me.CompilerOptionsGoldSourceEnginePanel)
         Me.OptionsGroupBoxFillPanel.Controls.Add(Me.GameSetupPanel)
@@ -542,7 +503,6 @@ Partial Class CompileUserControl
         Me.OptionsGroupBoxFillPanel.Controls.Add(Me.PanelEx2)
         Me.OptionsGroupBoxFillPanel.Controls.Add(Me.CompilerOptionsTextBoxMinScrollPanel)
         Me.OptionsGroupBoxFillPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.OptionsGroupBoxFillPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.OptionsGroupBoxFillPanel.Location = New System.Drawing.Point(3, 18)
         Me.OptionsGroupBoxFillPanel.Name = "OptionsGroupBoxFillPanel"
         Me.OptionsGroupBoxFillPanel.SelectedIndex = -1
@@ -552,7 +512,6 @@ Partial Class CompileUserControl
         '
         'CompilerOptionsSourceEnginePanel
         '
-        Me.CompilerOptionsSourceEnginePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.CompilerOptionsSourceEnginePanel.Controls.Add(Me.CompilerOptionDefineBonesCheckBox)
         Me.CompilerOptionsSourceEnginePanel.Controls.Add(Me.DefineBonesGroupBox)
         Me.CompilerOptionsSourceEnginePanel.Controls.Add(Me.SourceEngineLogFileCheckBox)
@@ -561,7 +520,6 @@ Partial Class CompileUserControl
         Me.CompilerOptionsSourceEnginePanel.Controls.Add(Me.FolderForEachModelCheckBox)
         Me.CompilerOptionsSourceEnginePanel.Controls.Add(Me.CompileOptionsSourceEngineUseDefaultsButton)
         Me.CompilerOptionsSourceEnginePanel.Dock = System.Windows.Forms.DockStyle.Top
-        Me.CompilerOptionsSourceEnginePanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.CompilerOptionsSourceEnginePanel.Location = New System.Drawing.Point(0, 126)
         Me.CompilerOptionsSourceEnginePanel.Name = "CompilerOptionsSourceEnginePanel"
         Me.CompilerOptionsSourceEnginePanel.SelectedIndex = -1
@@ -571,12 +529,10 @@ Partial Class CompileUserControl
         '
         'DefineBonesGroupBox
         '
-        Me.DefineBonesGroupBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.DefineBonesGroupBox.Controls.Add(Me.CompilerOptionDefineBonesFileNameTextBox)
         Me.DefineBonesGroupBox.Controls.Add(Me.CompilerOptionDefineBonesModifyQcFileCheckBox)
         Me.DefineBonesGroupBox.Controls.Add(Me.CompilerOptionDefineBonesOverwriteQciFileCheckBox)
         Me.DefineBonesGroupBox.Controls.Add(Me.CompilerOptionDefineBonesWriteQciFileCheckBox)
-        Me.DefineBonesGroupBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.DefineBonesGroupBox.IsReadOnly = False
         Me.DefineBonesGroupBox.Location = New System.Drawing.Point(173, 3)
         Me.DefineBonesGroupBox.Name = "DefineBonesGroupBox"
@@ -601,7 +557,6 @@ Partial Class CompileUserControl
         'CompileOptionsSourceEngineUseDefaultsButton
         '
         Me.CompileOptionsSourceEngineUseDefaultsButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CompileOptionsSourceEngineUseDefaultsButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.CompileOptionsSourceEngineUseDefaultsButton.Location = New System.Drawing.Point(671, 64)
         Me.CompileOptionsSourceEngineUseDefaultsButton.Name = "CompileOptionsSourceEngineUseDefaultsButton"
         Me.CompileOptionsSourceEngineUseDefaultsButton.Size = New System.Drawing.Size(90, 23)
@@ -613,11 +568,9 @@ Partial Class CompileUserControl
         '
         'CompilerOptionsGoldSourceEnginePanel
         '
-        Me.CompilerOptionsGoldSourceEnginePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.CompilerOptionsGoldSourceEnginePanel.Controls.Add(Me.GoldSourceEngineLogFileCheckBox)
         Me.CompilerOptionsGoldSourceEnginePanel.Controls.Add(Me.CompileOptionsGoldSourceEngineUseDefaultsButton)
         Me.CompilerOptionsGoldSourceEnginePanel.Dock = System.Windows.Forms.DockStyle.Top
-        Me.CompilerOptionsGoldSourceEnginePanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.CompilerOptionsGoldSourceEnginePanel.Location = New System.Drawing.Point(0, 26)
         Me.CompilerOptionsGoldSourceEnginePanel.Name = "CompilerOptionsGoldSourceEnginePanel"
         Me.CompilerOptionsGoldSourceEnginePanel.SelectedIndex = -1
@@ -641,7 +594,6 @@ Partial Class CompileUserControl
         'CompileOptionsGoldSourceEngineUseDefaultsButton
         '
         Me.CompileOptionsGoldSourceEngineUseDefaultsButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CompileOptionsGoldSourceEngineUseDefaultsButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.CompileOptionsGoldSourceEngineUseDefaultsButton.Location = New System.Drawing.Point(653, 68)
         Me.CompileOptionsGoldSourceEngineUseDefaultsButton.Name = "CompileOptionsGoldSourceEngineUseDefaultsButton"
         Me.CompileOptionsGoldSourceEngineUseDefaultsButton.Size = New System.Drawing.Size(90, 23)
@@ -653,12 +605,10 @@ Partial Class CompileUserControl
         '
         'GameSetupPanel
         '
-        Me.GameSetupPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.GameSetupPanel.Controls.Add(Me.GameSetupLabel)
-        Me.GameSetupPanel.Controls.Add(Me.GameSetupComboBox)
+        Me.GameSetupPanel.Controls.Add(Me.GameSetupComboUserControl)
         Me.GameSetupPanel.Controls.Add(Me.SetUpGamesButton)
         Me.GameSetupPanel.Dock = System.Windows.Forms.DockStyle.Top
-        Me.GameSetupPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.GameSetupPanel.Location = New System.Drawing.Point(0, 0)
         Me.GameSetupPanel.Name = "GameSetupPanel"
         Me.GameSetupPanel.SelectedIndex = -1
@@ -670,9 +620,7 @@ Partial Class CompileUserControl
         '
         Me.PanelEx1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PanelEx1.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.PanelEx1.Controls.Add(Me.DirectCompilerOptionsTextBox)
-        Me.PanelEx1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.PanelEx1.Location = New System.Drawing.Point(0, 141)
         Me.PanelEx1.Name = "PanelEx1"
         Me.PanelEx1.SelectedIndex = -1
@@ -685,9 +633,7 @@ Partial Class CompileUserControl
         Me.PanelEx2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.PanelEx2.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.PanelEx2.Controls.Add(Me.CompilerOptionsTextBox)
-        Me.PanelEx2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.PanelEx2.Location = New System.Drawing.Point(0, 169)
         Me.PanelEx2.Name = "PanelEx2"
         Me.PanelEx2.SelectedIndex = -1
@@ -698,8 +644,6 @@ Partial Class CompileUserControl
         'CompilerOptionsTextBoxMinScrollPanel
         '
         Me.CompilerOptionsTextBoxMinScrollPanel.AutoScroll = True
-        Me.CompilerOptionsTextBoxMinScrollPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
-        Me.CompilerOptionsTextBoxMinScrollPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.CompilerOptionsTextBoxMinScrollPanel.Location = New System.Drawing.Point(0, 169)
         Me.CompilerOptionsTextBoxMinScrollPanel.Name = "CompilerOptionsTextBoxMinScrollPanel"
         Me.CompilerOptionsTextBoxMinScrollPanel.SelectedIndex = -1
@@ -709,13 +653,11 @@ Partial Class CompileUserControl
         '
         'CompileLogRichTextBox
         '
-        Me.CompileLogRichTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.CompileLogRichTextBox.BorderColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.CompileLogRichTextBox.CueBannerText = ""
         Me.CompileLogRichTextBox.DetectUrls = False
         Me.CompileLogRichTextBox.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CompileLogRichTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-        Me.CompileLogRichTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.CompileLogRichTextBox.HideSelection = False
         Me.CompileLogRichTextBox.Location = New System.Drawing.Point(0, 26)
         Me.CompileLogRichTextBox.Name = "CompileLogRichTextBox"
@@ -728,13 +670,11 @@ Partial Class CompileUserControl
         '
         'CompileButtonsPanel
         '
-        Me.CompileButtonsPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.CompileButtonsPanel.Controls.Add(Me.CompileButton)
         Me.CompileButtonsPanel.Controls.Add(Me.SkipCurrentModelButton)
         Me.CompileButtonsPanel.Controls.Add(Me.CancelCompileButton)
         Me.CompileButtonsPanel.Controls.Add(Me.UseAllInPackButton)
         Me.CompileButtonsPanel.Dock = System.Windows.Forms.DockStyle.Top
-        Me.CompileButtonsPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.CompileButtonsPanel.Location = New System.Drawing.Point(0, 0)
         Me.CompileButtonsPanel.Name = "CompileButtonsPanel"
         Me.CompileButtonsPanel.SelectedIndex = -1
@@ -744,7 +684,6 @@ Partial Class CompileUserControl
         '
         'SkipCurrentModelButton
         '
-        Me.SkipCurrentModelButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.SkipCurrentModelButton.Enabled = False
         Me.SkipCurrentModelButton.Location = New System.Drawing.Point(131, 0)
         Me.SkipCurrentModelButton.Name = "SkipCurrentModelButton"
@@ -756,7 +695,6 @@ Partial Class CompileUserControl
         '
         'CancelCompileButton
         '
-        Me.CancelCompileButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.CancelCompileButton.Enabled = False
         Me.CancelCompileButton.Location = New System.Drawing.Point(257, 0)
         Me.CancelCompileButton.Name = "CancelCompileButton"
@@ -768,7 +706,6 @@ Partial Class CompileUserControl
         '
         'UseAllInPackButton
         '
-        Me.UseAllInPackButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.UseAllInPackButton.Enabled = False
         Me.UseAllInPackButton.Location = New System.Drawing.Point(383, 0)
         Me.UseAllInPackButton.Name = "UseAllInPackButton"
@@ -781,14 +718,12 @@ Partial Class CompileUserControl
         '
         'PostCompilePanel
         '
-        Me.PostCompilePanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
-        Me.PostCompilePanel.Controls.Add(Me.CompiledFilesComboBox)
+        Me.PostCompilePanel.Controls.Add(Me.CompiledFilesComboUserControl)
         Me.PostCompilePanel.Controls.Add(Me.UseInViewButton)
         Me.PostCompilePanel.Controls.Add(Me.RecompileButton)
         Me.PostCompilePanel.Controls.Add(Me.UseInPackButton)
         Me.PostCompilePanel.Controls.Add(Me.GotoCompiledMdlButton)
         Me.PostCompilePanel.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PostCompilePanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
         Me.PostCompilePanel.Location = New System.Drawing.Point(0, 212)
         Me.PostCompilePanel.Name = "PostCompilePanel"
         Me.PostCompilePanel.SelectedIndex = -1
@@ -798,23 +733,17 @@ Partial Class CompileUserControl
         '
         'CompiledFilesComboBox
         '
-        Me.CompiledFilesComboBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.CompiledFilesComboUserControl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CompiledFilesComboBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
-        Me.CompiledFilesComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
-        Me.CompiledFilesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.CompiledFilesComboBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
-        Me.CompiledFilesComboBox.FormattingEnabled = True
-        Me.CompiledFilesComboBox.IsReadOnly = False
-        Me.CompiledFilesComboBox.Location = New System.Drawing.Point(0, 4)
-        Me.CompiledFilesComboBox.Name = "CompiledFilesComboBox"
-        Me.CompiledFilesComboBox.Size = New System.Drawing.Size(542, 23)
-        Me.CompiledFilesComboBox.TabIndex = 1
+        Me.CompiledFilesComboUserControl.IsReadOnly = False
+        Me.CompiledFilesComboUserControl.Location = New System.Drawing.Point(0, 4)
+        Me.CompiledFilesComboUserControl.Name = "CompiledFilesComboBox"
+        Me.CompiledFilesComboUserControl.Size = New System.Drawing.Size(542, 23)
+        Me.CompiledFilesComboUserControl.TabIndex = 1
         '
         'UseInViewButton
         '
         Me.UseInViewButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.UseInViewButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.UseInViewButton.Enabled = False
         Me.UseInViewButton.Location = New System.Drawing.Point(548, 3)
         Me.UseInViewButton.Name = "UseInViewButton"
@@ -827,7 +756,6 @@ Partial Class CompileUserControl
         'RecompileButton
         '
         Me.RecompileButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.RecompileButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.RecompileButton.Enabled = False
         Me.RecompileButton.Location = New System.Drawing.Point(629, 3)
         Me.RecompileButton.Name = "RecompileButton"
@@ -840,7 +768,6 @@ Partial Class CompileUserControl
         'UseInPackButton
         '
         Me.UseInPackButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.UseInPackButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.UseInPackButton.Enabled = False
         Me.UseInPackButton.Location = New System.Drawing.Point(629, 3)
         Me.UseInPackButton.Name = "UseInPackButton"
@@ -854,7 +781,6 @@ Partial Class CompileUserControl
         'GotoCompiledMdlButton
         '
         Me.GotoCompiledMdlButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.GotoCompiledMdlButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.GotoCompiledMdlButton.Location = New System.Drawing.Point(710, 3)
         Me.GotoCompiledMdlButton.Name = "GotoCompiledMdlButton"
         Me.GotoCompiledMdlButton.Size = New System.Drawing.Size(43, 23)
@@ -866,7 +792,6 @@ Partial Class CompileUserControl
         'UseDefaultOutputSubfolderButton
         '
         Me.UseDefaultOutputSubfolderButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.UseDefaultOutputSubfolderButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
         Me.UseDefaultOutputSubfolderButton.Location = New System.Drawing.Point(660, 32)
         Me.UseDefaultOutputSubfolderButton.Name = "UseDefaultOutputSubfolderButton"
         Me.UseDefaultOutputSubfolderButton.Size = New System.Drawing.Size(113, 23)
@@ -903,8 +828,8 @@ Partial Class CompileUserControl
 
     End Sub
     Friend WithEvents CompilerOptionsTextBox As Crowbar.RichTextBoxEx
-	Friend WithEvents GameSetupComboBox As ComboBoxEx
-	Friend WithEvents BrowseForQcPathFolderOrFileNameButton As ButtonEx
+    Friend WithEvents GameSetupComboUserControl As ComboUserControl
+    Friend WithEvents BrowseForQcPathFolderOrFileNameButton As ButtonEx
 	Friend WithEvents Label6 As System.Windows.Forms.Label
 	Friend WithEvents SetUpGamesButton As ButtonEx
 	Friend WithEvents GameSetupLabel As System.Windows.Forms.Label
@@ -917,10 +842,10 @@ Partial Class CompileUserControl
 	Friend WithEvents CompileLogRichTextBox As Crowbar.RichTextBoxEx
 	Friend WithEvents CancelCompileButton As ButtonEx
 	Friend WithEvents SkipCurrentModelButton As ButtonEx
-	Friend WithEvents CompileComboBox As ComboBoxEx
-	Friend WithEvents RecompileButton As ButtonEx
-	Friend WithEvents CompiledFilesComboBox As ComboBoxEx
-	Friend WithEvents GotoQcButton As ButtonEx
+    Friend WithEvents CompileComboUserControl As ComboUserControl
+    Friend WithEvents RecompileButton As ButtonEx
+    Friend WithEvents CompiledFilesComboUserControl As ComboUserControl
+    Friend WithEvents GotoQcButton As ButtonEx
 	Friend WithEvents GotoCompiledMdlButton As ButtonEx
 	Friend WithEvents Panel1 As PanelEx
 	Friend WithEvents SourceEngineLogFileCheckBox As CheckBoxEx
@@ -940,8 +865,8 @@ Partial Class CompileUserControl
 	Friend WithEvents BrowseForOutputPathButton As ButtonEx
 	Friend WithEvents UseDefaultOutputSubfolderButton As ButtonEx
 	Friend WithEvents OutputPathTextBox As Crowbar.RichTextBoxEx
-	Friend WithEvents OutputPathComboBox As ComboBoxEx
-	Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents OutputPathComboUserControl As ComboUserControl
+    Friend WithEvents Label1 As System.Windows.Forms.Label
 	Friend WithEvents GameModelsOutputPathTextBox As Crowbar.RichTextBoxEx
 	Friend WithEvents CompilerOptionsSourceEnginePanel As PanelEx
 	Friend WithEvents CompilerOptionsGoldSourceEnginePanel As PanelEx

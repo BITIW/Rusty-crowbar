@@ -177,8 +177,6 @@ Public Class GroupBoxEx
 	'End Sub
 
 	Protected Overrides Sub OnPaint(ByVal e As PaintEventArgs)
-		'MyBase.OnPaint(e)
-
 		Dim theme As GroupBoxTheme = Nothing
 		' This check prevents problems with viewing and saving Forms in VS Designer.
 		If TheApp IsNot Nothing Then
@@ -205,6 +203,8 @@ Public Class GroupBoxEx
 			Dim textIndent As Integer = 6
 			Dim textRect As New Rectangle(clientRectangle.X + textIndent, clientRectangle.Y, clientRectangle.Width - (textIndent * 2), CInt(stringSize.Height))
 			TextRenderer.DrawText(g, Me.Text, Me.Font, textRect, WidgetTextColor, WidgetBackColor, TextFormatFlags.Left Or TextFormatFlags.VerticalCenter Or TextFormatFlags.WordEllipsis Or TextFormatFlags.LeftAndRightPadding)
+		Else
+			MyBase.OnPaint(e)
 		End If
 	End Sub
 

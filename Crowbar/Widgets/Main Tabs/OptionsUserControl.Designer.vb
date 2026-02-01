@@ -19,58 +19,58 @@ Partial Class OptionsUserControl
 	'Do not modify it using the code editor.
 	<System.Diagnostics.DebuggerStepThrough()> _
 	Private Sub InitializeComponent()
-		Me.IntegrateContextMenuItemsCheckBox = New CheckBoxEx()
+		Me.IntegrateContextMenuItemsCheckBox = New Crowbar.CheckBoxEx()
 		Me.Label1 = New System.Windows.Forms.Label()
-		Me.IntegrateAsSubmenuCheckBox = New CheckBoxEx()
+		Me.IntegrateAsSubmenuCheckBox = New Crowbar.CheckBoxEx()
 		Me.GroupBox1 = New Crowbar.GroupBoxEx()
 		Me.Panel7 = New Crowbar.PanelEx()
-		Me.OptionsContextMenuCompileFolderAndSubfoldersCheckBox = New CheckBoxEx()
-		Me.OptionsContextMenuCompileFolderCheckBox = New CheckBoxEx()
-		Me.OptionsContextMenuCompileQcFileCheckBox = New CheckBoxEx()
-		Me.OptionsContextMenuDecompileFolderAndSubfoldersCheckBox = New CheckBoxEx()
-		Me.OptionsContextMenuDecompileFolderCheckBox = New CheckBoxEx()
-		Me.OptionsContextMenuDecompileMdlFileCheckBox = New CheckBoxEx()
-		Me.OptionsContextMenuViewMdlFileCheckBox = New CheckBoxEx()
-		Me.OptionsContextMenuOpenWithCrowbarCheckBox = New CheckBoxEx()
+		Me.OptionsContextMenuCompileFolderAndSubfoldersCheckBox = New Crowbar.CheckBoxEx()
+		Me.OptionsContextMenuCompileFolderCheckBox = New Crowbar.CheckBoxEx()
+		Me.OptionsContextMenuCompileQcFileCheckBox = New Crowbar.CheckBoxEx()
+		Me.OptionsContextMenuDecompileFolderAndSubfoldersCheckBox = New Crowbar.CheckBoxEx()
+		Me.OptionsContextMenuDecompileFolderCheckBox = New Crowbar.CheckBoxEx()
+		Me.OptionsContextMenuDecompileMdlFileCheckBox = New Crowbar.CheckBoxEx()
+		Me.OptionsContextMenuViewMdlFileCheckBox = New Crowbar.CheckBoxEx()
+		Me.OptionsContextMenuOpenWithCrowbarCheckBox = New Crowbar.CheckBoxEx()
 		Me.ContextMenuUseDefaultsButton = New Crowbar.ButtonEx()
-		Me.AutoOpenMdlFileCheckBox = New CheckBoxEx()
-		Me.AutoOpenQcFileCheckBox = New CheckBoxEx()
+		Me.AutoOpenMdlFileCheckBox = New Crowbar.CheckBoxEx()
+		Me.AutoOpenQcFileCheckBox = New Crowbar.CheckBoxEx()
 		Me.GroupBox2 = New Crowbar.GroupBoxEx()
 		Me.Panel2 = New Crowbar.PanelEx()
-		Me.AutoOpenGmaFileForPublishRadioButton = New RadioButtonEx()
-		Me.AutoOpenGmaFileForUnpackRadioButton = New RadioButtonEx()
+		Me.AutoOpenGmaFileForPublishRadioButton = New Crowbar.RadioButtonEx()
+		Me.AutoOpenGmaFileForUnpackRadioButton = New Crowbar.RadioButtonEx()
 		Me.AutoOpenVpkPanel = New Crowbar.PanelEx()
-		Me.AutoOpenVpkFileForPublishRadioButton = New RadioButtonEx()
-		Me.AutoOpenVpkFileForUnpackRadioButton = New RadioButtonEx()
+		Me.AutoOpenVpkFileForPublishRadioButton = New Crowbar.RadioButtonEx()
+		Me.AutoOpenVpkFileForUnpackRadioButton = New Crowbar.RadioButtonEx()
 		Me.Label14 = New System.Windows.Forms.Label()
-		Me.AutoOpenFpxFileCheckBox = New CheckBoxEx()
-		Me.AutoOpenGmaFileCheckBox = New CheckBoxEx()
+		Me.AutoOpenFpxFileCheckBox = New Crowbar.CheckBoxEx()
+		Me.AutoOpenGmaFileCheckBox = New Crowbar.CheckBoxEx()
 		Me.Label5 = New System.Windows.Forms.Label()
 		Me.AutoOpenFolderPanel = New Crowbar.PanelEx()
-		Me.AutoOpenFolderForPackRadioButton = New RadioButtonEx()
-		Me.AutoOpenFolderForCompileRadioButton = New RadioButtonEx()
-		Me.AutoOpenFolderForDecompileRadioButton = New RadioButtonEx()
-		Me.AutoOpenFolderForUnpackRadioButton = New RadioButtonEx()
+		Me.AutoOpenFolderForPackRadioButton = New Crowbar.RadioButtonEx()
+		Me.AutoOpenFolderForCompileRadioButton = New Crowbar.RadioButtonEx()
+		Me.AutoOpenFolderForDecompileRadioButton = New Crowbar.RadioButtonEx()
+		Me.AutoOpenFolderForUnpackRadioButton = New Crowbar.RadioButtonEx()
 		Me.Label4 = New System.Windows.Forms.Label()
 		Me.Label2 = New System.Windows.Forms.Label()
 		Me.AutoOpenUseDefaultsButton = New Crowbar.ButtonEx()
 		Me.Panel1 = New Crowbar.PanelEx()
 		Me.Label9 = New System.Windows.Forms.Label()
 		Me.Label8 = New System.Windows.Forms.Label()
-		Me.AutoOpenMdlFileForViewCheckBox = New CheckBoxEx()
-		Me.AutoOpenMdlFileForDecompileCheckBox = New CheckBoxEx()
-		Me.AutoOpenMdlFileForPreviewCheckBox = New CheckBoxEx()
-		Me.AutoOpenMdlFileForViewingRadioButton = New RadioButtonEx()
-		Me.AutoOpenMdlFileForPreviewingRadioButton = New RadioButtonEx()
-		Me.AutoOpenMdlFileForDecompilingRadioButton = New RadioButtonEx()
-		Me.AutoOpenVpkFileCheckBox = New CheckBoxEx()
+		Me.AutoOpenMdlFileForViewCheckBox = New Crowbar.CheckBoxEx()
+		Me.AutoOpenMdlFileForDecompileCheckBox = New Crowbar.CheckBoxEx()
+		Me.AutoOpenMdlFileForPreviewCheckBox = New Crowbar.CheckBoxEx()
+		Me.AutoOpenMdlFileForViewingRadioButton = New Crowbar.RadioButtonEx()
+		Me.AutoOpenMdlFileForPreviewingRadioButton = New Crowbar.RadioButtonEx()
+		Me.AutoOpenMdlFileForDecompilingRadioButton = New Crowbar.RadioButtonEx()
+		Me.AutoOpenVpkFileCheckBox = New Crowbar.CheckBoxEx()
 		Me.GroupBox3 = New Crowbar.GroupBoxEx()
 		Me.Panel5 = New Crowbar.PanelEx()
-		Me.DragAndDropGmaFileForPublishRadioButton = New RadioButtonEx()
-		Me.DragAndDropGmaFileForUnpackRadioButton = New RadioButtonEx()
+		Me.DragAndDropGmaFileForPublishRadioButton = New Crowbar.RadioButtonEx()
+		Me.DragAndDropGmaFileForUnpackRadioButton = New Crowbar.RadioButtonEx()
 		Me.Panel6 = New Crowbar.PanelEx()
-		Me.DragAndDropVpkFileForPublishRadioButton = New RadioButtonEx()
-		Me.DragAndDropVpkFileForUnpackRadioButton = New RadioButtonEx()
+		Me.DragAndDropVpkFileForPublishRadioButton = New Crowbar.RadioButtonEx()
+		Me.DragAndDropVpkFileForUnpackRadioButton = New Crowbar.RadioButtonEx()
 		Me.Label7 = New System.Windows.Forms.Label()
 		Me.Label6 = New System.Windows.Forms.Label()
 		Me.Label13 = New System.Windows.Forms.Label()
@@ -78,23 +78,23 @@ Partial Class OptionsUserControl
 		Me.Panel3 = New Crowbar.PanelEx()
 		Me.Label10 = New System.Windows.Forms.Label()
 		Me.Label11 = New System.Windows.Forms.Label()
-		Me.DragAndDropMdlFileForViewCheckBox = New CheckBoxEx()
-		Me.DragAndDropMdlFileForDecompileCheckBox = New CheckBoxEx()
-		Me.DragAndDropMdlFileForPreviewCheckBox = New CheckBoxEx()
-		Me.DragAndDropMdlFileForPreviewingRadioButton = New RadioButtonEx()
-		Me.DragAndDropMdlFileForDecompilingRadioButton = New RadioButtonEx()
-		Me.DragAndDropMdlFileForViewingRadioButton = New RadioButtonEx()
+		Me.DragAndDropMdlFileForViewCheckBox = New Crowbar.CheckBoxEx()
+		Me.DragAndDropMdlFileForDecompileCheckBox = New Crowbar.CheckBoxEx()
+		Me.DragAndDropMdlFileForPreviewCheckBox = New Crowbar.CheckBoxEx()
+		Me.DragAndDropMdlFileForPreviewingRadioButton = New Crowbar.RadioButtonEx()
+		Me.DragAndDropMdlFileForDecompilingRadioButton = New Crowbar.RadioButtonEx()
+		Me.DragAndDropMdlFileForViewingRadioButton = New Crowbar.RadioButtonEx()
 		Me.Label3 = New System.Windows.Forms.Label()
 		Me.DragAndDropUseDefaultsButton = New Crowbar.ButtonEx()
 		Me.Panel4 = New Crowbar.PanelEx()
-		Me.DragAndDropFolderForPackRadioButton = New RadioButtonEx()
-		Me.DragAndDropFolderForCompileRadioButton = New RadioButtonEx()
-		Me.DragAndDropFolderForDecompileRadioButton = New RadioButtonEx()
-		Me.DragAndDropFolderForUnpackRadioButton = New RadioButtonEx()
+		Me.DragAndDropFolderForPackRadioButton = New Crowbar.RadioButtonEx()
+		Me.DragAndDropFolderForCompileRadioButton = New Crowbar.RadioButtonEx()
+		Me.DragAndDropFolderForDecompileRadioButton = New Crowbar.RadioButtonEx()
+		Me.DragAndDropFolderForUnpackRadioButton = New Crowbar.RadioButtonEx()
 		Me.ApplyLabel = New System.Windows.Forms.Label()
 		Me.ApplyButton = New Crowbar.ButtonEx()
 		Me.ApplyPanel = New Crowbar.PanelEx()
-		Me.SingleInstanceCheckBox = New CheckBoxEx()
+		Me.SingleInstanceCheckBox = New Crowbar.CheckBoxEx()
 		Me.GroupBox1.SuspendLayout()
 		Me.Panel7.SuspendLayout()
 		Me.GroupBox2.SuspendLayout()
@@ -113,6 +113,7 @@ Partial Class OptionsUserControl
 		'IntegrateContextMenuItemsCheckBox
 		'
 		Me.IntegrateContextMenuItemsCheckBox.AutoSize = True
+		Me.IntegrateContextMenuItemsCheckBox.IsReadOnly = False
 		Me.IntegrateContextMenuItemsCheckBox.Location = New System.Drawing.Point(6, 19)
 		Me.IntegrateContextMenuItemsCheckBox.Name = "IntegrateContextMenuItemsCheckBox"
 		Me.IntegrateContextMenuItemsCheckBox.Size = New System.Drawing.Size(223, 17)
@@ -132,6 +133,7 @@ Partial Class OptionsUserControl
 		'IntegrateAsSubmenuCheckBox
 		'
 		Me.IntegrateAsSubmenuCheckBox.AutoSize = True
+		Me.IntegrateAsSubmenuCheckBox.IsReadOnly = False
 		Me.IntegrateAsSubmenuCheckBox.Location = New System.Drawing.Point(24, 42)
 		Me.IntegrateAsSubmenuCheckBox.Name = "IntegrateAsSubmenuCheckBox"
 		Me.IntegrateAsSubmenuCheckBox.Size = New System.Drawing.Size(202, 17)
@@ -141,13 +143,11 @@ Partial Class OptionsUserControl
 		'
 		'GroupBox1
 		'
-		Me.GroupBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.GroupBox1.Controls.Add(Me.Panel7)
 		Me.GroupBox1.Controls.Add(Me.ContextMenuUseDefaultsButton)
 		Me.GroupBox1.Controls.Add(Me.IntegrateContextMenuItemsCheckBox)
 		Me.GroupBox1.Controls.Add(Me.Label1)
 		Me.GroupBox1.Controls.Add(Me.IntegrateAsSubmenuCheckBox)
-		Me.GroupBox1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.GroupBox1.IsReadOnly = False
 		Me.GroupBox1.Location = New System.Drawing.Point(415, 26)
 		Me.GroupBox1.Name = "GroupBox1"
@@ -160,7 +160,7 @@ Partial Class OptionsUserControl
 		'
 		'Panel7
 		'
-		Me.Panel7.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
+		Me.Panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.Panel7.Controls.Add(Me.OptionsContextMenuCompileFolderAndSubfoldersCheckBox)
 		Me.Panel7.Controls.Add(Me.OptionsContextMenuCompileFolderCheckBox)
 		Me.Panel7.Controls.Add(Me.OptionsContextMenuCompileQcFileCheckBox)
@@ -169,7 +169,6 @@ Partial Class OptionsUserControl
 		Me.Panel7.Controls.Add(Me.OptionsContextMenuDecompileMdlFileCheckBox)
 		Me.Panel7.Controls.Add(Me.OptionsContextMenuViewMdlFileCheckBox)
 		Me.Panel7.Controls.Add(Me.OptionsContextMenuOpenWithCrowbarCheckBox)
-		Me.Panel7.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.Panel7.Location = New System.Drawing.Point(27, 84)
 		Me.Panel7.Name = "Panel7"
 		Me.Panel7.SelectedIndex = -1
@@ -180,6 +179,7 @@ Partial Class OptionsUserControl
 		'OptionsContextMenuCompileFolderAndSubfoldersCheckBox
 		'
 		Me.OptionsContextMenuCompileFolderAndSubfoldersCheckBox.AutoSize = True
+		Me.OptionsContextMenuCompileFolderAndSubfoldersCheckBox.IsReadOnly = False
 		Me.OptionsContextMenuCompileFolderAndSubfoldersCheckBox.Location = New System.Drawing.Point(3, 106)
 		Me.OptionsContextMenuCompileFolderAndSubfoldersCheckBox.Name = "OptionsContextMenuCompileFolderAndSubfoldersCheckBox"
 		Me.OptionsContextMenuCompileFolderAndSubfoldersCheckBox.Size = New System.Drawing.Size(247, 17)
@@ -190,6 +190,7 @@ Partial Class OptionsUserControl
 		'OptionsContextMenuCompileFolderCheckBox
 		'
 		Me.OptionsContextMenuCompileFolderCheckBox.AutoSize = True
+		Me.OptionsContextMenuCompileFolderCheckBox.IsReadOnly = False
 		Me.OptionsContextMenuCompileFolderCheckBox.Location = New System.Drawing.Point(3, 91)
 		Me.OptionsContextMenuCompileFolderCheckBox.Name = "OptionsContextMenuCompileFolderCheckBox"
 		Me.OptionsContextMenuCompileFolderCheckBox.Size = New System.Drawing.Size(166, 17)
@@ -200,6 +201,7 @@ Partial Class OptionsUserControl
 		'OptionsContextMenuCompileQcFileCheckBox
 		'
 		Me.OptionsContextMenuCompileQcFileCheckBox.AutoSize = True
+		Me.OptionsContextMenuCompileQcFileCheckBox.IsReadOnly = False
 		Me.OptionsContextMenuCompileQcFileCheckBox.Location = New System.Drawing.Point(3, 76)
 		Me.OptionsContextMenuCompileQcFileCheckBox.Name = "OptionsContextMenuCompileQcFileCheckBox"
 		Me.OptionsContextMenuCompileQcFileCheckBox.Size = New System.Drawing.Size(105, 17)
@@ -210,6 +212,7 @@ Partial Class OptionsUserControl
 		'OptionsContextMenuDecompileFolderAndSubfoldersCheckBox
 		'
 		Me.OptionsContextMenuDecompileFolderAndSubfoldersCheckBox.AutoSize = True
+		Me.OptionsContextMenuDecompileFolderAndSubfoldersCheckBox.IsReadOnly = False
 		Me.OptionsContextMenuDecompileFolderAndSubfoldersCheckBox.Location = New System.Drawing.Point(3, 61)
 		Me.OptionsContextMenuDecompileFolderAndSubfoldersCheckBox.Name = "OptionsContextMenuDecompileFolderAndSubfoldersCheckBox"
 		Me.OptionsContextMenuDecompileFolderAndSubfoldersCheckBox.Size = New System.Drawing.Size(259, 17)
@@ -220,6 +223,7 @@ Partial Class OptionsUserControl
 		'OptionsContextMenuDecompileFolderCheckBox
 		'
 		Me.OptionsContextMenuDecompileFolderCheckBox.AutoSize = True
+		Me.OptionsContextMenuDecompileFolderCheckBox.IsReadOnly = False
 		Me.OptionsContextMenuDecompileFolderCheckBox.Location = New System.Drawing.Point(3, 46)
 		Me.OptionsContextMenuDecompileFolderCheckBox.Name = "OptionsContextMenuDecompileFolderCheckBox"
 		Me.OptionsContextMenuDecompileFolderCheckBox.Size = New System.Drawing.Size(178, 17)
@@ -230,6 +234,7 @@ Partial Class OptionsUserControl
 		'OptionsContextMenuDecompileMdlFileCheckBox
 		'
 		Me.OptionsContextMenuDecompileMdlFileCheckBox.AutoSize = True
+		Me.OptionsContextMenuDecompileMdlFileCheckBox.IsReadOnly = False
 		Me.OptionsContextMenuDecompileMdlFileCheckBox.Location = New System.Drawing.Point(3, 31)
 		Me.OptionsContextMenuDecompileMdlFileCheckBox.Name = "OptionsContextMenuDecompileMdlFileCheckBox"
 		Me.OptionsContextMenuDecompileMdlFileCheckBox.Size = New System.Drawing.Size(189, 17)
@@ -240,6 +245,7 @@ Partial Class OptionsUserControl
 		'OptionsContextMenuViewMdlFileCheckBox
 		'
 		Me.OptionsContextMenuViewMdlFileCheckBox.AutoSize = True
+		Me.OptionsContextMenuViewMdlFileCheckBox.IsReadOnly = False
 		Me.OptionsContextMenuViewMdlFileCheckBox.Location = New System.Drawing.Point(3, 16)
 		Me.OptionsContextMenuViewMdlFileCheckBox.Name = "OptionsContextMenuViewMdlFileCheckBox"
 		Me.OptionsContextMenuViewMdlFileCheckBox.Size = New System.Drawing.Size(96, 17)
@@ -250,6 +256,7 @@ Partial Class OptionsUserControl
 		'OptionsContextMenuOpenWithCrowbarCheckBox
 		'
 		Me.OptionsContextMenuOpenWithCrowbarCheckBox.AutoSize = True
+		Me.OptionsContextMenuOpenWithCrowbarCheckBox.IsReadOnly = False
 		Me.OptionsContextMenuOpenWithCrowbarCheckBox.Location = New System.Drawing.Point(3, 1)
 		Me.OptionsContextMenuOpenWithCrowbarCheckBox.Name = "OptionsContextMenuOpenWithCrowbarCheckBox"
 		Me.OptionsContextMenuOpenWithCrowbarCheckBox.Size = New System.Drawing.Size(128, 17)
@@ -263,6 +270,7 @@ Partial Class OptionsUserControl
 		Me.ContextMenuUseDefaultsButton.Location = New System.Drawing.Point(104, 438)
 		Me.ContextMenuUseDefaultsButton.Name = "ContextMenuUseDefaultsButton"
 		Me.ContextMenuUseDefaultsButton.Size = New System.Drawing.Size(100, 23)
+		Me.ContextMenuUseDefaultsButton.SpecialImage = Crowbar.ButtonEx.SpecialImageType.None
 		Me.ContextMenuUseDefaultsButton.TabIndex = 19
 		Me.ContextMenuUseDefaultsButton.Text = "Use Defaults"
 		Me.ContextMenuUseDefaultsButton.UseVisualStyleBackColor = True
@@ -270,6 +278,7 @@ Partial Class OptionsUserControl
 		'AutoOpenMdlFileCheckBox
 		'
 		Me.AutoOpenMdlFileCheckBox.AutoSize = True
+		Me.AutoOpenMdlFileCheckBox.IsReadOnly = False
 		Me.AutoOpenMdlFileCheckBox.Location = New System.Drawing.Point(6, 214)
 		Me.AutoOpenMdlFileCheckBox.Name = "AutoOpenMdlFileCheckBox"
 		Me.AutoOpenMdlFileCheckBox.Size = New System.Drawing.Size(71, 17)
@@ -280,6 +289,7 @@ Partial Class OptionsUserControl
 		'AutoOpenQcFileCheckBox
 		'
 		Me.AutoOpenQcFileCheckBox.AutoSize = True
+		Me.AutoOpenQcFileCheckBox.IsReadOnly = False
 		Me.AutoOpenQcFileCheckBox.Location = New System.Drawing.Point(6, 307)
 		Me.AutoOpenQcFileCheckBox.Name = "AutoOpenQcFileCheckBox"
 		Me.AutoOpenQcFileCheckBox.Size = New System.Drawing.Size(63, 17)
@@ -289,7 +299,6 @@ Partial Class OptionsUserControl
 		'
 		'GroupBox2
 		'
-		Me.GroupBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.GroupBox2.Controls.Add(Me.Panel2)
 		Me.GroupBox2.Controls.Add(Me.AutoOpenVpkPanel)
 		Me.GroupBox2.Controls.Add(Me.Label14)
@@ -304,7 +313,6 @@ Partial Class OptionsUserControl
 		Me.GroupBox2.Controls.Add(Me.AutoOpenMdlFileCheckBox)
 		Me.GroupBox2.Controls.Add(Me.AutoOpenQcFileCheckBox)
 		Me.GroupBox2.Controls.Add(Me.AutoOpenVpkFileCheckBox)
-		Me.GroupBox2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.GroupBox2.IsReadOnly = False
 		Me.GroupBox2.Location = New System.Drawing.Point(3, 26)
 		Me.GroupBox2.Name = "GroupBox2"
@@ -316,10 +324,9 @@ Partial Class OptionsUserControl
 		'
 		'Panel2
 		'
-		Me.Panel2.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
+		Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.Panel2.Controls.Add(Me.AutoOpenGmaFileForPublishRadioButton)
 		Me.Panel2.Controls.Add(Me.AutoOpenGmaFileForUnpackRadioButton)
-		Me.Panel2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.Panel2.Location = New System.Drawing.Point(81, 149)
 		Me.Panel2.Name = "Panel2"
 		Me.Panel2.SelectedIndex = 0
@@ -352,10 +359,9 @@ Partial Class OptionsUserControl
 		'
 		'AutoOpenVpkPanel
 		'
-		Me.AutoOpenVpkPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
+		Me.AutoOpenVpkPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.AutoOpenVpkPanel.Controls.Add(Me.AutoOpenVpkFileForPublishRadioButton)
 		Me.AutoOpenVpkPanel.Controls.Add(Me.AutoOpenVpkFileForUnpackRadioButton)
-		Me.AutoOpenVpkPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.AutoOpenVpkPanel.Location = New System.Drawing.Point(81, 107)
 		Me.AutoOpenVpkPanel.Name = "AutoOpenVpkPanel"
 		Me.AutoOpenVpkPanel.SelectedIndex = 0
@@ -398,6 +404,7 @@ Partial Class OptionsUserControl
 		'AutoOpenFpxFileCheckBox
 		'
 		Me.AutoOpenFpxFileCheckBox.AutoSize = True
+		Me.AutoOpenFpxFileCheckBox.IsReadOnly = False
 		Me.AutoOpenFpxFileCheckBox.Location = New System.Drawing.Point(6, 191)
 		Me.AutoOpenFpxFileCheckBox.Name = "AutoOpenFpxFileCheckBox"
 		Me.AutoOpenFpxFileCheckBox.Size = New System.Drawing.Size(66, 17)
@@ -408,6 +415,7 @@ Partial Class OptionsUserControl
 		'AutoOpenGmaFileCheckBox
 		'
 		Me.AutoOpenGmaFileCheckBox.AutoSize = True
+		Me.AutoOpenGmaFileCheckBox.IsReadOnly = False
 		Me.AutoOpenGmaFileCheckBox.Location = New System.Drawing.Point(6, 151)
 		Me.AutoOpenGmaFileCheckBox.Name = "AutoOpenGmaFileCheckBox"
 		Me.AutoOpenGmaFileCheckBox.Size = New System.Drawing.Size(73, 17)
@@ -427,12 +435,11 @@ Partial Class OptionsUserControl
 		'
 		'AutoOpenFolderPanel
 		'
-		Me.AutoOpenFolderPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
+		Me.AutoOpenFolderPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.AutoOpenFolderPanel.Controls.Add(Me.AutoOpenFolderForPackRadioButton)
 		Me.AutoOpenFolderPanel.Controls.Add(Me.AutoOpenFolderForCompileRadioButton)
 		Me.AutoOpenFolderPanel.Controls.Add(Me.AutoOpenFolderForDecompileRadioButton)
 		Me.AutoOpenFolderPanel.Controls.Add(Me.AutoOpenFolderForUnpackRadioButton)
-		Me.AutoOpenFolderPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.AutoOpenFolderPanel.Location = New System.Drawing.Point(81, 330)
 		Me.AutoOpenFolderPanel.Name = "AutoOpenFolderPanel"
 		Me.AutoOpenFolderPanel.SelectedIndex = 0
@@ -511,13 +518,14 @@ Partial Class OptionsUserControl
 		Me.AutoOpenUseDefaultsButton.Location = New System.Drawing.Point(44, 438)
 		Me.AutoOpenUseDefaultsButton.Name = "AutoOpenUseDefaultsButton"
 		Me.AutoOpenUseDefaultsButton.Size = New System.Drawing.Size(100, 23)
+		Me.AutoOpenUseDefaultsButton.SpecialImage = Crowbar.ButtonEx.SpecialImageType.None
 		Me.AutoOpenUseDefaultsButton.TabIndex = 8
 		Me.AutoOpenUseDefaultsButton.Text = "Use Defaults"
 		Me.AutoOpenUseDefaultsButton.UseVisualStyleBackColor = True
 		'
 		'Panel1
 		'
-		Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
+		Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.Panel1.Controls.Add(Me.Label9)
 		Me.Panel1.Controls.Add(Me.Label8)
 		Me.Panel1.Controls.Add(Me.AutoOpenMdlFileForViewCheckBox)
@@ -526,7 +534,6 @@ Partial Class OptionsUserControl
 		Me.Panel1.Controls.Add(Me.AutoOpenMdlFileForViewingRadioButton)
 		Me.Panel1.Controls.Add(Me.AutoOpenMdlFileForPreviewingRadioButton)
 		Me.Panel1.Controls.Add(Me.AutoOpenMdlFileForDecompilingRadioButton)
-		Me.Panel1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.Panel1.Location = New System.Drawing.Point(25, 231)
 		Me.Panel1.Name = "Panel1"
 		Me.Panel1.SelectedIndex = 0
@@ -555,6 +562,7 @@ Partial Class OptionsUserControl
 		'AutoOpenMdlFileForViewCheckBox
 		'
 		Me.AutoOpenMdlFileForViewCheckBox.AutoSize = True
+		Me.AutoOpenMdlFileForViewCheckBox.IsReadOnly = False
 		Me.AutoOpenMdlFileForViewCheckBox.Location = New System.Drawing.Point(3, 48)
 		Me.AutoOpenMdlFileForViewCheckBox.Name = "AutoOpenMdlFileForViewCheckBox"
 		Me.AutoOpenMdlFileForViewCheckBox.Size = New System.Drawing.Size(51, 17)
@@ -565,6 +573,7 @@ Partial Class OptionsUserControl
 		'AutoOpenMdlFileForDecompileCheckBox
 		'
 		Me.AutoOpenMdlFileForDecompileCheckBox.AutoSize = True
+		Me.AutoOpenMdlFileForDecompileCheckBox.IsReadOnly = False
 		Me.AutoOpenMdlFileForDecompileCheckBox.Location = New System.Drawing.Point(3, 33)
 		Me.AutoOpenMdlFileForDecompileCheckBox.Name = "AutoOpenMdlFileForDecompileCheckBox"
 		Me.AutoOpenMdlFileForDecompileCheckBox.Size = New System.Drawing.Size(80, 17)
@@ -575,6 +584,7 @@ Partial Class OptionsUserControl
 		'AutoOpenMdlFileForPreviewCheckBox
 		'
 		Me.AutoOpenMdlFileForPreviewCheckBox.AutoSize = True
+		Me.AutoOpenMdlFileForPreviewCheckBox.IsReadOnly = False
 		Me.AutoOpenMdlFileForPreviewCheckBox.Location = New System.Drawing.Point(3, 18)
 		Me.AutoOpenMdlFileForPreviewCheckBox.Name = "AutoOpenMdlFileForPreviewCheckBox"
 		Me.AutoOpenMdlFileForPreviewCheckBox.Size = New System.Drawing.Size(65, 17)
@@ -613,6 +623,7 @@ Partial Class OptionsUserControl
 		'AutoOpenVpkFileCheckBox
 		'
 		Me.AutoOpenVpkFileCheckBox.AutoSize = True
+		Me.AutoOpenVpkFileCheckBox.IsReadOnly = False
 		Me.AutoOpenVpkFileCheckBox.Location = New System.Drawing.Point(6, 108)
 		Me.AutoOpenVpkFileCheckBox.Name = "AutoOpenVpkFileCheckBox"
 		Me.AutoOpenVpkFileCheckBox.Size = New System.Drawing.Size(67, 17)
@@ -622,7 +633,6 @@ Partial Class OptionsUserControl
 		'
 		'GroupBox3
 		'
-		Me.GroupBox3.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.GroupBox3.Controls.Add(Me.Panel5)
 		Me.GroupBox3.Controls.Add(Me.Panel6)
 		Me.GroupBox3.Controls.Add(Me.Label7)
@@ -633,7 +643,6 @@ Partial Class OptionsUserControl
 		Me.GroupBox3.Controls.Add(Me.Label3)
 		Me.GroupBox3.Controls.Add(Me.DragAndDropUseDefaultsButton)
 		Me.GroupBox3.Controls.Add(Me.Panel4)
-		Me.GroupBox3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.GroupBox3.IsReadOnly = False
 		Me.GroupBox3.Location = New System.Drawing.Point(209, 26)
 		Me.GroupBox3.Name = "GroupBox3"
@@ -645,10 +654,9 @@ Partial Class OptionsUserControl
 		'
 		'Panel5
 		'
-		Me.Panel5.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
+		Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.Panel5.Controls.Add(Me.DragAndDropGmaFileForPublishRadioButton)
 		Me.Panel5.Controls.Add(Me.DragAndDropGmaFileForUnpackRadioButton)
-		Me.Panel5.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.Panel5.Location = New System.Drawing.Point(81, 149)
 		Me.Panel5.Name = "Panel5"
 		Me.Panel5.SelectedIndex = 0
@@ -681,10 +689,9 @@ Partial Class OptionsUserControl
 		'
 		'Panel6
 		'
-		Me.Panel6.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
+		Me.Panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.Panel6.Controls.Add(Me.DragAndDropVpkFileForPublishRadioButton)
 		Me.Panel6.Controls.Add(Me.DragAndDropVpkFileForUnpackRadioButton)
-		Me.Panel6.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.Panel6.Location = New System.Drawing.Point(81, 107)
 		Me.Panel6.Name = "Panel6"
 		Me.Panel6.SelectedIndex = 0
@@ -757,7 +764,7 @@ Partial Class OptionsUserControl
 		'
 		'Panel3
 		'
-		Me.Panel3.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
+		Me.Panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.Panel3.Controls.Add(Me.Label10)
 		Me.Panel3.Controls.Add(Me.Label11)
 		Me.Panel3.Controls.Add(Me.DragAndDropMdlFileForViewCheckBox)
@@ -766,7 +773,6 @@ Partial Class OptionsUserControl
 		Me.Panel3.Controls.Add(Me.DragAndDropMdlFileForPreviewingRadioButton)
 		Me.Panel3.Controls.Add(Me.DragAndDropMdlFileForDecompilingRadioButton)
 		Me.Panel3.Controls.Add(Me.DragAndDropMdlFileForViewingRadioButton)
-		Me.Panel3.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.Panel3.Location = New System.Drawing.Point(25, 207)
 		Me.Panel3.Name = "Panel3"
 		Me.Panel3.SelectedIndex = 0
@@ -795,6 +801,7 @@ Partial Class OptionsUserControl
 		'DragAndDropMdlFileForViewCheckBox
 		'
 		Me.DragAndDropMdlFileForViewCheckBox.AutoSize = True
+		Me.DragAndDropMdlFileForViewCheckBox.IsReadOnly = False
 		Me.DragAndDropMdlFileForViewCheckBox.Location = New System.Drawing.Point(3, 48)
 		Me.DragAndDropMdlFileForViewCheckBox.Name = "DragAndDropMdlFileForViewCheckBox"
 		Me.DragAndDropMdlFileForViewCheckBox.Size = New System.Drawing.Size(51, 17)
@@ -805,6 +812,7 @@ Partial Class OptionsUserControl
 		'DragAndDropMdlFileForDecompileCheckBox
 		'
 		Me.DragAndDropMdlFileForDecompileCheckBox.AutoSize = True
+		Me.DragAndDropMdlFileForDecompileCheckBox.IsReadOnly = False
 		Me.DragAndDropMdlFileForDecompileCheckBox.Location = New System.Drawing.Point(3, 33)
 		Me.DragAndDropMdlFileForDecompileCheckBox.Name = "DragAndDropMdlFileForDecompileCheckBox"
 		Me.DragAndDropMdlFileForDecompileCheckBox.Size = New System.Drawing.Size(80, 17)
@@ -815,6 +823,7 @@ Partial Class OptionsUserControl
 		'DragAndDropMdlFileForPreviewCheckBox
 		'
 		Me.DragAndDropMdlFileForPreviewCheckBox.AutoSize = True
+		Me.DragAndDropMdlFileForPreviewCheckBox.IsReadOnly = False
 		Me.DragAndDropMdlFileForPreviewCheckBox.Location = New System.Drawing.Point(3, 18)
 		Me.DragAndDropMdlFileForPreviewCheckBox.Name = "DragAndDropMdlFileForPreviewCheckBox"
 		Me.DragAndDropMdlFileForPreviewCheckBox.Size = New System.Drawing.Size(65, 17)
@@ -867,18 +876,18 @@ Partial Class OptionsUserControl
 		Me.DragAndDropUseDefaultsButton.Location = New System.Drawing.Point(50, 438)
 		Me.DragAndDropUseDefaultsButton.Name = "DragAndDropUseDefaultsButton"
 		Me.DragAndDropUseDefaultsButton.Size = New System.Drawing.Size(100, 23)
+		Me.DragAndDropUseDefaultsButton.SpecialImage = Crowbar.ButtonEx.SpecialImageType.None
 		Me.DragAndDropUseDefaultsButton.TabIndex = 4
 		Me.DragAndDropUseDefaultsButton.Text = "Use Defaults"
 		Me.DragAndDropUseDefaultsButton.UseVisualStyleBackColor = True
 		'
 		'Panel4
 		'
-		Me.Panel4.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
+		Me.Panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.Panel4.Controls.Add(Me.DragAndDropFolderForPackRadioButton)
 		Me.Panel4.Controls.Add(Me.DragAndDropFolderForCompileRadioButton)
 		Me.Panel4.Controls.Add(Me.DragAndDropFolderForDecompileRadioButton)
 		Me.Panel4.Controls.Add(Me.DragAndDropFolderForUnpackRadioButton)
-		Me.Panel4.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.Panel4.Location = New System.Drawing.Point(81, 283)
 		Me.Panel4.Name = "Panel4"
 		Me.Panel4.SelectedIndex = 0
@@ -946,16 +955,15 @@ Partial Class OptionsUserControl
 		Me.ApplyButton.Location = New System.Drawing.Point(521, 3)
 		Me.ApplyButton.Name = "ApplyButton"
 		Me.ApplyButton.Size = New System.Drawing.Size(50, 23)
+		Me.ApplyButton.SpecialImage = Crowbar.ButtonEx.SpecialImageType.None
 		Me.ApplyButton.TabIndex = 20
 		Me.ApplyButton.Text = "Apply"
 		Me.ApplyButton.UseVisualStyleBackColor = True
 		'
 		'ApplyPanel
 		'
-		Me.ApplyPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.ApplyPanel.Controls.Add(Me.ApplyLabel)
 		Me.ApplyPanel.Controls.Add(Me.ApplyButton)
-		Me.ApplyPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.ApplyPanel.Location = New System.Drawing.Point(3, 499)
 		Me.ApplyPanel.Name = "ApplyPanel"
 		Me.ApplyPanel.SelectedIndex = -1
@@ -967,6 +975,7 @@ Partial Class OptionsUserControl
 		'SingleInstanceCheckBox
 		'
 		Me.SingleInstanceCheckBox.AutoSize = True
+		Me.SingleInstanceCheckBox.IsReadOnly = False
 		Me.SingleInstanceCheckBox.Location = New System.Drawing.Point(3, 3)
 		Me.SingleInstanceCheckBox.Name = "SingleInstanceCheckBox"
 		Me.SingleInstanceCheckBox.Size = New System.Drawing.Size(336, 17)
@@ -1075,20 +1084,20 @@ Partial Class OptionsUserControl
 	Friend WithEvents Label14 As System.Windows.Forms.Label
 	Friend WithEvents AutoOpenFpxFileCheckBox As CheckBoxEx
 	Friend WithEvents AutoOpenGmaFileCheckBox As CheckBoxEx
-	Friend WithEvents AutoOpenFolderForPackRadioButton As RadioButton
-	Friend WithEvents DragAndDropFolderForPackRadioButton As RadioButton
-	Friend WithEvents AutoOpenVpkFileForPublishRadioButton As RadioButton
-	Friend WithEvents AutoOpenVpkFileForUnpackRadioButton As RadioButton
-	Friend WithEvents AutoOpenGmaFileForPublishRadioButton As RadioButton
-	Friend WithEvents AutoOpenGmaFileForUnpackRadioButton As RadioButton
-	Friend WithEvents DragAndDropGmaFileForPublishRadioButton As RadioButton
-	Friend WithEvents DragAndDropGmaFileForUnpackRadioButton As RadioButton
-	Friend WithEvents DragAndDropVpkFileForPublishRadioButton As RadioButton
-	Friend WithEvents DragAndDropVpkFileForUnpackRadioButton As RadioButton
 	Friend WithEvents Label7 As Label
 	Friend WithEvents Label6 As Label
 	Friend WithEvents AutoOpenVpkPanel As PanelEx
 	Friend WithEvents Panel2 As PanelEx
 	Friend WithEvents Panel5 As PanelEx
 	Friend WithEvents Panel6 As PanelEx
+	Friend WithEvents AutoOpenFolderForPackRadioButton As RadioButtonEx
+	Friend WithEvents DragAndDropFolderForPackRadioButton As RadioButtonEx
+	Friend WithEvents AutoOpenVpkFileForPublishRadioButton As RadioButtonEx
+	Friend WithEvents AutoOpenVpkFileForUnpackRadioButton As RadioButtonEx
+	Friend WithEvents AutoOpenGmaFileForPublishRadioButton As RadioButtonEx
+	Friend WithEvents AutoOpenGmaFileForUnpackRadioButton As RadioButtonEx
+	Friend WithEvents DragAndDropGmaFileForPublishRadioButton As RadioButtonEx
+	Friend WithEvents DragAndDropGmaFileForUnpackRadioButton As RadioButtonEx
+	Friend WithEvents DragAndDropVpkFileForPublishRadioButton As RadioButtonEx
+	Friend WithEvents DragAndDropVpkFileForUnpackRadioButton As RadioButtonEx
 End Class

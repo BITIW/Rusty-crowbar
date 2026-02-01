@@ -6,9 +6,6 @@ Public Class ComboBoxEx
 	Public Sub New()
 		MyBase.New()
 
-		Me.ForeColor = WidgetTextColor
-		Me.BackColor = WidgetHighBackColor
-
 		Me.DrawMode = DrawMode.OwnerDrawFixed
 		Me.SetStyle(ControlStyles.UserPaint, True)
 

@@ -122,11 +122,11 @@ Public Class DataGridViewEx
             If MyBase.ReadOnly <> value Then
                 MyBase.ReadOnly = value
 
-                If MyBase.ReadOnly Then
-                    Me.DefaultCellStyle.BackColor = WidgetConstants.WidgetBackColor
-                Else
-                    Me.DefaultCellStyle.BackColor = WidgetConstants.WidgetDisabledTextColor
-                End If
+                'If MyBase.ReadOnly Then
+                '    Me.DefaultCellStyle.BackColor = WidgetConstants.WidgetBackColor
+                'Else
+                '    Me.DefaultCellStyle.BackColor = WidgetConstants.WidgetDisabledTextColor
+                'End If
             End If
         End Set
     End Property

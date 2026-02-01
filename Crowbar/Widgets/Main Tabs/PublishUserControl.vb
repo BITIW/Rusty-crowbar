@@ -22,10 +22,6 @@ Public Class PublishUserControl
 			widget.Font = Me.Font
 		Next
 
-		Me.BackColor = WidgetBackColor
-
-		'Me.ItemsPanel.BackColor = Color.Red
-
 		Me.UseInDownloadToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 		Me.UseInDownloadToolStripMenuItem.Name = "ItemsDataGridViewUseInDownloadToolStripMenuItem"
 		Me.UseInDownloadToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
@@ -96,9 +92,9 @@ Public Class PublishUserControl
 		If TheApp.Settings.PublishGameSelectedIndex >= TheApp.SteamAppInfos.Count Then
 			TheApp.Settings.PublishGameSelectedIndex = 0
 		End If
-		Me.AppIdComboBox.DisplayMember = "Name"
-		Me.AppIdComboBox.ValueMember = "ID"
 		Me.AppIdComboBox.DataSource = TheApp.SteamAppInfos
+		Me.AppIdComboBox.ValueMember = "ID"
+		Me.AppIdComboBox.DisplayMember = "Name"
 		Me.AppIdComboBox.DataBindings.Add("SelectedIndex", TheApp.Settings, "PublishGameSelectedIndex", False, DataSourceUpdateMode.OnPropertyChanged)
 
 		Me.theBackgroundSteamPipe = New BackgroundSteamPipe()
@@ -276,9 +272,9 @@ Public Class PublishUserControl
 		textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
 		Me.ItemsDataGridView.Columns.Add(textColumn)
 
-		Me.SearchItemsToolStripComboBox.ComboBox.DisplayMember = "Value"
-		Me.SearchItemsToolStripComboBox.ComboBox.ValueMember = "Key"
 		Me.SearchItemsToolStripComboBox.ComboBox.DataSource = EnumHelper.ToList(GetType(PublishSearchFieldOptions))
+		Me.SearchItemsToolStripComboBox.ComboBox.ValueMember = "Key"
+		Me.SearchItemsToolStripComboBox.ComboBox.DisplayMember = "Value"
 		Me.SearchItemsToolStripComboBox.ComboBox.DataBindings.Add("SelectedValue", TheApp.Settings, "PublishSearchField", False, DataSourceUpdateMode.OnPropertyChanged)
 		Me.SearchItemsToolStripTextBox.DataBindings.Add("Text", TheApp.Settings, "PublishSearchText", False, DataSourceUpdateMode.OnValidation)
 	End Sub

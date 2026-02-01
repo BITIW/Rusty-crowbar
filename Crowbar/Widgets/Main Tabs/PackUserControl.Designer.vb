@@ -28,8 +28,8 @@ Partial Class PackUserControl
 		Me.BrowseForOutputPathButton = New Crowbar.ButtonEx()
 		Me.OutputPathTextBox = New Crowbar.RichTextBoxEx()
 		Me.OutputParentPathTextBox = New Crowbar.RichTextBoxEx()
-		Me.OutputPathComboBox = New Crowbar.ComboBoxEx()
-		Me.InputComboBox = New Crowbar.ComboBoxEx()
+		Me.OutputPathComboUserControl = New Crowbar.ComboUserControl()
+		Me.InputComboUserControl = New Crowbar.ComboUserControl()
 		Me.Label1 = New System.Windows.Forms.Label()
 		Me.GotoInputPathButton = New Crowbar.ButtonEx()
 		Me.Label6 = New System.Windows.Forms.Label()
@@ -48,7 +48,7 @@ Partial Class PackUserControl
 		Me.GmaGarrysModTagsUserControl = New Crowbar.GarrysModTagsUserControl()
 		Me.GameSetupPanel = New Crowbar.PanelEx()
 		Me.GameSetupLabel = New System.Windows.Forms.Label()
-		Me.GameSetupComboBox = New Crowbar.ComboBoxEx()
+		Me.GameSetupComboUserControl = New Crowbar.ComboUserControl()
 		Me.SetUpGamesButton = New Crowbar.ButtonEx()
 		Me.DirectPackOptionsLabel = New System.Windows.Forms.Label()
 		Me.DirectPackOptionsPanel = New Crowbar.PanelEx()
@@ -63,7 +63,7 @@ Partial Class PackUserControl
 		Me.CancelPackButton = New Crowbar.ButtonEx()
 		Me.UseAllInPublishButton = New Crowbar.ButtonEx()
 		Me.PostPackPanel = New Crowbar.PanelEx()
-		Me.PackedFilesComboBox = New Crowbar.ComboBoxEx()
+		Me.PackedFilesComboUserControl = New Crowbar.ComboUserControl()
 		Me.UseInPublishButton = New Crowbar.ButtonEx()
 		Me.GotoPackedFileButton = New Crowbar.ButtonEx()
 		Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
@@ -85,13 +85,12 @@ Partial Class PackUserControl
 		'
 		'Panel1
 		'
-		Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.Panel1.Controls.Add(Me.GotoOutputPathButton)
 		Me.Panel1.Controls.Add(Me.BrowseForOutputPathButton)
 		Me.Panel1.Controls.Add(Me.OutputPathTextBox)
 		Me.Panel1.Controls.Add(Me.OutputParentPathTextBox)
-		Me.Panel1.Controls.Add(Me.OutputPathComboBox)
-		Me.Panel1.Controls.Add(Me.InputComboBox)
+		Me.Panel1.Controls.Add(Me.OutputPathComboUserControl)
+		Me.Panel1.Controls.Add(Me.InputComboUserControl)
 		Me.Panel1.Controls.Add(Me.Label1)
 		Me.Panel1.Controls.Add(Me.GotoInputPathButton)
 		Me.Panel1.Controls.Add(Me.Label6)
@@ -99,7 +98,6 @@ Partial Class PackUserControl
 		Me.Panel1.Controls.Add(Me.BrowseForInputFolderOrFileNameButton)
 		Me.Panel1.Controls.Add(Me.Options_LogSplitContainer)
 		Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-		Me.Panel1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.Panel1.Location = New System.Drawing.Point(0, 0)
 		Me.Panel1.Name = "Panel1"
 		Me.Panel1.SelectedIndex = -1
@@ -132,12 +130,10 @@ Partial Class PackUserControl
 		Me.OutputPathTextBox.AllowDrop = True
 		Me.OutputPathTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
 			Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-		Me.OutputPathTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
 		Me.OutputPathTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.OutputPathTextBox.CueBannerText = ""
 		Me.OutputPathTextBox.DetectUrls = False
 		Me.OutputPathTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.OutputPathTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.OutputPathTextBox.Location = New System.Drawing.Point(223, 32)
 		Me.OutputPathTextBox.Multiline = False
 		Me.OutputPathTextBox.Name = "OutputPathTextBox"
@@ -150,12 +146,10 @@ Partial Class PackUserControl
 		'
 		Me.OutputParentPathTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
 			Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-		Me.OutputParentPathTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.OutputParentPathTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.OutputParentPathTextBox.CueBannerText = ""
 		Me.OutputParentPathTextBox.DetectUrls = False
 		Me.OutputParentPathTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.OutputParentPathTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.OutputParentPathTextBox.Location = New System.Drawing.Point(223, 32)
 		Me.OutputParentPathTextBox.Multiline = False
 		Me.OutputParentPathTextBox.Name = "OutputParentPathTextBox"
@@ -168,29 +162,19 @@ Partial Class PackUserControl
 		'
 		'OutputPathComboBox
 		'
-		Me.OutputPathComboBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
-		Me.OutputPathComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
-		Me.OutputPathComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-		Me.OutputPathComboBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
-		Me.OutputPathComboBox.FormattingEnabled = True
-		Me.OutputPathComboBox.IsReadOnly = False
-		Me.OutputPathComboBox.Location = New System.Drawing.Point(77, 33)
-		Me.OutputPathComboBox.Name = "OutputPathComboBox"
-		Me.OutputPathComboBox.Size = New System.Drawing.Size(140, 23)
-		Me.OutputPathComboBox.TabIndex = 23
+		Me.OutputPathComboUserControl.IsReadOnly = False
+		Me.OutputPathComboUserControl.Location = New System.Drawing.Point(77, 33)
+		Me.OutputPathComboUserControl.Name = "OutputPathComboBox"
+		Me.OutputPathComboUserControl.Size = New System.Drawing.Size(140, 23)
+		Me.OutputPathComboUserControl.TabIndex = 23
 		'
 		'InputComboBox
 		'
-		Me.InputComboBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
-		Me.InputComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
-		Me.InputComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-		Me.InputComboBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
-		Me.InputComboBox.FormattingEnabled = True
-		Me.InputComboBox.IsReadOnly = False
-		Me.InputComboBox.Location = New System.Drawing.Point(77, 4)
-		Me.InputComboBox.Name = "InputComboBox"
-		Me.InputComboBox.Size = New System.Drawing.Size(140, 23)
-		Me.InputComboBox.TabIndex = 0
+		Me.InputComboUserControl.IsReadOnly = False
+		Me.InputComboUserControl.Location = New System.Drawing.Point(77, 4)
+		Me.InputComboUserControl.Name = "InputComboBox"
+		Me.InputComboUserControl.Size = New System.Drawing.Size(140, 23)
+		Me.InputComboUserControl.TabIndex = 0
 		'
 		'Label1
 		'
@@ -224,12 +208,10 @@ Partial Class PackUserControl
 		'
 		Me.InputPathFileNameTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
 			Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-		Me.InputPathFileNameTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
 		Me.InputPathFileNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.InputPathFileNameTextBox.CueBannerText = ""
 		Me.InputPathFileNameTextBox.DetectUrls = False
 		Me.InputPathFileNameTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.InputPathFileNameTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.InputPathFileNameTextBox.Location = New System.Drawing.Point(223, 3)
 		Me.InputPathFileNameTextBox.Multiline = False
 		Me.InputPathFileNameTextBox.Name = "InputPathFileNameTextBox"
@@ -275,10 +257,8 @@ Partial Class PackUserControl
 		'
 		'OptionsGroupBox
 		'
-		Me.OptionsGroupBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.OptionsGroupBox.Controls.Add(Me.OptionsGroupBoxFillPanel)
 		Me.OptionsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill
-		Me.OptionsGroupBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.OptionsGroupBox.IsReadOnly = False
 		Me.OptionsGroupBox.Location = New System.Drawing.Point(0, 0)
 		Me.OptionsGroupBox.Name = "OptionsGroupBox"
@@ -291,14 +271,12 @@ Partial Class PackUserControl
 		'OptionsGroupBoxFillPanel
 		'
 		Me.OptionsGroupBoxFillPanel.AutoScroll = True
-		Me.OptionsGroupBoxFillPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.OptionsGroupBoxFillPanel.Controls.Add(Me.PackOptionsPanel)
 		Me.OptionsGroupBoxFillPanel.Controls.Add(Me.DirectPackOptionsLabel)
 		Me.OptionsGroupBoxFillPanel.Controls.Add(Me.DirectPackOptionsPanel)
 		Me.OptionsGroupBoxFillPanel.Controls.Add(Me.PackOptionsTextPanel)
 		Me.OptionsGroupBoxFillPanel.Controls.Add(Me.PackOptionsTextBoxMinScrollPanel)
 		Me.OptionsGroupBoxFillPanel.Dock = System.Windows.Forms.DockStyle.Fill
-		Me.OptionsGroupBoxFillPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.OptionsGroupBoxFillPanel.Location = New System.Drawing.Point(3, 18)
 		Me.OptionsGroupBoxFillPanel.Name = "OptionsGroupBoxFillPanel"
 		Me.OptionsGroupBoxFillPanel.SelectedIndex = -1
@@ -308,14 +286,12 @@ Partial Class PackUserControl
 		'
 		'PackOptionsPanel
 		'
-		Me.PackOptionsPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.PackOptionsPanel.Controls.Add(Me.MultiFileVpkCheckBox)
 		Me.PackOptionsPanel.Controls.Add(Me.PackOptionsUseDefaultsButton)
 		Me.PackOptionsPanel.Controls.Add(Me.LogFileCheckBox)
 		Me.PackOptionsPanel.Controls.Add(Me.GmaPanel)
 		Me.PackOptionsPanel.Controls.Add(Me.GameSetupPanel)
 		Me.PackOptionsPanel.Dock = System.Windows.Forms.DockStyle.Top
-		Me.PackOptionsPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.PackOptionsPanel.Location = New System.Drawing.Point(0, 0)
 		Me.PackOptionsPanel.Name = "PackOptionsPanel"
 		Me.PackOptionsPanel.SelectedIndex = -1
@@ -360,11 +336,9 @@ Partial Class PackUserControl
 		'
 		'GmaPanel
 		'
-		Me.GmaPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.GmaPanel.Controls.Add(Me.GmaTitleTextBox)
 		Me.GmaPanel.Controls.Add(Me.GmaTitleLabel)
 		Me.GmaPanel.Controls.Add(Me.GmaGarrysModTagsUserControl)
-		Me.GmaPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.GmaPanel.Location = New System.Drawing.Point(217, 29)
 		Me.GmaPanel.Name = "GmaPanel"
 		Me.GmaPanel.SelectedIndex = -1
@@ -374,12 +348,10 @@ Partial Class PackUserControl
 		'
 		'GmaTitleTextBox
 		'
-		Me.GmaTitleTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
 		Me.GmaTitleTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.GmaTitleTextBox.CueBannerText = ""
 		Me.GmaTitleTextBox.DetectUrls = False
 		Me.GmaTitleTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.GmaTitleTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.GmaTitleTextBox.Location = New System.Drawing.Point(42, 1)
 		Me.GmaTitleTextBox.Multiline = False
 		Me.GmaTitleTextBox.Name = "GmaTitleTextBox"
@@ -408,12 +380,10 @@ Partial Class PackUserControl
 		'
 		'GameSetupPanel
 		'
-		Me.GameSetupPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.GameSetupPanel.Controls.Add(Me.GameSetupLabel)
-		Me.GameSetupPanel.Controls.Add(Me.GameSetupComboBox)
+		Me.GameSetupPanel.Controls.Add(Me.GameSetupComboUserControl)
 		Me.GameSetupPanel.Controls.Add(Me.SetUpGamesButton)
 		Me.GameSetupPanel.Dock = System.Windows.Forms.DockStyle.Top
-		Me.GameSetupPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.GameSetupPanel.Location = New System.Drawing.Point(0, 0)
 		Me.GameSetupPanel.Name = "GameSetupPanel"
 		Me.GameSetupPanel.SelectedIndex = -1
@@ -432,18 +402,13 @@ Partial Class PackUserControl
 		'
 		'GameSetupComboBox
 		'
-		Me.GameSetupComboBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+		Me.GameSetupComboUserControl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
 			Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-		Me.GameSetupComboBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
-		Me.GameSetupComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
-		Me.GameSetupComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-		Me.GameSetupComboBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
-		Me.GameSetupComboBox.FormattingEnabled = True
-		Me.GameSetupComboBox.IsReadOnly = False
-		Me.GameSetupComboBox.Location = New System.Drawing.Point(171, 1)
-		Me.GameSetupComboBox.Name = "GameSetupComboBox"
-		Me.GameSetupComboBox.Size = New System.Drawing.Size(497, 23)
-		Me.GameSetupComboBox.TabIndex = 1
+		Me.GameSetupComboUserControl.IsReadOnly = False
+		Me.GameSetupComboUserControl.Location = New System.Drawing.Point(171, 1)
+		Me.GameSetupComboUserControl.Name = "GameSetupComboBox"
+		Me.GameSetupComboUserControl.Size = New System.Drawing.Size(497, 23)
+		Me.GameSetupComboUserControl.TabIndex = 1
 		'
 		'SetUpGamesButton
 		'
@@ -467,9 +432,7 @@ Partial Class PackUserControl
 		'
 		Me.DirectPackOptionsPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
 			Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-		Me.DirectPackOptionsPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.DirectPackOptionsPanel.Controls.Add(Me.DirectPackOptionsTextBox)
-		Me.DirectPackOptionsPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.DirectPackOptionsPanel.Location = New System.Drawing.Point(0, 170)
 		Me.DirectPackOptionsPanel.Name = "DirectPackOptionsPanel"
 		Me.DirectPackOptionsPanel.SelectedIndex = -1
@@ -479,13 +442,11 @@ Partial Class PackUserControl
 		'
 		'DirectPackOptionsTextBox
 		'
-		Me.DirectPackOptionsTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer), CType(CType(30, Byte), Integer))
 		Me.DirectPackOptionsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.DirectPackOptionsTextBox.CueBannerText = ""
 		Me.DirectPackOptionsTextBox.DetectUrls = False
 		Me.DirectPackOptionsTextBox.Dock = System.Windows.Forms.DockStyle.Fill
 		Me.DirectPackOptionsTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.DirectPackOptionsTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.DirectPackOptionsTextBox.Location = New System.Drawing.Point(0, 0)
 		Me.DirectPackOptionsTextBox.Multiline = False
 		Me.DirectPackOptionsTextBox.Name = "DirectPackOptionsTextBox"
@@ -500,9 +461,7 @@ Partial Class PackUserControl
 		Me.PackOptionsTextPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
 			Or System.Windows.Forms.AnchorStyles.Left) _
 			Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-		Me.PackOptionsTextPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.PackOptionsTextPanel.Controls.Add(Me.PackOptionsTextBox)
-		Me.PackOptionsTextPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.PackOptionsTextPanel.Location = New System.Drawing.Point(0, 198)
 		Me.PackOptionsTextPanel.Name = "PackOptionsTextPanel"
 		Me.PackOptionsTextPanel.SelectedIndex = -1
@@ -512,13 +471,11 @@ Partial Class PackUserControl
 		'
 		'PackOptionsTextBox
 		'
-		Me.PackOptionsTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.PackOptionsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.PackOptionsTextBox.CueBannerText = ""
 		Me.PackOptionsTextBox.DetectUrls = False
 		Me.PackOptionsTextBox.Dock = System.Windows.Forms.DockStyle.Fill
 		Me.PackOptionsTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.PackOptionsTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.PackOptionsTextBox.Location = New System.Drawing.Point(0, 0)
 		Me.PackOptionsTextBox.Name = "PackOptionsTextBox"
 		Me.PackOptionsTextBox.ReadOnly = True
@@ -529,8 +486,6 @@ Partial Class PackUserControl
 		'
 		'PackOptionsTextBoxMinScrollPanel
 		'
-		Me.PackOptionsTextBoxMinScrollPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
-		Me.PackOptionsTextBoxMinScrollPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.PackOptionsTextBoxMinScrollPanel.Location = New System.Drawing.Point(0, 198)
 		Me.PackOptionsTextBoxMinScrollPanel.Name = "PackOptionsTextBoxMinScrollPanel"
 		Me.PackOptionsTextBoxMinScrollPanel.SelectedIndex = -1
@@ -540,13 +495,11 @@ Partial Class PackUserControl
 		'
 		'LogRichTextBox
 		'
-		Me.LogRichTextBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.LogRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
 		Me.LogRichTextBox.CueBannerText = ""
 		Me.LogRichTextBox.DetectUrls = False
 		Me.LogRichTextBox.Dock = System.Windows.Forms.DockStyle.Fill
 		Me.LogRichTextBox.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.LogRichTextBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.LogRichTextBox.HideSelection = False
 		Me.LogRichTextBox.Location = New System.Drawing.Point(0, 26)
 		Me.LogRichTextBox.Name = "LogRichTextBox"
@@ -559,13 +512,11 @@ Partial Class PackUserControl
 		'
 		'PackButtonsPanel
 		'
-		Me.PackButtonsPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.PackButtonsPanel.Controls.Add(Me.PackButton)
 		Me.PackButtonsPanel.Controls.Add(Me.SkipCurrentFolderButton)
 		Me.PackButtonsPanel.Controls.Add(Me.CancelPackButton)
 		Me.PackButtonsPanel.Controls.Add(Me.UseAllInPublishButton)
 		Me.PackButtonsPanel.Dock = System.Windows.Forms.DockStyle.Top
-		Me.PackButtonsPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.PackButtonsPanel.Location = New System.Drawing.Point(0, 0)
 		Me.PackButtonsPanel.Name = "PackButtonsPanel"
 		Me.PackButtonsPanel.SelectedIndex = -1
@@ -615,12 +566,10 @@ Partial Class PackUserControl
 		'
 		'PostPackPanel
 		'
-		Me.PostPackPanel.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
-		Me.PostPackPanel.Controls.Add(Me.PackedFilesComboBox)
+		Me.PostPackPanel.Controls.Add(Me.PackedFilesComboUserControl)
 		Me.PostPackPanel.Controls.Add(Me.UseInPublishButton)
 		Me.PostPackPanel.Controls.Add(Me.GotoPackedFileButton)
 		Me.PostPackPanel.Dock = System.Windows.Forms.DockStyle.Bottom
-		Me.PostPackPanel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.PostPackPanel.Location = New System.Drawing.Point(0, 182)
 		Me.PostPackPanel.Name = "PostPackPanel"
 		Me.PostPackPanel.SelectedIndex = -1
@@ -630,18 +579,13 @@ Partial Class PackUserControl
 		'
 		'PackedFilesComboBox
 		'
-		Me.PackedFilesComboBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+		Me.PackedFilesComboUserControl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
 			Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-		Me.PackedFilesComboBox.BackColor = System.Drawing.Color.FromArgb(CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer), CType(CType(75, Byte), Integer))
-		Me.PackedFilesComboBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed
-		Me.PackedFilesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-		Me.PackedFilesComboBox.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
-		Me.PackedFilesComboBox.FormattingEnabled = True
-		Me.PackedFilesComboBox.IsReadOnly = False
-		Me.PackedFilesComboBox.Location = New System.Drawing.Point(0, 4)
-		Me.PackedFilesComboBox.Name = "PackedFilesComboBox"
-		Me.PackedFilesComboBox.Size = New System.Drawing.Size(721, 23)
-		Me.PackedFilesComboBox.TabIndex = 1
+		Me.PackedFilesComboUserControl.IsReadOnly = False
+		Me.PackedFilesComboUserControl.Location = New System.Drawing.Point(0, 4)
+		Me.PackedFilesComboUserControl.Name = "PackedFilesComboBox"
+		Me.PackedFilesComboUserControl.Size = New System.Drawing.Size(721, 23)
+		Me.PackedFilesComboUserControl.TabIndex = 1
 		'
 		'UseInPublishButton
 		'
@@ -697,8 +641,8 @@ Partial Class PackUserControl
 	Friend WithEvents GotoOutputPathButton As ButtonEx
 	Friend WithEvents BrowseForOutputPathButton As ButtonEx
 	Friend WithEvents OutputPathTextBox As Crowbar.RichTextBoxEx
-	Friend WithEvents OutputPathComboBox As ComboBoxEx
-	Friend WithEvents InputComboBox As ComboBoxEx
+	Friend WithEvents OutputPathComboUserControl As ComboUserControl
+	Friend WithEvents InputComboUserControl As ComboUserControl
 	Friend WithEvents Label1 As System.Windows.Forms.Label
 	Friend WithEvents GotoInputPathButton As ButtonEx
 	Friend WithEvents Label6 As System.Windows.Forms.Label
@@ -711,14 +655,14 @@ Partial Class PackUserControl
 	Friend WithEvents PackOptionsUseDefaultsButton As ButtonEx
 	Friend WithEvents LogFileCheckBox As CheckBoxEx
 	Friend WithEvents GameSetupLabel As System.Windows.Forms.Label
-	Friend WithEvents GameSetupComboBox As ComboBoxEx
+	Friend WithEvents GameSetupComboUserControl As ComboUserControl
 	Friend WithEvents SetUpGamesButton As ButtonEx
 	Friend WithEvents CancelPackButton As ButtonEx
 	Friend WithEvents SkipCurrentFolderButton As ButtonEx
 	Friend WithEvents PackButton As ButtonEx
 	Friend WithEvents UseInPublishButton As ButtonEx
 	Friend WithEvents LogRichTextBox As Crowbar.RichTextBoxEx
-	Friend WithEvents PackedFilesComboBox As ComboBoxEx
+	Friend WithEvents PackedFilesComboUserControl As ComboUserControl
 	Friend WithEvents GotoPackedFileButton As ButtonEx
 	Friend WithEvents DirectPackOptionsLabel As Label
 	Friend WithEvents DirectPackOptionsTextBox As Crowbar.RichTextBoxEx

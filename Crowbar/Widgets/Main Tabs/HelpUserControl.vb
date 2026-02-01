@@ -4,19 +4,18 @@ Public Class HelpUserControl
 
 #Region "Creation and Destruction"
 
-	Public Sub New()
-		MyBase.New()
-		' This call is required by the Windows Form Designer.
-		InitializeComponent()
+    Public Sub New()
+        MyBase.New()
+        ' This call is required by the Windows Form Designer.
+        InitializeComponent()
 
-		Me.BackColor = WidgetBackColor
-	End Sub
+    End Sub
 
 #End Region
 
 #Region "Init and Free"
 
-	Private Sub Init()
+    Private Sub Init()
         Me.TutorialLinkLabel.Links.Add(0, Me.TutorialLinkLabel.Text.Length(), AppConstants.HelpTutorialLink)
         Me.ContentsLinkLabel.Links.Add(0, Me.ContentsLinkLabel.Text.Length(), AppConstants.HelpContentsLink)
         Me.IndexLinkLabel.Links.Add(0, Me.IndexLinkLabel.Text.Length(), AppConstants.HelpIndexLink)

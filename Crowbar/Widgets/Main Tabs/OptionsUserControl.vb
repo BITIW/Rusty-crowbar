@@ -7,7 +7,6 @@ Public Class OptionsUserControl
 		' This call is required by the Windows Form Designer.
 		InitializeComponent()
 
-		Me.BackColor = WidgetBackColor
 	End Sub
 
 #End Region

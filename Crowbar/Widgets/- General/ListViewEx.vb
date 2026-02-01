@@ -7,8 +7,6 @@ Public Class ListViewEx
 		MyBase.New()
 
 		Me.BorderStyle = BorderStyle.None
-		Me.ForeColor = WidgetTextColor
-		Me.BackColor = WidgetDeepBackColor
 		Me.OwnerDraw = True
 		MyBase.Scrollable = True
 
@@ -187,26 +185,36 @@ Public Class ListViewEx
 	End Sub
 
 	Protected Overrides Sub OnDrawColumnHeader(e As DrawListViewColumnHeaderEventArgs)
-		'e.DrawDefault = True
-		'MyBase.OnDrawColumnHeader(e)
-		'------
-		'If Me.CustomVerticalScrollBar.Visible Then
-		'	Dim rect As Rectangle = Me.ClientRectangle
-		'	rect.Width -= ScrollBarEx.Consts.ScrollBarSize - SystemInformation.VerticalScrollBarWidth
-		'	e.Graphics.Clip = New Region(rect)
-		'End If
-		'Me.theHeaderHeight = e.Bounds.Height
-		Using aBrush As New SolidBrush(WidgetHighBackColor)
-			Dim aRect As Rectangle = e.Bounds
-			aRect.Inflate(-1, 0)
-			e.Graphics.FillRectangle(aBrush, aRect)
-		End Using
-		Dim textRect As Rectangle = e.Bounds
-		textRect.X += 1
-		TextRenderer.DrawText(e.Graphics, e.Header.Text, Me.Font, textRect, WidgetTextColor, TextFormatFlags.Left Or TextFormatFlags.VerticalCenter Or TextFormatFlags.SingleLine Or TextFormatFlags.EndEllipsis Or TextFormatFlags.PreserveGraphicsClipping)
-		'If Me.CustomVerticalScrollBar.Visible Then
-		'	e.Graphics.ResetClip()
-		'End If
+		Dim theme As ListViewTheme = Nothing
+		' This check prevents problems with viewing and saving Forms in VS Designer.
+		If TheApp IsNot Nothing Then
+			theme = TheApp.Settings.SelectedAppTheme.ListViewTheme
+		End If
+		If theme IsNot Nothing Then
+			'If Me.CustomVerticalScrollBar.Visible Then
+			'	Dim rect As Rectangle = Me.ClientRectangle
+			'	rect.Width -= ScrollBarEx.Consts.ScrollBarSize - SystemInformation.VerticalScrollBarWidth
+			'	e.Graphics.Clip = New Region(rect)
+			'End If
+			'Me.theHeaderHeight = e.Bounds.Height
+			Using aBrush As New SolidBrush(theme.EnabledBackColor)
+				Dim aRect As Rectangle = e.Bounds
+				aRect.Inflate(-1, 0)
+				e.Graphics.FillRectangle(aBrush, aRect)
+			End Using
+			Dim textRect As Rectangle = e.Bounds
+			textRect.X += 1
+			Dim textForeColor As Color = theme.EnabledForeColor
+			Dim textBackColor As Color = theme.EnabledBackColor
+			TextRenderer.DrawText(e.Graphics, e.Header.Text, Me.Font, textRect, textForeColor, textBackColor, TextFormatFlags.Left Or TextFormatFlags.VerticalCenter Or TextFormatFlags.SingleLine Or TextFormatFlags.EndEllipsis Or TextFormatFlags.PreserveGraphicsClipping)
+			'If Me.CustomVerticalScrollBar.Visible Then
+			'	e.Graphics.ResetClip()
+			'End If
+			e.DrawDefault = False
+		Else
+			e.DrawDefault = True
+		End If
+		MyBase.OnDrawColumnHeader(e)
 	End Sub
 
 	Protected Overrides Sub OnDrawItem(e As DrawListViewItemEventArgs)
@@ -455,54 +463,60 @@ Public Class ListViewEx
 		If Me.DesignMode Then
 			Exit Sub
 		End If
-
-		Dim left As Integer = 0
-		Dim top As Integer = 0
-		Dim right As Integer = 0
-		Dim bottom As Integer = 0
-		'TEST: Use 2 for testing. Use 0 for final.
-		'Dim left As Integer = 2
-		'Dim top As Integer = 2
-		'Dim right As Integer = 2
-		'Dim bottom As Integer = 2
-
-		'Dim contentSize As Size = Me.GetContentSize()
-		'Dim contentWidth As Integer = contentSize.Width
-		'Dim clientWidth As Integer = Me.ClientRectangle.Width
-		'Dim contentHeight As Integer = contentSize.Height
-		'Dim clientHeight As Integer = Me.ClientRectangle.Height
-
-		'If contentHeight > clientHeight AndAlso Me.theAutoScroll Then
-		'	right += ScrollBarEx.Consts.ScrollBarSize
-		'	clientWidth -= ScrollBarEx.Consts.ScrollBarSize
-		'End If
-		'If contentWidth > clientWidth AndAlso Me.theAutoScroll Then
-		'	bottom += ScrollBarEx.Consts.ScrollBarSize
-		'End If
-		'------
-		'If contentHeight > clientHeight AndAlso Me.Scrollable Then
-		'	right += ScrollBarEx.Consts.ScrollBarSize + 4
-		'End If
-		'If contentWidth > clientWidth AndAlso Me.Scrollable Then
-		'	bottom += ScrollBarEx.Consts.ScrollBarSize + 4
-		'End If
-		'------
-		If Me.Scrollable Then
-			Dim scrollBarInfo As New Win32Api.SCROLLBARINFO()
-			scrollBarInfo.cbSize = Marshal.SizeOf(scrollBarInfo.[GetType]())
-			Dim resultIsSuccess As Boolean = Win32Api.GetScrollBarInfo(Me.Handle, Win32Api.OBJID_VSCROLL, scrollBarInfo)
-			If (scrollBarInfo.scrollbar And Win32Api.STATE_SYSTEM_INVISIBLE) = 0 Then
-				'right += scrollBarInfo.dxyLineButton
-				right += scrollBarInfo.dxyLineButton - ScrollBarEx.Consts.ScrollBarSize
-			End If
-			resultIsSuccess = Win32Api.GetScrollBarInfo(Me.Handle, Win32Api.OBJID_HSCROLL, scrollBarInfo)
-			If (scrollBarInfo.scrollbar And Win32Api.STATE_SYSTEM_INVISIBLE) = 0 Then
-				'bottom += scrollBarInfo.dxyLineButton
-				bottom += scrollBarInfo.dxyLineButton - ScrollBarEx.Consts.ScrollBarSize
-			End If
+		Dim theme As ListViewTheme = Nothing
+		' This check prevents problems with viewing and saving Forms in VS Designer.
+		If TheApp IsNot Nothing Then
+			theme = TheApp.Settings.SelectedAppTheme.ListViewTheme
 		End If
+		If theme IsNot Nothing Then
+			Dim left As Integer = 0
+			Dim top As Integer = 0
+			Dim right As Integer = 0
+			Dim bottom As Integer = 0
+			'TEST: Use 2 for testing. Use 0 for final.
+			'Dim left As Integer = 2
+			'Dim top As Integer = 2
+			'Dim right As Integer = 2
+			'Dim bottom As Integer = 2
 
-		Me.NonClientPadding = New Padding(left, top, right, bottom)
+			'Dim contentSize As Size = Me.GetContentSize()
+			'Dim contentWidth As Integer = contentSize.Width
+			'Dim clientWidth As Integer = Me.ClientRectangle.Width
+			'Dim contentHeight As Integer = contentSize.Height
+			'Dim clientHeight As Integer = Me.ClientRectangle.Height
+
+			'If contentHeight > clientHeight AndAlso Me.theAutoScroll Then
+			'	right += ScrollBarEx.Consts.ScrollBarSize
+			'	clientWidth -= ScrollBarEx.Consts.ScrollBarSize
+			'End If
+			'If contentWidth > clientWidth AndAlso Me.theAutoScroll Then
+			'	bottom += ScrollBarEx.Consts.ScrollBarSize
+			'End If
+			'------
+			'If contentHeight > clientHeight AndAlso Me.Scrollable Then
+			'	right += ScrollBarEx.Consts.ScrollBarSize + 4
+			'End If
+			'If contentWidth > clientWidth AndAlso Me.Scrollable Then
+			'	bottom += ScrollBarEx.Consts.ScrollBarSize + 4
+			'End If
+			'------
+			If Me.Scrollable Then
+				Dim scrollBarInfo As New Win32Api.SCROLLBARINFO()
+				scrollBarInfo.cbSize = Marshal.SizeOf(scrollBarInfo.[GetType]())
+				Dim resultIsSuccess As Boolean = Win32Api.GetScrollBarInfo(Me.Handle, Win32Api.OBJID_VSCROLL, scrollBarInfo)
+				If (scrollBarInfo.scrollbar And Win32Api.STATE_SYSTEM_INVISIBLE) = 0 Then
+					'right += scrollBarInfo.dxyLineButton
+					right += scrollBarInfo.dxyLineButton - ScrollBarEx.Consts.ScrollBarSize
+				End If
+				resultIsSuccess = Win32Api.GetScrollBarInfo(Me.Handle, Win32Api.OBJID_HSCROLL, scrollBarInfo)
+				If (scrollBarInfo.scrollbar And Win32Api.STATE_SYSTEM_INVISIBLE) = 0 Then
+					'bottom += scrollBarInfo.dxyLineButton
+					bottom += scrollBarInfo.dxyLineButton - ScrollBarEx.Consts.ScrollBarSize
+				End If
+			End If
+
+			Me.NonClientPadding = New Padding(left, top, right, bottom)
+		End If
 	End Sub
 
 	Private Sub ResizeClientRect(ByVal padding As Padding, ByRef rect As Win32Api.RECT)
@@ -520,31 +534,37 @@ Public Class ListViewEx
 		If Me.DesignMode Then
 			Exit Sub
 		End If
+		Dim theme As ListViewTheme = Nothing
+		' This check prevents problems with viewing and saving Forms in VS Designer.
+		If TheApp IsNot Nothing Then
+			theme = TheApp.Settings.SelectedAppTheme.ListViewTheme
+		End If
+		If theme IsNot Nothing Then
+			Me.UpdateHorizontalScrollbar()
+			Me.UpdateVerticalScrollbar()
 
-		Me.UpdateHorizontalScrollbar()
-		Me.UpdateVerticalScrollbar()
+			If Me.CustomHorizontalScrollbar.Visible AndAlso Me.CustomVerticalScrollBar.Visible Then
+				'Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
+				'Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Height - ScrollBarEx.Consts.ScrollBarSize)
+				'------
+				'Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width - 1 - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
+				'Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.Height - 1 - ScrollBarEx.Consts.ScrollBarSize)
+				'------
+				Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
+				Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
 
-		If Me.CustomHorizontalScrollbar.Visible AndAlso Me.CustomVerticalScrollBar.Visible Then
-			'Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
-			'Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Height - ScrollBarEx.Consts.ScrollBarSize)
-			'------
-			'Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width - 1 - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
-			'Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.Height - 1 - ScrollBarEx.Consts.ScrollBarSize)
-			'------
-			Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
-			Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
-
-			'NOTE: Assign to Parent so it can draw over non-client area.
-			Me.ScrollbarCornerPanel.Parent = Me.Parent
-			Me.ScrollbarCornerPanel.BringToFront()
-			Dim aPoint As New Point(Me.Width - ScrollBarEx.Consts.ScrollBarSize, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
-			'NOTE: Location must be relative to Parent.
-			aPoint = Me.PointToScreen(aPoint)
-			aPoint = Me.ScrollbarCornerPanel.Parent.PointToClient(aPoint)
-			Me.ScrollbarCornerPanel.Location = aPoint
-			Me.ScrollbarCornerPanel.Visible = True
-		Else
-			Me.ScrollbarCornerPanel.Visible = False
+				'NOTE: Assign to Parent so it can draw over non-client area.
+				Me.ScrollbarCornerPanel.Parent = Me.Parent
+				Me.ScrollbarCornerPanel.BringToFront()
+				Dim aPoint As New Point(Me.Width - ScrollBarEx.Consts.ScrollBarSize, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
+				'NOTE: Location must be relative to Parent.
+				aPoint = Me.PointToScreen(aPoint)
+				aPoint = Me.ScrollbarCornerPanel.Parent.PointToClient(aPoint)
+				Me.ScrollbarCornerPanel.Location = aPoint
+				Me.ScrollbarCornerPanel.Visible = True
+			Else
+				Me.ScrollbarCornerPanel.Visible = False
+			End If
 		End If
 	End Sub
 
