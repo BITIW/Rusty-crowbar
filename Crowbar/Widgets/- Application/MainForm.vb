@@ -117,6 +117,7 @@ Public Class MainForm
         'Me.ViewViewUserControl.RunDataViewer()
 
         AddHandler SystemEvents.UserPreferenceChanged, AddressOf OnUserPreferenceChanged
+        AddHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
 
         AddHandler Me.SetUpGamesUserControl1.GoBackButton.Click, AddressOf Me.SetUpGamesGoBackButton_Click
         AddHandler Me.DownloadUserControl1.UseInUnpackButton.Click, AddressOf Me.DownloadUserControl1_UseInUnpackButton_Click
@@ -165,6 +166,7 @@ Public Class MainForm
         RemoveHandler Me.UpdateUserControl1.UpdateAvailable, AddressOf Me.UpdateUserControl1_UpdateAvailable
 
         RemoveHandler SystemEvents.UserPreferenceChanged, AddressOf OnUserPreferenceChanged
+        RemoveHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
 
         Me.PreviewViewUserControl.Free()
         Me.ViewViewUserControl.Free()
@@ -203,17 +205,6 @@ Public Class MainForm
                 'Next
                 'MessageBox.Show(text.ToString())
             End If
-        End If
-    End Sub
-
-#End Region
-
-#Region "System Events"
-
-    Private Sub OnUserPreferenceChanged(sender As Object, e As UserPreferenceChangedEventArgs)
-        If e.Category = UserPreferenceCategory.General Then
-            TheApp.LoadThemeData()
-            Me.Refresh()
         End If
     End Sub
 
@@ -375,132 +366,22 @@ Public Class MainForm
 
 #Region "Core Event Handlers"
 
+    Private Sub OnUserPreferenceChanged(sender As Object, e As UserPreferenceChangedEventArgs)
+        If e.Category = UserPreferenceCategory.General Then
+            TheApp.LoadThemeData()
+            Me.Refresh()
+        End If
+    End Sub
+
+    Private Sub AppSettings_PropertyChanged(ByVal sender As Object, ByVal e As System.ComponentModel.PropertyChangedEventArgs)
+        If e.PropertyName = "AppThemeName" Then
+            Me.Refresh()
+        End If
+    End Sub
+
 #End Region
 
 #Region "Private Methods"
-
-    Protected Sub UpdateThemeOfChildControls(ByVal parentControl As Control)
-        For Each aChild As Control In parentControl.Controls
-            If TypeOf aChild Is TabControlEx Then
-                CType(aChild, TabControlEx).UpdateTheme()
-            End If
-            If aChild.HasChildren Then
-                Me.UpdateThemeOfChildControls(aChild)
-            End If
-        Next
-    End Sub
-
-    'Protected Sub UpdateChildControls(ByVal parentControl As Control)
-
-    '	For Each aChild As Control In parentControl.Controls
-    '		If TypeOf aChild Is ButtonEx Then
-    '			Dim widget As ButtonEx = CType(aChild, ButtonEx)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetHighBackColor
-    '		ElseIf TypeOf aChild Is CheckBox Then
-    '			Dim widget As CheckBox = CType(aChild, CheckBox)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetBackColor
-    '		ElseIf TypeOf aChild Is ComboBoxEx Then
-    '			Dim widget As ComboBoxEx = CType(aChild, ComboBoxEx)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetHighBackColor
-    '		ElseIf TypeOf aChild Is DataGridView Then
-    '			Dim widget As DataGridView = CType(aChild, DataGridView)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetDeepBackColor
-    '		ElseIf TypeOf aChild Is Label Then
-    '			Dim widget As Label = CType(aChild, Label)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetBackColor
-    '			'ElseIf TypeOf aChild Is DataGridViewEx Then
-    '			'	Dim widget As DataGridViewEx = CType(aChild, DataGridViewEx)
-    '		ElseIf TypeOf aChild Is GroupBox Then
-    '			Dim widget As Control = CType(aChild, Control)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetBackColor
-    '			Me.UpdateChildControls(aChild)
-    '		ElseIf TypeOf aChild Is ListView Then
-    '			Dim widget As ListView = CType(aChild, ListView)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetDeepBackColor
-    '			'ElseIf TypeOf aChild Is NumericChooser Then
-    '			'	Dim widget As NumericChooser = CType(aChild, NumericChooser)
-    '			'ElseIf TypeOf aChild Is RadioButton Then
-    '			'	Dim widget As RadioButton = CType(aChild, RadioButton)
-    '		ElseIf TypeOf aChild Is Panel Then
-    '			Dim widget As Control = CType(aChild, Control)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetBackColor
-    '			Me.UpdateChildControls(aChild)
-    '		ElseIf TypeOf aChild Is ProgressBarEx Then
-    '			Dim widget As ProgressBarEx = CType(aChild, ProgressBarEx)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetDeepBackColor
-    '		ElseIf TypeOf aChild Is RichTextBox Then
-    '			Dim widget As RichTextBox = CType(aChild, RichTextBox)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetDeepBackColor
-    '		ElseIf TypeOf aChild Is SplitContainer Then
-    '			Dim widget As SplitContainer = CType(aChild, SplitContainer)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetHighBackColor
-    '			Me.UpdateChildControls(widget.Panel1)
-    '			Me.UpdateChildControls(widget.Panel2)
-    '		ElseIf TypeOf aChild Is TabControlEx Then
-    '			Dim widget As TabControlEx = CType(aChild, TabControlEx)
-    '			widget.TabPageForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetBackColor
-    '			'For i As Integer = 0 To widget.TabPages.Count - 1
-    '			'	widget.TabPages(i).ForeColor = Color.Red
-    '			'Next
-    '			Me.UpdateChildControls(aChild)
-    '		ElseIf TypeOf aChild Is TabPage Then
-    '			Me.UpdateChildControls(aChild)
-    '		ElseIf TypeOf aChild Is TextBox Then
-    '			Dim widget As Crowbar.RichTextBoxEx = CType(aChild, TextBox)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetDeepBackColor
-    '			'ElseIf TypeOf aChild Is ToolStrip Then
-    '			'	Dim theToolStrip As ToolStrip = CType(aChild, ToolStrip)
-    '			'	For Each toolStripChild As ToolStripItem In theToolStrip.Items
-    '			'		If TypeOf toolStripChild Is ToolStripCheckBox Then
-    '			'			Dim theToolStripCheckBox As ToolStripCheckBox = CType(toolStripChild, ToolStripCheckBox)
-    '			'		End If
-    '			'	Next
-    '		ElseIf TypeOf aChild Is ToolStrip Then
-    '			Dim widget As ToolStrip = CType(aChild, ToolStrip)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetBackColor
-    '			For Each toolStripWidget As ToolStripItem In widget.Items
-    '				If TypeOf toolStripWidget Is ToolStripComboBox Then
-    '					toolStripWidget.ForeColor = WidgetTextColor
-    '					toolStripWidget.BackColor = WidgetHighBackColor
-    '				ElseIf TypeOf toolStripWidget Is ToolStripButton Then
-    '					toolStripWidget.ForeColor = WidgetTextColor
-    '					toolStripWidget.BackColor = WidgetHighBackColor
-    '				ElseIf TypeOf toolStripWidget Is ToolStripLabel Then
-    '					toolStripWidget.ForeColor = WidgetTextColor
-    '					toolStripWidget.BackColor = WidgetBackColor
-    '				ElseIf TypeOf toolStripWidget Is ToolStripSeparator Then
-    '					toolStripWidget.ForeColor = WidgetDisabledTextColor
-    '					toolStripWidget.BackColor = WidgetBackColor
-    '				ElseIf TypeOf toolStripWidget Is ToolStripSpringTextBox Then
-    '					toolStripWidget.ForeColor = WidgetTextColor
-    '					toolStripWidget.BackColor = WidgetHighBackColor
-    '				End If
-    '			Next
-    '			Me.UpdateChildControls(aChild)
-    '		ElseIf TypeOf aChild Is TreeView Then
-    '			Dim widget As TreeView = CType(aChild, TreeView)
-    '			widget.ForeColor = WidgetTextColor
-    '			widget.BackColor = WidgetDeepBackColor
-    '		ElseIf TypeOf aChild Is UserControl Then
-    '			'UserControl is last so that descendant ones can be handled in their own ways above.
-    '			Me.UpdateChildControls(aChild)
-    '		End If
-    '	Next
-    'End Sub
 
     Private Sub SetDroppedPathFileName(ByVal setViaAutoOpen As Boolean, ByVal pathFileName As String)
         Dim extension As String = ""

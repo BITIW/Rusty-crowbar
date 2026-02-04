@@ -16,6 +16,8 @@ Public Class OptionsUserControl
 	Public Sub Init()
 		Me.SingleInstanceCheckBox.DataBindings.Add("Checked", TheApp.Settings, "AppIsSingleInstance", False, DataSourceUpdateMode.OnPropertyChanged)
 
+		Me.InitThemePathComboBox()
+
 		' Auto-Open
 
 		Me.AutoOpenVpkFileCheckBox.DataBindings.Add("Checked", TheApp.Settings, "OptionsAutoOpenVpkFileIsChecked", False, DataSourceUpdateMode.OnPropertyChanged)
@@ -99,6 +101,8 @@ Public Class OptionsUserControl
 
 		Me.SingleInstanceCheckBox.DataBindings.Clear()
 
+		Me.FreeThemeComboBox()
+
 		' Auto-Open
 
 		Me.AutoOpenVpkFileCheckBox.DataBindings.Clear()
@@ -131,6 +135,28 @@ Public Class OptionsUserControl
 		Me.OptionsContextMenuCompileQcFileCheckBox.DataBindings.Clear()
 		Me.OptionsContextMenuCompileFolderCheckBox.DataBindings.Clear()
 		Me.OptionsContextMenuCompileFolderAndSubfoldersCheckBox.DataBindings.Clear()
+	End Sub
+
+	Private Sub InitThemePathComboBox()
+		Me.ThemeComboUserControl.DataBindings.Clear()
+		Try
+			'NOTE: Prevent changing this combobox's SelectedIndex when another combobox's (which also accesses "SelectedIndex" and TheApp.Settings) SelectedIndex changes.
+			Me.ThemeComboUserControl.BindingContext = New BindingContext()
+			'NOTE: The DataSource, DisplayMember, and ValueMember need to be set before DataBindings, or else an exception is raised.
+			Me.ThemeComboUserControl.DataSource = TheApp.AppThemes
+			Me.ThemeComboUserControl.ValueMember = "Name"
+			Me.ThemeComboUserControl.DisplayMember = "Name"
+			Me.ThemeComboUserControl.DataBindings.Add("SelectedValue", TheApp.Settings, "AppThemeName", False, DataSourceUpdateMode.OnPropertyChanged)
+		Catch ex As Exception
+			Dim debug As Integer = 4242
+		End Try
+
+		'AddHandler Me.ThemeComboUserControl.SelectedValueChanged, AddressOf Me.ThemeComboUserControl_SelectedValueChanged
+	End Sub
+
+	Private Sub FreeThemeComboBox()
+		'RemoveHandler Me.ThemeComboUserControl.SelectedValueChanged, AddressOf Me.ThemeComboUserControl_SelectedValueChanged
+		Me.ThemeComboUserControl.DataBindings.Clear()
 	End Sub
 
 #End Region

@@ -19,6 +19,7 @@ Partial Class OptionsUserControl
 	'Do not modify it using the code editor.
 	<System.Diagnostics.DebuggerStepThrough()> _
 	Private Sub InitializeComponent()
+		Me.components = New System.ComponentModel.Container()
 		Me.IntegrateContextMenuItemsCheckBox = New Crowbar.CheckBoxEx()
 		Me.Label1 = New System.Windows.Forms.Label()
 		Me.IntegrateAsSubmenuCheckBox = New Crowbar.CheckBoxEx()
@@ -96,6 +97,8 @@ Partial Class OptionsUserControl
 		Me.ApplyPanel = New Crowbar.PanelEx()
 		Me.SingleInstanceCheckBox = New Crowbar.CheckBoxEx()
 		Me.PanelEx1 = New Crowbar.PanelEx()
+		Me.ThemeComboUserControl = New Crowbar.ComboUserControl()
+		Me.ThemeLabel = New System.Windows.Forms.Label()
 		Me.GroupBox1.SuspendLayout()
 		Me.Panel7.SuspendLayout()
 		Me.GroupBox2.SuspendLayout()
@@ -109,6 +112,7 @@ Partial Class OptionsUserControl
 		Me.Panel3.SuspendLayout()
 		Me.Panel4.SuspendLayout()
 		Me.ApplyPanel.SuspendLayout()
+		Me.PanelEx1.SuspendLayout()
 		Me.SuspendLayout()
 		'
 		'IntegrateContextMenuItemsCheckBox
@@ -150,10 +154,10 @@ Partial Class OptionsUserControl
 		Me.GroupBox1.Controls.Add(Me.Label1)
 		Me.GroupBox1.Controls.Add(Me.IntegrateAsSubmenuCheckBox)
 		Me.GroupBox1.IsReadOnly = False
-		Me.GroupBox1.Location = New System.Drawing.Point(415, 26)
+		Me.GroupBox1.Location = New System.Drawing.Point(415, 31)
 		Me.GroupBox1.Name = "GroupBox1"
 		Me.GroupBox1.SelectedValue = Nothing
-		Me.GroupBox1.Size = New System.Drawing.Size(309, 467)
+		Me.GroupBox1.Size = New System.Drawing.Size(309, 462)
 		Me.GroupBox1.TabIndex = 2
 		Me.GroupBox1.TabStop = False
 		Me.GroupBox1.Text = "Windows Explorer Context Menu"
@@ -267,7 +271,7 @@ Partial Class OptionsUserControl
 		'ContextMenuUseDefaultsButton
 		'
 		Me.ContextMenuUseDefaultsButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-		Me.ContextMenuUseDefaultsButton.Location = New System.Drawing.Point(104, 438)
+		Me.ContextMenuUseDefaultsButton.Location = New System.Drawing.Point(104, 433)
 		Me.ContextMenuUseDefaultsButton.Name = "ContextMenuUseDefaultsButton"
 		Me.ContextMenuUseDefaultsButton.Size = New System.Drawing.Size(100, 23)
 		Me.ContextMenuUseDefaultsButton.SpecialImage = Crowbar.ButtonEx.SpecialImageType.None
@@ -314,10 +318,10 @@ Partial Class OptionsUserControl
 		Me.GroupBox2.Controls.Add(Me.AutoOpenQcFileCheckBox)
 		Me.GroupBox2.Controls.Add(Me.AutoOpenVpkFileCheckBox)
 		Me.GroupBox2.IsReadOnly = False
-		Me.GroupBox2.Location = New System.Drawing.Point(3, 26)
+		Me.GroupBox2.Location = New System.Drawing.Point(3, 31)
 		Me.GroupBox2.Name = "GroupBox2"
 		Me.GroupBox2.SelectedValue = Nothing
-		Me.GroupBox2.Size = New System.Drawing.Size(200, 467)
+		Me.GroupBox2.Size = New System.Drawing.Size(200, 462)
 		Me.GroupBox2.TabIndex = 0
 		Me.GroupBox2.TabStop = False
 		Me.GroupBox2.Text = "Windows Explorer Auto-Open"
@@ -512,7 +516,7 @@ Partial Class OptionsUserControl
 		'AutoOpenUseDefaultsButton
 		'
 		Me.AutoOpenUseDefaultsButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-		Me.AutoOpenUseDefaultsButton.Location = New System.Drawing.Point(44, 438)
+		Me.AutoOpenUseDefaultsButton.Location = New System.Drawing.Point(44, 433)
 		Me.AutoOpenUseDefaultsButton.Name = "AutoOpenUseDefaultsButton"
 		Me.AutoOpenUseDefaultsButton.Size = New System.Drawing.Size(100, 23)
 		Me.AutoOpenUseDefaultsButton.SpecialImage = Crowbar.ButtonEx.SpecialImageType.None
@@ -640,10 +644,10 @@ Partial Class OptionsUserControl
 		Me.GroupBox3.Controls.Add(Me.DragAndDropUseDefaultsButton)
 		Me.GroupBox3.Controls.Add(Me.Panel4)
 		Me.GroupBox3.IsReadOnly = False
-		Me.GroupBox3.Location = New System.Drawing.Point(209, 26)
+		Me.GroupBox3.Location = New System.Drawing.Point(209, 31)
 		Me.GroupBox3.Name = "GroupBox3"
 		Me.GroupBox3.SelectedValue = Nothing
-		Me.GroupBox3.Size = New System.Drawing.Size(200, 467)
+		Me.GroupBox3.Size = New System.Drawing.Size(200, 462)
 		Me.GroupBox3.TabIndex = 1
 		Me.GroupBox3.TabStop = False
 		Me.GroupBox3.Text = "Windows Explorer Drag-and-Drop"
@@ -866,7 +870,7 @@ Partial Class OptionsUserControl
 		'DragAndDropUseDefaultsButton
 		'
 		Me.DragAndDropUseDefaultsButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-		Me.DragAndDropUseDefaultsButton.Location = New System.Drawing.Point(50, 438)
+		Me.DragAndDropUseDefaultsButton.Location = New System.Drawing.Point(50, 433)
 		Me.DragAndDropUseDefaultsButton.Name = "DragAndDropUseDefaultsButton"
 		Me.DragAndDropUseDefaultsButton.Size = New System.Drawing.Size(100, 23)
 		Me.DragAndDropUseDefaultsButton.SpecialImage = Crowbar.ButtonEx.SpecialImageType.None
@@ -968,7 +972,7 @@ Partial Class OptionsUserControl
 		'
 		Me.SingleInstanceCheckBox.AutoSize = True
 		Me.SingleInstanceCheckBox.IsReadOnly = False
-		Me.SingleInstanceCheckBox.Location = New System.Drawing.Point(3, 3)
+		Me.SingleInstanceCheckBox.Location = New System.Drawing.Point(3, 7)
 		Me.SingleInstanceCheckBox.Name = "SingleInstanceCheckBox"
 		Me.SingleInstanceCheckBox.Size = New System.Drawing.Size(336, 17)
 		Me.SingleInstanceCheckBox.TabIndex = 4
@@ -977,6 +981,8 @@ Partial Class OptionsUserControl
 		'
 		'PanelEx1
 		'
+		Me.PanelEx1.Controls.Add(Me.ThemeLabel)
+		Me.PanelEx1.Controls.Add(Me.ThemeComboUserControl)
 		Me.PanelEx1.Controls.Add(Me.SingleInstanceCheckBox)
 		Me.PanelEx1.Controls.Add(Me.ApplyPanel)
 		Me.PanelEx1.Controls.Add(Me.GroupBox3)
@@ -989,6 +995,36 @@ Partial Class OptionsUserControl
 		Me.PanelEx1.SelectedValue = Nothing
 		Me.PanelEx1.Size = New System.Drawing.Size(776, 536)
 		Me.PanelEx1.TabIndex = 5
+		'
+		'ThemeComboUserControl
+		'
+		Me.ThemeComboUserControl.BorderColor = System.Drawing.Color.Empty
+		Me.ThemeComboUserControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+		Me.ThemeComboUserControl.DataSource = Nothing
+		Me.ThemeComboUserControl.DisplayMember = ""
+		Me.ThemeComboUserControl.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+		Me.ThemeComboUserControl.IsReadOnly = False
+		Me.ThemeComboUserControl.Location = New System.Drawing.Point(467, 3)
+		Me.ThemeComboUserControl.MaxDropDownItems = 30
+		Me.ThemeComboUserControl.MultipleInputsIsAllowed = True
+		Me.ThemeComboUserControl.Name = "ThemeComboUserControl"
+		Me.ThemeComboUserControl.SelectedIndex = -1
+		Me.ThemeComboUserControl.SelectedValue = ""
+		Me.ThemeComboUserControl.Size = New System.Drawing.Size(257, 22)
+		Me.ThemeComboUserControl.TabIndex = 6
+		Me.ThemeComboUserControl.TextHistoryIsKept = False
+		Me.ThemeComboUserControl.TextHistoryMaxSize = 15
+		Me.ThemeComboUserControl.TextIsPathFileNames = False
+		Me.ThemeComboUserControl.ValueMember = ""
+		'
+		'ThemeLabel
+		'
+		Me.ThemeLabel.AutoSize = True
+		Me.ThemeLabel.Location = New System.Drawing.Point(418, 8)
+		Me.ThemeLabel.Name = "ThemeLabel"
+		Me.ThemeLabel.Size = New System.Drawing.Size(43, 13)
+		Me.ThemeLabel.TabIndex = 24
+		Me.ThemeLabel.Text = "Theme:"
 		'
 		'OptionsUserControl
 		'
@@ -1023,8 +1059,9 @@ Partial Class OptionsUserControl
 		Me.Panel4.PerformLayout()
 		Me.ApplyPanel.ResumeLayout(False)
 		Me.ApplyPanel.PerformLayout()
+		Me.PanelEx1.ResumeLayout(False)
+		Me.PanelEx1.PerformLayout()
 		Me.ResumeLayout(False)
-		Me.PerformLayout()
 
 	End Sub
 	Friend WithEvents IntegrateContextMenuItemsCheckBox As CheckBoxEx
@@ -1104,4 +1141,6 @@ Partial Class OptionsUserControl
 	Friend WithEvents DragAndDropVpkFileForPublishRadioButton As RadioButtonEx
 	Friend WithEvents DragAndDropVpkFileForUnpackRadioButton As RadioButtonEx
 	Friend WithEvents PanelEx1 As PanelEx
+	Friend WithEvents ThemeLabel As Label
+	Friend WithEvents ThemeComboUserControl As ComboUserControl
 End Class

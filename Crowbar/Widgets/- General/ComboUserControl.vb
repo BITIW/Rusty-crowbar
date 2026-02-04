@@ -12,6 +12,7 @@ Public Class ComboUserControl
 
 		' This call is required by the designer.
 		InitializeComponent()
+		Me.DropDownPanel.Visible = False
 
 		'NOTE: Disable to use custom.
 		MyBase.BorderStyle = BorderStyle.None
@@ -119,8 +120,8 @@ Public Class ComboUserControl
 		Get
 			' This check prevents problems with viewing and saving Forms in VS Designer.
 			Dim columnName As String = ""
-			If Me.TextHistoryDataGridView.Columns.Count > 0 Then
-				columnName = Me.TextHistoryDataGridView.Columns(0).Name
+			If Me.TextHistoryDataGridView.Columns.Count > 1 Then
+				columnName = Me.TextHistoryDataGridView.Columns(1).Name
 			End If
 			Return columnName
 		End Get
@@ -828,6 +829,7 @@ Public Class ComboUserControl
 		If Not Me.theDropDownButtonWasClickedWhenPopupShowing Then
 			'IMPORTANT: Resize the ListBox.
 			'Me.TextHistoryPopup.Size = Me.Size
+			Me.TextHistoryDataGridView.Height = Me.TextHistoryDataGridView.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
 			Me.TextHistoryDataGridView.Width = Me.Width
 			Dim itemCount As Integer = Me.TextHistoryDataGridView.Rows.Count
 			If itemCount > Me.theMaxDropDownItemCount Then
@@ -840,12 +842,15 @@ Public Class ComboUserControl
 			Me.TextHistoryDataGridView.Text = Me.ComboTextBox.Text
 			Me.theSelectedIndexIsChangingViaMe = False
 
+			Me.TextHistoryPopup.Width = Me.Width
+			'Me.TextHistoryPopup.Height = Me.TextHistoryDataGridView.Rows(0).Height * (itemCount + 1)
+			'Me.TextHistoryPopup.Width = Me.TextHistoryDataGridView.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)
+			Me.TextHistoryPopup.Height = Me.TextHistoryDataGridView.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
+
 			' Use -1 for X to account for left border.
 			Dim position As Point = New Point(-1, Me.Height)
 			position = Me.PointToScreen(position)
 			Me.TextHistoryPopup.Show(position)
-			Me.TextHistoryPopup.Height = Me.TextHistoryDataGridView.Rows(0).Height * (itemCount + 1)
-			Me.TextHistoryPopup.Width = Me.Width
 			Me.TextHistoryDataGridView.Focus()
 			Me.theDropDownButtonWasClickedWhenPopupShowing = True
 		Else

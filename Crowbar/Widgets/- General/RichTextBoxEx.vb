@@ -234,9 +234,9 @@ Public Class RichTextBoxEx
 			'      so save the Font before changing style.
 			Me.theOriginalFont = New System.Drawing.Font(Me.Font.FontFamily, Me.Font.Size, Me.Font.Style, Me.Font.Unit)
 
-			SetStyle(ControlStyles.AllPaintingInWmPaint, True)
-			SetStyle(ControlStyles.DoubleBuffer, True)
-			SetStyle(ControlStyles.UserPaint, True)
+			Me.SetStyle(ControlStyles.AllPaintingInWmPaint, True)
+			Me.SetStyle(ControlStyles.DoubleBuffer, True)
+			Me.SetStyle(ControlStyles.UserPaint, True)
 		End If
 
 		' Sometimes this is True for unknown reason, so force it to False.

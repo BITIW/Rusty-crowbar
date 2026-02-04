@@ -13,7 +13,7 @@
 		content.Dock = DockStyle.Fill
 
 		Me.theHost = New ToolStripControlHost(Me.theHostPanel)
-		'Me.theHost.BackColor = Color.Red
+		'Me.theHost.BackColor = Color.Blue
 		Me.theHost.Margin = Padding.Empty
 		Me.theHost.Padding = Padding.Empty
 		'IMPORTANT: Prevent showing space at the top and bottom of the host control.
@@ -21,7 +21,7 @@
 		'Me.theHost.Dock = DockStyle.Fill
 
 		Me.ResizeRedraw = True
-		'Me.BackColor = Color.Green
+		'Me.BackColor = Color.Yellow
 		Me.Margin = Padding.Empty
 		Me.Padding = Padding.Empty
 		Me.Items.Add(Me.theHost)

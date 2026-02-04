@@ -39,13 +39,12 @@ Public Class DataGridViewEx
 
         Me.theControlHasShown = False
 
-        'Me.EnableHeadersVisualStyles = True
         'NOTE: Need these settings so that ColumnHeadersDefaultCellStyle, DefaultCellStyle, and GridColor properties are used.
         '      Might affect other properties, too.
         'Me.EnableHeadersVisualStyles = False
-        Me.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single
-        Me.CellBorderStyle = DataGridViewCellBorderStyle.Single
-        Me.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single
+        'Me.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single
+        'Me.CellBorderStyle = DataGridViewCellBorderStyle.Single
+        'Me.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single
 
         'Me.ForeColor = WidgetConstants.WidgetTextColor
         'Me.BackgroundColor = WidgetConstants.WidgetBackColor
@@ -242,8 +241,29 @@ Public Class DataGridViewEx
             theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
         End If
         If theme IsNot Nothing Then
-            If e.RowIndex = -1 Then
+            Dim g As Graphics = e.Graphics
+            Dim cellRect As Rectangle = e.CellBounds
+
+            ' RowIndex = -1 for header cell.
+            If e.RowIndex = -1 AndAlso e.ColumnIndex > -1 Then
+                Me.ColumnHeadersDefaultCellStyle.ForeColor = theme.EnabledForeColor
                 Me.ColumnHeadersDefaultCellStyle.BackColor = theme.EnabledBackColor
+
+                '' Set settings for cell borders.
+                'Me.GridColor = Color.Red
+                'Me.EnableHeadersVisualStyles = False
+                'Me.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single
+                'Me.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single
+                'Me.CellBorderStyle = DataGridViewCellBorderStyle.Single
+
+                '' Draw header cell border.
+                'Dim headerBorderColor As Color = Color.Red
+                'Using borderColorPen As New Pen(headerBorderColor, 1)
+                '    ' Draw the left border.
+                '    e.Graphics.DrawLine(borderColorPen, cellRect.Left - 1, cellRect.Top, cellRect.Left - 1, cellRect.Bottom)
+                '    ' Draw the bottom border.
+                '    e.Graphics.DrawLine(borderColorPen, cellRect.Left, cellRect.Bottom - 1, cellRect.Right, cellRect.Bottom - 1)
+                'End Using
             End If
             If (e.RowIndex > -1) AndAlso (e.ColumnIndex > -1) Then
                 If TypeOf Me.Columns(e.ColumnIndex) Is DataGridViewRadioButtonColumn Then
@@ -254,16 +274,11 @@ Public Class DataGridViewEx
                     'Dim column As DataGridViewButtonColumn = CType(Me.Columns(e.ColumnIndex), DataGridViewButtonColumn)
                     Dim cell As DataGridViewCell = Me.Rows(e.RowIndex).Cells(e.ColumnIndex)
 
-                    Dim g As Graphics = e.Graphics
-                    Dim clientRectangle As Rectangle = e.CellBounds
-                    'clientRectangle.Width -= 2
-                    'clientRectangle.Height -= 2
-
                     Dim backColor1 As Color
                     Dim backColor2 As Color
                     Dim textColor As Color
                     Dim textBackColor As Color
-                    'Dim borderColor As Color
+                    Dim borderColor As Color
 
                     If Me.Enabled Then
                         If cell.Selected Then
@@ -271,48 +286,60 @@ Public Class DataGridViewEx
                             backColor2 = theme.SelectedBackColor
                             textColor = theme.SelectedForeColor
                             textBackColor = Color.Transparent
-                            'borderColor = theme.SelectedBorderColor
+                            borderColor = theme.SelectedBorderColor
                         ElseIf cell Is Me.theCellWherePointerIs Then
                             backColor1 = theme.FocusBackColor
                             backColor2 = theme.FocusBackColor
                             textColor = theme.FocusForeColor
                             textBackColor = Color.Transparent
-                            'borderColor = theme.FocusBorderColor
+                            borderColor = theme.FocusBorderColor
                         Else
                             backColor1 = theme.EnabledBackColor
                             backColor2 = theme.EnabledBackColor
                             textColor = theme.EnabledForeColor
                             textBackColor = Color.Transparent
-                            'borderColor = theme.EnabledBorderColor
+                            borderColor = theme.EnabledBorderColor
                         End If
                     Else
                         backColor1 = theme.DisabledBackColor
                         backColor2 = theme.DisabledBackColor
                         textColor = theme.DisabledForeColor
                         textBackColor = Color.Transparent
-                        'borderColor = theme.DisabledBorderColor
+                        borderColor = theme.DisabledBorderColor
                     End If
 
                     ' Draw background.
-                    Using aColorBrush As New Drawing2D.LinearGradientBrush(clientRectangle, backColor1, backColor2, Drawing2D.LinearGradientMode.Vertical)
-                        g.FillRectangle(aColorBrush, clientRectangle)
+                    Using aColorBrush As New Drawing2D.LinearGradientBrush(cellRect, backColor1, backColor2, Drawing2D.LinearGradientMode.Vertical)
+                        g.FillRectangle(aColorBrush, cellRect)
                     End Using
-                    TextRenderer.DrawText(g, CType(cell.Value, String), Me.Font, clientRectangle, textColor, textBackColor, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter Or TextFormatFlags.WordBreak)
+                    TextRenderer.DrawText(g, CType(cell.Value, String), Me.Font, cellRect, textColor, textBackColor, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter Or TextFormatFlags.WordBreak)
 
-                    ' Draw the grid lines (only the right and bottom lines;
-                    ' DataGridView takes care of the others).
-                    Dim gridBrush As New SolidBrush(Me.GridColor)
-                    Dim gridLinePen As New Pen(gridBrush)
-                    e.Graphics.DrawLine(gridLinePen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1)
-                    e.Graphics.DrawLine(gridLinePen, e.CellBounds.Right - 1, e.CellBounds.Top, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1)
+                    '' Draw cell border.
+                    'Dim headerBorderColor As Color = Color.Red
+                    'Using borderColorPen As New Pen(headerBorderColor, 1)
+                    '    ' Draw the left border.
+                    '    e.Graphics.DrawLine(borderColorPen, cellRect.Left - 1, cellRect.Top, cellRect.Left - 1, cellRect.Bottom)
+                    '    ' Draw the bottom border.
+                    '    e.Graphics.DrawLine(borderColorPen, cellRect.Left, cellRect.Bottom - 1, cellRect.Right, cellRect.Bottom - 1)
+                    'End Using
+
+                    ' Draw button border.
+                    Using borderColorPen As New Pen(borderColor, 1)
+                        'NOTE: DrawRectangle width and height are interpreted as the right and bottom pixels to draw.
+                        g.DrawRectangle(borderColorPen, cellRect.Left, cellRect.Top + 1, cellRect.Width - 1, cellRect.Height - 2)
+                    End Using
+
+                    '' Draw the grid lines (only the right and bottom lines;
+                    '' DataGridView takes care of the others).
+                    'Dim gridBrush As New SolidBrush(Me.GridColor)
+                    'Dim gridLinePen As New Pen(gridBrush)
+                    'e.Graphics.DrawLine(gridLinePen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1)
+                    'e.Graphics.DrawLine(gridLinePen, e.CellBounds.Right - 1, e.CellBounds.Top, e.CellBounds.Right - 1, e.CellBounds.Bottom - 1)
 
                     e.Handled = True
                 ElseIf TypeOf Me.Columns(e.ColumnIndex) Is DataGridViewTextBoxColumn Then
                     Dim cell As DataGridViewCell = Me.Rows(e.RowIndex).Cells(e.ColumnIndex)
 
-                    Dim g As Graphics = e.Graphics
-                    Dim clientRectangle As Rectangle = e.CellBounds
-
                     Dim backColor1 As Color
                     Dim backColor2 As Color
                     Dim textColor As Color
@@ -348,14 +375,14 @@ Public Class DataGridViewEx
                     End If
 
                     ' Draw background.
-                    Using aColorBrush As New Drawing2D.LinearGradientBrush(clientRectangle, backColor1, backColor2, Drawing2D.LinearGradientMode.Vertical)
-                        g.FillRectangle(aColorBrush, clientRectangle)
+                    Using aColorBrush As New Drawing2D.LinearGradientBrush(cellRect, backColor1, backColor2, Drawing2D.LinearGradientMode.Vertical)
+                        g.FillRectangle(aColorBrush, cellRect)
                     End Using
                     Dim textFormat As TextFormatFlags = TextFormatFlags.Default
                     If cell.InheritedStyle.WrapMode = DataGridViewTriState.True Then
                         textFormat = textFormat Or TextFormatFlags.WordBreak
                     End If
-                    TextRenderer.DrawText(g, CType(cell.Value, String), Me.Font, clientRectangle, textColor, textBackColor, TextFormatFlags.VerticalCenter)
+                    TextRenderer.DrawText(g, CType(cell.Value, String), Me.Font, cellRect, textColor, textBackColor, TextFormatFlags.VerticalCenter)
 
                     e.Handled = True
                 End If
@@ -587,40 +614,42 @@ Public Class DataGridViewEx
     End Sub
 
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
-        Dim theme As DataGridViewTheme = Nothing
-        ' This check prevents problems with viewing and saving Forms in VS Designer.
-        If TheApp IsNot Nothing Then
-            theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
-        End If
-        If theme IsNot Nothing Then
-            If Me.Enabled Then
-                Me.GridColor = theme.EnabledForeColor
-                Me.BackgroundColor = theme.EnabledBackColor
-            Else
-                Me.GridColor = theme.DisabledForeColor
-                Me.BackgroundColor = theme.DisabledBackColor
-            End If
-        End If
-
-        MyBase.OnPaint(e)
-
         'Dim theme As DataGridViewTheme = Nothing
         '' This check prevents problems with viewing and saving Forms in VS Designer.
         'If TheApp IsNot Nothing Then
         '    theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
         'End If
-        If theme IsNot Nothing Then
-            Dim g As Graphics = e.Graphics
-            Dim clientRectangle As Rectangle = Me.ClientRectangle
-            ' Draw outer border.
-            If Me.BorderStyle <> BorderStyle.None Then
-                Dim borderColor As Color
-                borderColor = theme.EnabledBorderColor
-                Using borderColorPen As New Pen(borderColor)
-                    g.DrawRectangle(borderColorPen, clientRectangle.Left, clientRectangle.Top, clientRectangle.Width - 1, clientRectangle.Height - 1)
-                End Using
-            End If
-        End If
+        'If theme IsNot Nothing Then
+        '    If Me.Enabled Then
+        '        Me.GridColor = theme.EnabledForeColor
+        '        'Me.BackgroundColor = theme.EnabledBackColor
+        '        Me.BackgroundColor = Color.Red
+        '    Else
+        '        Me.GridColor = theme.DisabledForeColor
+        '        'Me.BackgroundColor = theme.DisabledBackColor
+        '        Me.BackgroundColor = Color.Red
+        '    End If
+        'End If
+
+        MyBase.OnPaint(e)
+
+        ''Dim theme As DataGridViewTheme = Nothing
+        ''' This check prevents problems with viewing and saving Forms in VS Designer.
+        ''If TheApp IsNot Nothing Then
+        ''    theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
+        ''End If
+        'If theme IsNot Nothing Then
+        '    Dim g As Graphics = e.Graphics
+        '    Dim clientRectangle As Rectangle = Me.ClientRectangle
+        '    ' Draw outer border.
+        '    If Me.BorderStyle <> BorderStyle.None Then
+        '        Dim borderColor As Color
+        '        borderColor = theme.EnabledBorderColor
+        '        Using borderColorPen As New Pen(borderColor)
+        '            g.DrawRectangle(borderColorPen, clientRectangle.Left, clientRectangle.Top, clientRectangle.Width - 1, clientRectangle.Height - 1)
+        '        End Using
+        '    End If
+        'End If
     End Sub
 
     Protected Overrides Sub WndProc(ByRef m As Message)
@@ -666,7 +695,7 @@ Public Class DataGridViewEx
             Dim hDC As IntPtr = Win32Api.GetWindowDC(Me.Handle)
             Try
                 Using g As Graphics = Graphics.FromHdc(hDC)
-                    Using backColorBrush As New SolidBrush(Me.theNonClientPaddingColor)
+                    Using backColorBrush As New SolidBrush(Color.Pink)
                         Dim aRect As RectangleF = g.VisibleClipBounds
                         g.FillRectangle(backColorBrush, aRect)
                     End Using
@@ -705,8 +734,9 @@ Public Class DataGridViewEx
         'Dim right As Integer = 2
         'Dim bottom As Integer = 2
 
-        Dim contentWidth As Integer = Me.Columns.GetColumnsWidth(DataGridViewElementStates.None)
-        Dim clientWidth As Integer = Me.ClientRectangle.Width
+        Dim contentWidth As Integer = Me.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)
+        'Dim clientWidth As Integer = Me.ClientRectangle.Width
+        Dim clientWidth As Integer = Me.Width
         'If Me.CustomVerticalScrollBar.Visible Then
         '	clientWidth += ScrollBarEx.Consts.ScrollBarSize
         'End If
@@ -716,11 +746,13 @@ Public Class DataGridViewEx
         Dim rowCount As Integer = Me.RowCount
         If rowCount > 0 Then
             'Dim contentHeight As Integer = rowCount * Me.Rows(0).Height
-            Dim contentHeight As Integer = Me.Rows.GetRowsHeight(DataGridViewElementStates.None)
+            Dim contentHeight As Integer = Me.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
+            'Dim clientHeight As Integer = Me.ClientRectangle.Height
+            Dim clientHeight As Integer = Me.Height
             If Me.ColumnHeadersVisible Then
                 contentHeight += Me.ColumnHeadersHeight
             End If
-            If contentHeight > Me.ClientRectangle.Height Then
+            If contentHeight > clientHeight Then
                 right += ScrollBarEx.Consts.ScrollBarSize
             End If
         End If
@@ -766,8 +798,9 @@ Public Class DataGridViewEx
     Private Sub UpdateHorizontalScrollbar()
         'NOTE: Parent can be Nothing on exiting. Prevent the exception with this check.
         If Not Me.theScrollingIsActive AndAlso Me.Parent IsNot Nothing Then
-            Dim contentWidth As Integer = Me.Columns.GetColumnsWidth(DataGridViewElementStates.None)
-            Dim clientWidth As Integer = Me.ClientRectangle.Width
+            Dim contentWidth As Integer = Me.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)
+            'Dim clientWidth As Integer = Me.ClientRectangle.Width
+            Dim clientWidth As Integer = Me.Width
             If contentWidth > clientWidth Then
                 Me.theScrollingIsActive = True
 
@@ -785,7 +818,8 @@ Public Class DataGridViewEx
                 Me.CustomHorizontalScrollbar.Parent = Me.Parent
                 Me.CustomHorizontalScrollbar.BringToFront()
                 'NOTE: Point is relative to Me.ClientRectangle.
-                Dim aPoint As New Point(Me.ClientRectangle.Left - Me.NonClientPadding.Left, Me.ClientRectangle.Height + Me.NonClientPadding.Bottom - ScrollBarEx.Consts.ScrollBarSize)
+                'Dim aPoint As New Point(Me.ClientRectangle.Left - Me.NonClientPadding.Left, Me.ClientRectangle.Height + Me.NonClientPadding.Bottom - ScrollBarEx.Consts.ScrollBarSize)
+                Dim aPoint As New Point(Me.Left - Me.NonClientPadding.Left, Me.Height + Me.NonClientPadding.Bottom - ScrollBarEx.Consts.ScrollBarSize)
                 'NOTE: Location must be relative to Parent.
                 aPoint = Me.PointToScreen(aPoint)
                 aPoint = Me.Parent.PointToClient(aPoint)
@@ -805,13 +839,14 @@ Public Class DataGridViewEx
             If rowCount > 0 Then
                 Dim rowHeight As Integer = Me.Rows(0).Height
                 'Dim contentHeight As Integer = rowCount * rowHeight
-                Dim contentHeight As Integer = Me.Rows.GetRowsHeight(DataGridViewElementStates.None)
-                Dim clientHeight As Integer = Me.ClientRectangle.Height
+                Dim contentHeight As Integer = Me.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
+                'Dim clientHeight As Integer = Me.ClientRectangle.Height
+                Dim clientHeight As Integer = Me.Height
                 If Me.ColumnHeadersVisible Then
                     contentHeight += Me.ColumnHeadersHeight
                     clientHeight -= Me.ColumnHeadersHeight
                 End If
-                If contentHeight > Me.ClientRectangle.Height Then
+                If contentHeight > clientHeight Then
                     Me.theScrollingIsActive = True
 
                     Me.CustomVerticalScrollBar.Minimum = 0
@@ -825,7 +860,8 @@ Public Class DataGridViewEx
                     Me.CustomVerticalScrollBar.Parent = Me.Parent
                     Me.CustomVerticalScrollBar.BringToFront()
                     'NOTE: Point is relative to Me.ClientRectangle.
-                    Dim aPoint As New Point(Me.ClientRectangle.Width + Me.NonClientPadding.Right - ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Top - Me.NonClientPadding.Top)
+                    'Dim aPoint As New Point(Me.ClientRectangle.Width + Me.NonClientPadding.Right - ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Top - Me.NonClientPadding.Top)
+                    Dim aPoint As New Point(Me.Width + Me.NonClientPadding.Right - ScrollBarEx.Consts.ScrollBarSize, Me.Top - Me.NonClientPadding.Top)
                     'NOTE: Location must be relative to Parent.
                     aPoint = Me.PointToScreen(aPoint)
                     aPoint = Me.CustomVerticalScrollBar.Parent.PointToClient(aPoint)

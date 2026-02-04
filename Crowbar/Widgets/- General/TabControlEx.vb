@@ -6,13 +6,13 @@ Public Class TabControlEx
 	Public Sub New()
 		MyBase.New()
 
-		'' This should allow Forms that inherit from this class and their widgets to use the system font instead of Visual Studio's default of Microsoft Sans Serif.
-		'Me.Font = New Font(SystemFonts.MessageBoxFont.Name, 8.25)
+		' This should allow this widget to use the system font instead of Visual Studio's default of Microsoft Sans Serif.
+		Me.Font = New Font(SystemFonts.MessageBoxFont.Name, 8.25)
 		'Me.Font = New Font(SystemFonts.MessageBoxFont.Name, 6)
 		'Me.Padding = New Point(0, Padding.Y)
 
-		'NOTE: To workaround a bug with TabControl.TabPages.Insert() not inserting, force the handle to be created.
-		Dim h As IntPtr = Me.Handle
+		''NOTE: To workaround a bug with TabControl.TabPages.Insert() not inserting, force the handle to be created.
+		'Dim h As IntPtr = Me.Handle
 
 		''Me.theBackColor = WidgetBackColor
 		'Me.theTabBackColor1 = WidgetHighBackColor
@@ -39,11 +39,13 @@ Public Class TabControlEx
 
 #Region "Init and Free"
 
-	'Private Sub Init()
-	'End Sub
+	Private Sub Init()
+		AddHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
+	End Sub
 
-	'Private Sub Free()
-	'End Sub
+	Private Sub Free()
+		RemoveHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
+	End Sub
 
 #End Region
 
@@ -127,18 +129,6 @@ Public Class TabControlEx
 #End Region
 
 #Region "Methods"
-
-	Public Sub UpdateTheme()
-		Dim theme As TabControlTheme = Nothing
-		If TheApp IsNot Nothing Then
-			theme = TheApp.Settings.SelectedAppTheme.TabControlTheme
-		End If
-		If theme IsNot Nothing Then
-			Me.SetStyle(ControlStyles.UserPaint, True)
-		Else
-			Me.SetStyle(ControlStyles.UserPaint, False)
-		End If
-	End Sub
 
 #End Region
 
@@ -328,6 +318,23 @@ Public Class TabControlEx
 
 	'		MyBase.OnDrawItem(e)
 	'	End Sub
+
+	Protected Overrides Sub OnHandleCreated(ByVal e As System.EventArgs)
+		MyBase.OnHandleCreated(e)
+		Me.Init()
+
+		If Me.Multiline = False Then
+			Scroller.Font = New Font("Marlett", Me.Font.Size, FontStyle.Regular, GraphicsUnit.Pixel, Me.Font.GdiCharSet)
+			Win32Api.SetParent(Scroller.Handle, Me.Handle)
+		End If
+
+		Me.OnFontChanged(EventArgs.Empty)
+	End Sub
+
+	Protected Overrides Sub OnHandleDestroyed(e As EventArgs)
+		Me.Free()
+		MyBase.OnHandleDestroyed(e)
+	End Sub
 
 	'	'NOTE: Right-clicking a tab selects it. (OnMouseClick didn't run for right-click.)
 	'	Protected Overrides Sub OnMouseDown(ByVal e As System.Windows.Forms.MouseEventArgs)
@@ -774,19 +781,13 @@ Public Class TabControlEx
 
 	'#End Region
 
-	Protected Overrides Sub OnHandleCreated(ByVal e As System.EventArgs)
-		MyBase.OnHandleCreated(e)
-
-		If Me.Multiline = False Then
-			Scroller.Font = New Font("Marlett", Me.Font.Size, FontStyle.Regular, GraphicsUnit.Pixel, Me.Font.GdiCharSet)
-			Win32Api.SetParent(Scroller.Handle, Me.Handle)
-		End If
-
-		Me.OnFontChanged(EventArgs.Empty)
-	End Sub
-
 	Protected Overrides Sub OnFontChanged(ByVal e As System.EventArgs)
 		MyBase.OnFontChanged(e)
+
+		' These two lines prevent incorrectly drawn text in the tabs when switching to manually painted TanControl.
+		'FROM: https://stackoverflow.com/questions/7128996/owner-drawn-tabcontrol-has-wider-tabs
+		Dim hFont As IntPtr = Me.Font.ToHfont()
+		Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_SETFONT, hFont, New IntPtr(-1))
 
 		Me.Scroller.Font = New Font("Marlett", Me.Font.SizeInPoints, FontStyle.Regular, GraphicsUnit.Point)
 		' The '-1' prevents writing over the border at bottom of tabs.
@@ -870,8 +871,47 @@ Public Class TabControlEx
 
 #End Region
 
+#Region "Core Event Handlers"
+
+	Private Sub AppSettings_PropertyChanged(ByVal sender As Object, ByVal e As System.ComponentModel.PropertyChangedEventArgs)
+		If e.PropertyName = "AppThemeName" Then
+			Me.UpdateTheme()
+			Me.Refresh()
+		End If
+	End Sub
+
+#End Region
+
+#Region "Private Methods"
+
+	Private Sub UpdateTheme()
+		Dim theme As TabControlTheme = Nothing
+		If TheApp IsNot Nothing Then
+			theme = TheApp.Settings.SelectedAppTheme.TabControlTheme
+		End If
+		If theme IsNot Nothing Then
+			Me.OnFontChanged(EventArgs.Empty)
+			' The Padding is around the tab text.
+			'Me.theDefaultPadding = Me.Padding
+			'Me.Padding = New Point(8, Me.theDefaultPadding.Y)
+			'Me.Font = Me.Parent.Font
+			'Me.SetStyle(ControlStyles.AllPaintingInWmPaint, True)
+			'Me.SetStyle(ControlStyles.DoubleBuffer, True)
+			Me.SetStyle(ControlStyles.UserPaint, True)
+		Else
+			'Me.Padding = Me.theDefaultPadding
+			'Me.SetStyle(ControlStyles.AllPaintingInWmPaint, False)
+			'Me.SetStyle(ControlStyles.DoubleBuffer, False)
+			Me.SetStyle(ControlStyles.UserPaint, False)
+		End If
+		'Me.OnFontChanged(EventArgs.Empty)
+	End Sub
+
+#End Region
+
 #Region "Data"
 
+	'Private theDefaultPadding As Point
 	'Private theBackColor As Color
 	Private theTabControlBackColor As Color
 	Private theTabBackColor1 As Color
