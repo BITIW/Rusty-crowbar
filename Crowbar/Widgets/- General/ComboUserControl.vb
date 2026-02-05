@@ -44,6 +44,8 @@ Public Class ComboUserControl
 		Me.TextHistoryDataGridView.AutoGenerateColumns = False
 
 		Me.thePointerIsOverTheDropDownButton = False
+
+		Me.UpdateTheme()
 	End Sub
 
 #End Region
@@ -86,30 +88,30 @@ Public Class ComboUserControl
 
 #Region "Properties"
 
-	<Browsable(True)>
-	<Category("Appearance")>
-	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
-	Public Overloads Property BorderColor As Color
-		Get
-			Return Me.theBorderColor
-		End Get
-		Set
-			Me.theBorderColor = Value
-		End Set
-	End Property
+	'<Browsable(True)>
+	'<Category("Appearance")>
+	'<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+	'Public Overloads Property BorderColor As Color
+	'	Get
+	'		Return Me.theBorderColor
+	'	End Get
+	'	Set
+	'		Me.theBorderColor = Value
+	'	End Set
+	'End Property
 
-	<Browsable(True)>
-	<Category("Appearance")>
-	<Description("Colorable BorderStyle.")>
-	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
-	Public Overloads Property BorderStyle As BorderStyle
-		Get
-			Return Me.theBorderStyle
-		End Get
-		Set
-			Me.theBorderStyle = Value
-		End Set
-	End Property
+	'<Browsable(True)>
+	'<Category("Appearance")>
+	'<Description("Colorable BorderStyle.")>
+	'<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+	'Public Overloads Property BorderStyle As BorderStyle
+	'	Get
+	'		Return Me.theBorderStyle
+	'	End Get
+	'	Set
+	'		Me.theBorderStyle = Value
+	'	End Set
+	'End Property
 
 	<Browsable(False)>
 	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>

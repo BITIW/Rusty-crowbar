@@ -3,31 +3,61 @@
 Public Class RadioButtonEx
 	Inherits RadioButton
 
+#Region "Create and Destroy"
+
 	Public Sub New()
 		MyBase.New()
 
+		'Me.UpdateTheme()
 	End Sub
+
+#End Region
+
+#Region "Init and Free"
+
+	Private Sub Init()
+		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
+		If TheApp IsNot Nothing Then
+			AddHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
+		End If
+	End Sub
+
+	Private Sub Free()
+		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
+		If TheApp IsNot Nothing Then
+			RemoveHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
+		End If
+	End Sub
+
+#End Region
+
+#Region "Properties"
+
+#End Region
+
+#Region "Widget Event Handlers"
 
 	Protected Overrides Sub OnHandleCreated(e As EventArgs)
 		MyBase.OnHandleCreated(e)
+		' [04-Feb-2026] Me.DesignMode is unreliable in nested widgets.
+		'If Not Me.DesignMode Then
+		Me.Init()
+		'End If
 
-		Dim theme As RadioButtonTheme = Nothing
-		' This check prevents problems with viewing and saving Forms in VS Designer.
-		If TheApp IsNot Nothing Then
-			theme = TheApp.Settings.SelectedAppTheme.RadioButtonTheme
-		End If
-		If theme IsNot Nothing AndAlso Me.theOriginalFont Is Nothing Then
+		If Me.theOriginalFont Is Nothing Then
 			Me.Font = New Font(SystemFonts.MessageBoxFont.Name, 8.25)
 			'NOTE: Font gets changed at some point after changing style, messing up when cue banner is turned off, 
 			'      so save the Font before changing style.
 			Me.theOriginalFont = New System.Drawing.Font(Me.Font.FontFamily, Me.Font.Size, Me.Font.Style, Me.Font.Unit)
-
-			'SetStyle(ControlStyles.AllPaintingInWmPaint, True)
-			'SetStyle(ControlStyles.DoubleBuffer, True)
-			'SetStyle(ControlStyles.UserPaint, True)
 		End If
 	End Sub
 
+	Protected Overrides Sub OnHandleDestroyed(e As EventArgs)
+		Me.Free()
+		MyBase.OnHandleDestroyed(e)
+	End Sub
+
+	' Works without needing to call SetStyle.
 	Protected Overrides Sub OnPaint(ByVal e As PaintEventArgs)
 		Dim theme As RadioButtonTheme = Nothing
 		' This check prevents problems with viewing and saving Forms in VS Designer.
@@ -83,7 +113,42 @@ Public Class RadioButtonEx
 		End If
 	End Sub
 
+#End Region
+
+#Region "Core Event Handlers"
+
+	Private Sub AppSettings_PropertyChanged(ByVal sender As Object, ByVal e As System.ComponentModel.PropertyChangedEventArgs)
+		If e.PropertyName = "AppThemeName" Then
+			'Me.UpdateTheme()
+			Me.Refresh()
+		End If
+	End Sub
+
+#End Region
+
+#Region "Events"
+
+#End Region
+
+#Region "Private Methods"
+
+	'Private Sub UpdateTheme()
+	'	Dim theme As ButtonTheme = Nothing
+	'	If TheApp IsNot Nothing Then
+	'		theme = TheApp.Settings.SelectedAppTheme.ButtonTheme
+	'	End If
+	'	If theme IsNot Nothing Then
+	'	Else
+	'	End If
+	'End Sub
+
+#End Region
+
+#Region "Data"
+
 	Protected theControlIsReadOnly As Boolean
 	Private theOriginalFont As Font
+
+#End Region
 
 End Class

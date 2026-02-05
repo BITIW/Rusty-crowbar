@@ -81,17 +81,27 @@ Public Class RichTextBoxEx
 
 		Me.theLineCount = 0
 		Me.theScrollingIsActive = False
+
+		Me.UpdateTheme()
 	End Sub
 
 #End Region
 
 #Region "Init and Free"
 
-	'Private Sub Init()
-	'End Sub
+	Private Sub Init()
+		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
+		If TheApp IsNot Nothing Then
+			AddHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
+		End If
+	End Sub
 
-	'Private Sub Free()
-	'End Sub
+	Private Sub Free()
+		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
+		If TheApp IsNot Nothing Then
+			RemoveHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
+		End If
+	End Sub
 
 #End Region
 
@@ -215,32 +225,32 @@ Public Class RichTextBoxEx
 
 #Region "Widget Event Handlers"
 
-	Protected Overrides Sub OnGotFocus(e As EventArgs)
-		MyBase.OnGotFocus(e)
-		Me.Invalidate()
-	End Sub
-
 	Protected Overrides Sub OnHandleCreated(e As EventArgs)
 		MyBase.OnHandleCreated(e)
+		' [04-Feb-2026] Me.DesignMode is unreliable in nested widgets.
+		'If Not Me.DesignMode Then
+		Me.Init()
+		'End If
 
-		Dim theme As RichTextBoxTheme = Nothing
-		' This check prevents problems with viewing and saving Forms in VS Designer.
-		If TheApp IsNot Nothing Then
-			theme = TheApp.Settings.SelectedAppTheme.RichTextBoxTheme
-		End If
-		If theme IsNot Nothing AndAlso Me.theOriginalFont Is Nothing Then
+		If Me.theOriginalFont Is Nothing Then
 			Me.Font = New Font(SystemFonts.MessageBoxFont.Name, 8.25)
 			'NOTE: Font gets changed at some point after changing style, messing up when cue banner is turned off, 
 			'      so save the Font before changing style.
 			Me.theOriginalFont = New System.Drawing.Font(Me.Font.FontFamily, Me.Font.Size, Me.Font.Style, Me.Font.Unit)
-
-			Me.SetStyle(ControlStyles.AllPaintingInWmPaint, True)
-			Me.SetStyle(ControlStyles.DoubleBuffer, True)
-			Me.SetStyle(ControlStyles.UserPaint, True)
 		End If
 
 		' Sometimes this is True for unknown reason, so force it to False.
 		MyBase.AutoWordSelection = False
+	End Sub
+
+	Protected Overrides Sub OnHandleDestroyed(e As EventArgs)
+		Me.Free()
+		MyBase.OnHandleDestroyed(e)
+	End Sub
+
+	Protected Overrides Sub OnGotFocus(e As EventArgs)
+		MyBase.OnGotFocus(e)
+		Me.Invalidate()
 	End Sub
 
 	Protected Overrides Sub OnHScroll(e As EventArgs)
@@ -304,6 +314,8 @@ Public Class RichTextBoxEx
 	'NOTE: Single-line caret is visually glitched so always use Multiline.
 	'      Fake the single-line.
 	'NOTE: This all works by working with the underlying RTB positioning of text and caret.
+	' Need the following line for OnPaint() to be called by Windows:
+	'	Me.SetStyle(ControlStyles.UserPaint, True)
 	Protected Overrides Sub OnPaint(e As PaintEventArgs)
 		'NOTE: Completely override painting by OS.
 		'MyBase.OnPaint(e)
@@ -902,27 +914,6 @@ Public Class RichTextBoxEx
 	End Sub
 
 	Private Sub OnNonClientPaint(ByRef m As Message)
-		Dim theme As RichTextBoxTheme = Nothing
-		' This check prevents problems with viewing and saving Forms in VS Designer.
-		If TheApp IsNot Nothing Then
-			theme = TheApp.Settings.SelectedAppTheme.RichTextBoxTheme
-		End If
-		If theme IsNot Nothing AndAlso Me.theThemeIsUsed Then
-			'IMPORTANT: Only assign ForeColor and BackColor once in OnPaint();
-			'           otherwise OnPaint will be called over 100 times
-			'           and much of the window will not be painted.
-			If Me.Enabled Then
-				Me.ForeColor = theme.EnabledForeColor
-			Else
-				Me.ForeColor = theme.DisabledForeColor
-			End If
-			If MyBase.[ReadOnly] Then
-				MyBase.BackColor = theme.DisabledBackColor
-			Else
-				MyBase.BackColor = theme.EnabledBackColor
-			End If
-		End If
-
 		Dim hDC As IntPtr = Win32Api.GetWindowDC(Me.Handle)
 		Try
 			Using g As Graphics = Graphics.FromHdc(hDC)
@@ -1012,9 +1003,49 @@ Public Class RichTextBoxEx
 
 #Region "Core Event Handlers"
 
+	Private Sub AppSettings_PropertyChanged(ByVal sender As Object, ByVal e As System.ComponentModel.PropertyChangedEventArgs)
+		If e.PropertyName = "AppThemeName" Then
+			Me.UpdateTheme()
+			Me.Refresh()
+		End If
+	End Sub
+
 #End Region
 
 #Region "Private Methods"
+
+	Private Sub UpdateTheme()
+		Dim theme As RichTextBoxTheme = Nothing
+		' This check prevents problems with viewing and saving Forms in VS Designer.
+		If TheApp IsNot Nothing Then
+			theme = TheApp.Settings.SelectedAppTheme.RichTextBoxTheme
+		End If
+		If theme IsNot Nothing Then
+			If Me.theThemeIsUsed Then
+				If Me.Enabled Then
+					Me.ForeColor = theme.EnabledForeColor
+				Else
+					Me.ForeColor = theme.DisabledForeColor
+				End If
+				If MyBase.[ReadOnly] Then
+					MyBase.BackColor = theme.DisabledBackColor
+				Else
+					MyBase.BackColor = theme.EnabledBackColor
+				End If
+			End If
+
+			Me.SetStyle(ControlStyles.AllPaintingInWmPaint, True)
+			Me.SetStyle(ControlStyles.DoubleBuffer, True)
+			Me.SetStyle(ControlStyles.UserPaint, True)
+		Else
+			Me.ForeColor = DefaultForeColor
+			MyBase.BackColor = DefaultBackColor
+
+			Me.SetStyle(ControlStyles.AllPaintingInWmPaint, False)
+			Me.SetStyle(ControlStyles.DoubleBuffer, False)
+			Me.SetStyle(ControlStyles.UserPaint, False)
+		End If
+	End Sub
 
 	Private Function GetContentWidthWithNoWordWrap() As Integer
 		Dim contentWidth As Integer = 0

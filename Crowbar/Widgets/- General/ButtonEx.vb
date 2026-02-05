@@ -8,19 +8,28 @@ Public Class ButtonEx
 	Public Sub New()
 		MyBase.New()
 
-		'Me.BackColor = WidgetConstants.WidgetHighBackColor
 		Me.theMouseIsOverButton = False
+
+		'Me.UpdateTheme()
 	End Sub
 
 #End Region
 
 #Region "Init and Free"
 
-	'Private Sub Init()
-	'End Sub
+	Private Sub Init()
+		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
+		If TheApp IsNot Nothing Then
+			AddHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
+		End If
+	End Sub
 
-	'Private Sub Free()
-	'End Sub
+	Private Sub Free()
+		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
+		If TheApp IsNot Nothing Then
+			RemoveHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
+		End If
+	End Sub
 
 #End Region
 
@@ -63,11 +72,20 @@ Public Class ButtonEx
 
 #End Region
 
-#Region "Events"
+#Region "Widget Event Handlers"
 
-#End Region
+	Protected Overrides Sub OnHandleCreated(ByVal e As System.EventArgs)
+		MyBase.OnHandleCreated(e)
+		' [04-Feb-2026] Me.DesignMode is unreliable in nested widgets.
+		'If Not Me.DesignMode Then
+		Me.Init()
+		'End If
+	End Sub
 
-#Region "Private Methods"
+	Protected Overrides Sub OnHandleDestroyed(e As EventArgs)
+		Me.Free()
+		MyBase.OnHandleDestroyed(e)
+	End Sub
 
 	Protected Overrides Sub OnMouseEnter(e As EventArgs)
 		MyBase.OnMouseEnter(e)
@@ -79,6 +97,7 @@ Public Class ButtonEx
 		Me.theMouseIsOverButton = False
 	End Sub
 
+	' Works without needing to call SetStyle.
 	Protected Overrides Sub OnPaint(e As PaintEventArgs)
 		MyBase.OnPaint(e)
 
@@ -190,6 +209,35 @@ Public Class ButtonEx
 			End If
 		End If
 	End Sub
+
+#End Region
+
+#Region "Core Event Handlers"
+
+	Private Sub AppSettings_PropertyChanged(ByVal sender As Object, ByVal e As System.ComponentModel.PropertyChangedEventArgs)
+		If e.PropertyName = "AppThemeName" Then
+			'Me.UpdateTheme()
+			Me.Refresh()
+		End If
+	End Sub
+
+#End Region
+
+#Region "Events"
+
+#End Region
+
+#Region "Private Methods"
+
+	'Private Sub UpdateTheme()
+	'	Dim theme As ButtonTheme = Nothing
+	'	If TheApp IsNot Nothing Then
+	'		theme = TheApp.Settings.SelectedAppTheme.ButtonTheme
+	'	End If
+	'	If theme IsNot Nothing Then
+	'	Else
+	'	End If
+	'End Sub
 
 #End Region
 
