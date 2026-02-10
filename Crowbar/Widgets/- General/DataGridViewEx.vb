@@ -72,11 +72,31 @@ Public Class DataGridViewEx
         Me.theSelectionIsChangingBecauseOfMe = False
 
         Me.theCellWherePointerIs = Nothing
+
+        Me.UpdateTheme()
     End Sub
 
 #End Region
 
 #Region "Init and Free"
+
+    Protected Sub Init()
+        ' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
+        If TheApp Is Nothing Then
+            Exit Sub
+        End If
+
+        AddHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
+    End Sub
+
+    Protected Sub Free()
+        ' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
+        If TheApp Is Nothing Then
+            Exit Sub
+        End If
+
+        RemoveHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
+    End Sub
 
 #End Region
 
@@ -149,6 +169,19 @@ Public Class DataGridViewEx
 #End Region
 
 #Region "Widget Event Handlers"
+
+    Protected Overrides Sub OnHandleCreated(e As EventArgs)
+        MyBase.OnHandleCreated(e)
+        ' [04-Feb-2026] Me.DesignMode is unreliable in nested widgets.
+        'If Not Me.DesignMode Then
+        Me.Init()
+        'End If
+    End Sub
+
+    Protected Overrides Sub OnHandleDestroyed(e As EventArgs)
+        Me.Free()
+        MyBase.OnHandleDestroyed(e)
+    End Sub
 
     Protected Overrides Sub OnCellClick(ByVal e As DataGridViewCellEventArgs)
         If Not Me.ReadOnly AndAlso Me.Enabled AndAlso (e.RowIndex > -1) AndAlso (e.ColumnIndex > -1) Then
@@ -613,44 +646,44 @@ Public Class DataGridViewEx
         End If
     End Sub
 
-    Protected Overrides Sub OnPaint(e As PaintEventArgs)
-        'Dim theme As DataGridViewTheme = Nothing
-        '' This check prevents problems with viewing and saving Forms in VS Designer.
-        'If TheApp IsNot Nothing Then
-        '    theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
-        'End If
-        'If theme IsNot Nothing Then
-        '    If Me.Enabled Then
-        '        Me.GridColor = theme.EnabledForeColor
-        '        'Me.BackgroundColor = theme.EnabledBackColor
-        '        Me.BackgroundColor = Color.Red
-        '    Else
-        '        Me.GridColor = theme.DisabledForeColor
-        '        'Me.BackgroundColor = theme.DisabledBackColor
-        '        Me.BackgroundColor = Color.Red
-        '    End If
-        'End If
+    'Protected Overrides Sub OnPaint(e As PaintEventArgs)
+    '    Dim theme As DataGridViewTheme = Nothing
+    '    ' This check prevents problems with viewing and saving Forms in VS Designer.
+    '    If TheApp IsNot Nothing Then
+    '        theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
+    '    End If
+    '    If theme IsNot Nothing Then
+    '        If Me.Enabled Then
+    '            Me.GridColor = theme.EnabledForeColor
+    '            'Me.BackgroundColor = theme.EnabledBackColor
+    '            Me.BackgroundColor = Color.Red
+    '        Else
+    '            Me.GridColor = theme.DisabledForeColor
+    '            'Me.BackgroundColor = theme.DisabledBackColor
+    '            Me.BackgroundColor = Color.Red
+    '        End If
+    '    End If
 
-        MyBase.OnPaint(e)
+    '    MyBase.OnPaint(e)
 
-        ''Dim theme As DataGridViewTheme = Nothing
-        ''' This check prevents problems with viewing and saving Forms in VS Designer.
-        ''If TheApp IsNot Nothing Then
-        ''    theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
-        ''End If
-        'If theme IsNot Nothing Then
-        '    Dim g As Graphics = e.Graphics
-        '    Dim clientRectangle As Rectangle = Me.ClientRectangle
-        '    ' Draw outer border.
-        '    If Me.BorderStyle <> BorderStyle.None Then
-        '        Dim borderColor As Color
-        '        borderColor = theme.EnabledBorderColor
-        '        Using borderColorPen As New Pen(borderColor)
-        '            g.DrawRectangle(borderColorPen, clientRectangle.Left, clientRectangle.Top, clientRectangle.Width - 1, clientRectangle.Height - 1)
-        '        End Using
-        '    End If
-        'End If
-    End Sub
+    '    ''Dim theme As DataGridViewTheme = Nothing
+    '    ''' This check prevents problems with viewing and saving Forms in VS Designer.
+    '    ''If TheApp IsNot Nothing Then
+    '    ''    theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
+    '    ''End If
+    '    'If theme IsNot Nothing Then
+    '    '    Dim g As Graphics = e.Graphics
+    '    '    Dim clientRectangle As Rectangle = Me.ClientRectangle
+    '    '    ' Draw outer border.
+    '    '    If Me.BorderStyle <> BorderStyle.None Then
+    '    '        Dim borderColor As Color
+    '    '        borderColor = theme.EnabledBorderColor
+    '    '        Using borderColorPen As New Pen(borderColor)
+    '    '            g.DrawRectangle(borderColorPen, clientRectangle.Left, clientRectangle.Top, clientRectangle.Width - 1, clientRectangle.Height - 1)
+    '    '        End Using
+    '    '    End If
+    '    'End If
+    'End Sub
 
     Protected Overrides Sub WndProc(ByRef m As Message)
         Select Case m.Msg
@@ -721,7 +754,38 @@ Public Class DataGridViewEx
 
 #End Region
 
+#Region "Core Event Handlers"
+
+    Private Sub AppSettings_PropertyChanged(ByVal sender As Object, ByVal e As System.ComponentModel.PropertyChangedEventArgs)
+        If e.PropertyName = "AppThemeName" Then
+            Me.UpdateTheme()
+            Me.Refresh()
+        End If
+    End Sub
+
+#End Region
+
 #Region "Private Methods"
+
+    Private Sub UpdateTheme()
+        Dim theme As DataGridViewTheme = Nothing
+        ' This check prevents problems with viewing and saving Forms in VS Designer.
+        If TheApp IsNot Nothing Then
+            theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
+        End If
+        If theme IsNot Nothing Then
+            If Me.Enabled Then
+                Me.GridColor = theme.EnabledForeColor
+                Me.BackgroundColor = theme.EnabledBackColor
+            Else
+                Me.GridColor = theme.DisabledForeColor
+                Me.BackgroundColor = theme.DisabledBackColor
+            End If
+        Else
+            Me.GridColor = SystemColors.ControlDark
+            Me.BackgroundColor = SystemColors.AppWorkspace
+        End If
+    End Sub
 
     Private Sub UpdateNonClientPadding()
         Dim left As Integer = 0

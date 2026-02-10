@@ -22,7 +22,6 @@ Partial Class EditUserControl
 		'
 		'Panel1
 		'
-		Me.Panel1.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
 		Me.Panel1.Controls.Add(Me.GotoQcButton)
 		Me.Panel1.Controls.Add(Me.Label6)
 		Me.Panel1.Controls.Add(Me.QcPathFileNameTextBox)

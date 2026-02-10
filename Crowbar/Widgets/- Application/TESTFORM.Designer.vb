@@ -32,14 +32,17 @@ Partial Class TESTFORM
 		Me.TabPage2 = New System.Windows.Forms.TabPage()
 		Me.TabControl1 = New System.Windows.Forms.TabControl()
 		Me.TabPage3 = New System.Windows.Forms.TabPage()
+		Me.TextBox1 = New System.Windows.Forms.TextBox()
 		Me.Button1 = New System.Windows.Forms.Button()
 		Me.ComboBox1 = New System.Windows.Forms.ComboBox()
 		Me.TabPage4 = New System.Windows.Forms.TabPage()
+		Me.DataGridView1 = New System.Windows.Forms.DataGridView()
 		Me.TabControlEx1.SuspendLayout()
 		Me.TabPage1.SuspendLayout()
 		Me.PanelEx1.SuspendLayout()
 		Me.TabControl1.SuspendLayout()
 		Me.TabPage3.SuspendLayout()
+		CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
 		Me.SuspendLayout()
 		'
 		'TabControlEx1
@@ -47,6 +50,7 @@ Partial Class TESTFORM
 		Me.TabControlEx1.Controls.Add(Me.TabPage1)
 		Me.TabControlEx1.Controls.Add(Me.TabPage2)
 		Me.TabControlEx1.Dock = System.Windows.Forms.DockStyle.Top
+		Me.TabControlEx1.Font = New System.Drawing.Font("Segoe UI", 8.25!)
 		Me.TabControlEx1.HotTrack = True
 		Me.TabControlEx1.Location = New System.Drawing.Point(0, 0)
 		Me.TabControlEx1.Name = "TabControlEx1"
@@ -82,8 +86,6 @@ Partial Class TESTFORM
 		Me.PanelEx1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer), CType(CType(241, Byte), Integer))
 		Me.PanelEx1.Location = New System.Drawing.Point(0, 0)
 		Me.PanelEx1.Name = "PanelEx1"
-		Me.PanelEx1.SelectedIndex = -1
-		Me.PanelEx1.SelectedValue = Nothing
 		Me.PanelEx1.Size = New System.Drawing.Size(792, 199)
 		Me.PanelEx1.TabIndex = 0
 		'
@@ -158,6 +160,8 @@ Partial Class TESTFORM
 		'
 		'TabPage3
 		'
+		Me.TabPage3.Controls.Add(Me.DataGridView1)
+		Me.TabPage3.Controls.Add(Me.TextBox1)
 		Me.TabPage3.Controls.Add(Me.Button1)
 		Me.TabPage3.Controls.Add(Me.ComboBox1)
 		Me.TabPage3.Location = New System.Drawing.Point(4, 22)
@@ -167,6 +171,13 @@ Partial Class TESTFORM
 		Me.TabPage3.TabIndex = 0
 		Me.TabPage3.Text = "TabPage3"
 		Me.TabPage3.UseVisualStyleBackColor = True
+		'
+		'TextBox1
+		'
+		Me.TextBox1.Location = New System.Drawing.Point(6, 33)
+		Me.TextBox1.Name = "TextBox1"
+		Me.TextBox1.Size = New System.Drawing.Size(100, 22)
+		Me.TextBox1.TabIndex = 2
 		'
 		'Button1
 		'
@@ -195,6 +206,14 @@ Partial Class TESTFORM
 		Me.TabPage4.Text = "TabPage4"
 		Me.TabPage4.UseVisualStyleBackColor = True
 		'
+		'DataGridView1
+		'
+		Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+		Me.DataGridView1.Location = New System.Drawing.Point(214, 6)
+		Me.DataGridView1.Name = "DataGridView1"
+		Me.DataGridView1.Size = New System.Drawing.Size(240, 150)
+		Me.DataGridView1.TabIndex = 3
+		'
 		'TESTFORM
 		'
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -211,6 +230,8 @@ Partial Class TESTFORM
 		Me.PanelEx1.PerformLayout()
 		Me.TabControl1.ResumeLayout(False)
 		Me.TabPage3.ResumeLayout(False)
+		Me.TabPage3.PerformLayout()
+		CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
 		Me.ResumeLayout(False)
 
 	End Sub
@@ -228,4 +249,6 @@ Partial Class TESTFORM
     Friend WithEvents TabPage4 As TabPage
     Friend WithEvents Button1 As Button
     Friend WithEvents ComboBox1 As ComboBox
+	Friend WithEvents TextBox1 As TextBox
+	Friend WithEvents DataGridView1 As DataGridView
 End Class

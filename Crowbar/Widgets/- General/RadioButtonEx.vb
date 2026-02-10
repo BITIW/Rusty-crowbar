@@ -39,10 +39,6 @@ Public Class RadioButtonEx
 
 	Protected Overrides Sub OnHandleCreated(e As EventArgs)
 		MyBase.OnHandleCreated(e)
-		' [04-Feb-2026] Me.DesignMode is unreliable in nested widgets.
-		'If Not Me.DesignMode Then
-		Me.Init()
-		'End If
 
 		If Me.theOriginalFont Is Nothing Then
 			Me.Font = New Font(SystemFonts.MessageBoxFont.Name, 8.25)
@@ -50,6 +46,11 @@ Public Class RadioButtonEx
 			'      so save the Font before changing style.
 			Me.theOriginalFont = New System.Drawing.Font(Me.Font.FontFamily, Me.Font.Size, Me.Font.Style, Me.Font.Unit)
 		End If
+
+		' [04-Feb-2026] Me.DesignMode is unreliable in nested widgets.
+		'If Not Me.DesignMode Then
+		Me.Init()
+		'End If
 	End Sub
 
 	Protected Overrides Sub OnHandleDestroyed(e As EventArgs)

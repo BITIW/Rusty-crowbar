@@ -7,6 +7,7 @@ Public Class OptionsUserControl
 		' This call is required by the Windows Form Designer.
 		InitializeComponent()
 
+		Me.UpdateTheme()
 	End Sub
 
 	Protected Overrides Sub Dispose(ByVal disposing As Boolean)

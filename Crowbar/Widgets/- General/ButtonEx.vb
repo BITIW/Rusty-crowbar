@@ -8,6 +8,7 @@ Public Class ButtonEx
 	Public Sub New()
 		MyBase.New()
 
+		Me.theButtonCanBeFocused = True
 		Me.theMouseIsOverButton = False
 
 		'Me.UpdateTheme()
@@ -35,6 +36,17 @@ Public Class ButtonEx
 
 #Region "Properties"
 
+	Public Property ButtonCanBeFocused() As Boolean
+		Get
+			Return Me.theButtonCanBeFocused
+		End Get
+		Set(ByVal value As Boolean)
+			If Me.theButtonCanBeFocused <> value Then
+				Me.theButtonCanBeFocused = value
+			End If
+		End Set
+	End Property
+
 	Public Property SpecialImage() As ButtonEx.SpecialImageType
 		Get
 			Return Me.theSpecialImage
@@ -59,16 +71,6 @@ Public Class ButtonEx
 #End Region
 
 #Region "Methods"
-
-	Public Sub Highlight()
-		Me.theButtonShouldBeHighlighted = True
-		Me.Invalidate()
-	End Sub
-
-	Public Sub Diminish()
-		Me.theButtonShouldBeHighlighted = False
-		Me.Invalidate()
-	End Sub
 
 #End Region
 
@@ -116,7 +118,7 @@ Public Class ButtonEx
 			Dim borderColor As Color
 
 			If Me.Enabled Then
-				If Me.theMouseIsOverButton OrElse Me.theButtonShouldBeHighlighted Then
+				If Me.theButtonCanBeFocused AndAlso Me.theMouseIsOverButton Then
 					' Focus
 					backColor1 = theme.FocusBackColor
 					backColor2 = theme.FocusBackColor
@@ -243,9 +245,10 @@ Public Class ButtonEx
 
 #Region "Data"
 
-	Private theMouseIsOverButton As Boolean
-	Private theButtonShouldBeHighlighted As Boolean
+	Private theButtonCanBeFocused As Boolean
 	Private theSpecialImage As ButtonEx.SpecialImageType
+
+	Private theMouseIsOverButton As Boolean
 
 #End Region
 

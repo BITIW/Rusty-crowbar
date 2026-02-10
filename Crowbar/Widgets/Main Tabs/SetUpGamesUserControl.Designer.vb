@@ -64,6 +64,7 @@ Partial Class SetUpGamesUserControl
 		'AddLibraryPathButton
 		'
 		Me.AddLibraryPathButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.AddLibraryPathButton.ButtonCanBeFocused = True
 		Me.AddLibraryPathButton.Location = New System.Drawing.Point(613, 412)
 		Me.AddLibraryPathButton.Name = "AddLibraryPathButton"
 		Me.AddLibraryPathButton.Size = New System.Drawing.Size(75, 23)
@@ -75,6 +76,7 @@ Partial Class SetUpGamesUserControl
 		'DeleteLibraryPathButton
 		'
 		Me.DeleteLibraryPathButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.DeleteLibraryPathButton.ButtonCanBeFocused = True
 		Me.DeleteLibraryPathButton.Location = New System.Drawing.Point(613, 441)
 		Me.DeleteLibraryPathButton.Name = "DeleteLibraryPathButton"
 		Me.DeleteLibraryPathButton.Size = New System.Drawing.Size(75, 50)
@@ -107,6 +109,7 @@ Partial Class SetUpGamesUserControl
 		'BrowseForSteamAppPathFileNameButton
 		'
 		Me.BrowseForSteamAppPathFileNameButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.BrowseForSteamAppPathFileNameButton.ButtonCanBeFocused = True
 		Me.BrowseForSteamAppPathFileNameButton.Location = New System.Drawing.Point(613, 364)
 		Me.BrowseForSteamAppPathFileNameButton.Name = "BrowseForSteamAppPathFileNameButton"
 		Me.BrowseForSteamAppPathFileNameButton.Size = New System.Drawing.Size(75, 23)
@@ -126,6 +129,7 @@ Partial Class SetUpGamesUserControl
 		Me.SteamAppPathFileNameTextBox.Multiline = False
 		Me.SteamAppPathFileNameTextBox.Name = "SteamAppPathFileNameTextBox"
 		Me.SteamAppPathFileNameTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+		Me.SteamAppPathFileNameTextBox.SelectionEnabled = True
 		Me.SteamAppPathFileNameTextBox.Size = New System.Drawing.Size(604, 22)
 		Me.SteamAppPathFileNameTextBox.TabIndex = 46
 		Me.SteamAppPathFileNameTextBox.Text = ""
@@ -134,6 +138,7 @@ Partial Class SetUpGamesUserControl
 		'AddGameSetupButton
 		'
 		Me.AddGameSetupButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.AddGameSetupButton.ButtonCanBeFocused = True
 		Me.AddGameSetupButton.Location = New System.Drawing.Point(706, 3)
 		Me.AddGameSetupButton.Name = "AddGameSetupButton"
 		Me.AddGameSetupButton.Size = New System.Drawing.Size(75, 22)
@@ -192,26 +197,26 @@ Partial Class SetUpGamesUserControl
 		Me.EngineLabel.TabIndex = 43
 		Me.EngineLabel.Text = "Engine:"
 		'
-		'EngineComboBox
+		'EngineComboUserControl
 		'
-		Me.EngineComboUserControl.DataSource = Nothing
+		Me.EngineComboUserControl.BackColor = System.Drawing.SystemColors.Control
 		Me.EngineComboUserControl.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+		Me.EngineComboUserControl.ForeColor = System.Drawing.SystemColors.ControlText
 		Me.EngineComboUserControl.IsReadOnly = False
 		Me.EngineComboUserControl.Location = New System.Drawing.Point(55, 45)
 		Me.EngineComboUserControl.MaxDropDownItems = 30
 		Me.EngineComboUserControl.MultipleInputsIsAllowed = True
 		Me.EngineComboUserControl.Name = "EngineComboUserControl"
-		Me.EngineComboUserControl.SelectedIndex = -1
 		Me.EngineComboUserControl.Size = New System.Drawing.Size(121, 23)
 		Me.EngineComboUserControl.TabIndex = 42
 		Me.EngineComboUserControl.TextHistoryIsKept = False
 		Me.EngineComboUserControl.TextHistoryMaxSize = 15
 		Me.EngineComboUserControl.TextIsPathFileNames = False
-		Me.EngineComboUserControl.ValueMember = ""
 		'
 		'CreateModelsFolderTreeButton
 		'
 		Me.CreateModelsFolderTreeButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.CreateModelsFolderTreeButton.ButtonCanBeFocused = True
 		Me.CreateModelsFolderTreeButton.Location = New System.Drawing.Point(502, 275)
 		Me.CreateModelsFolderTreeButton.Name = "CreateModelsFolderTreeButton"
 		Me.CreateModelsFolderTreeButton.Size = New System.Drawing.Size(270, 23)
@@ -224,6 +229,7 @@ Partial Class SetUpGamesUserControl
 		'BrowseForMappingToolPathFileNameButton
 		'
 		Me.BrowseForMappingToolPathFileNameButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.BrowseForMappingToolPathFileNameButton.ButtonCanBeFocused = True
 		Me.BrowseForMappingToolPathFileNameButton.Location = New System.Drawing.Point(697, 217)
 		Me.BrowseForMappingToolPathFileNameButton.Name = "BrowseForMappingToolPathFileNameButton"
 		Me.BrowseForMappingToolPathFileNameButton.Size = New System.Drawing.Size(75, 23)
@@ -243,6 +249,7 @@ Partial Class SetUpGamesUserControl
 		Me.MappingToolPathFileNameTextBox.Multiline = False
 		Me.MappingToolPathFileNameTextBox.Name = "MappingToolPathFileNameTextBox"
 		Me.MappingToolPathFileNameTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+		Me.MappingToolPathFileNameTextBox.SelectionEnabled = True
 		Me.MappingToolPathFileNameTextBox.Size = New System.Drawing.Size(589, 22)
 		Me.MappingToolPathFileNameTextBox.TabIndex = 38
 		Me.MappingToolPathFileNameTextBox.Text = ""
@@ -278,6 +285,7 @@ Partial Class SetUpGamesUserControl
 		Me.GameAppOptionsTextBox.Multiline = False
 		Me.GameAppOptionsTextBox.Name = "GameAppOptionsTextBox"
 		Me.GameAppOptionsTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+		Me.GameAppOptionsTextBox.SelectionEnabled = True
 		Me.GameAppOptionsTextBox.Size = New System.Drawing.Size(579, 22)
 		Me.GameAppOptionsTextBox.TabIndex = 32
 		Me.GameAppOptionsTextBox.Text = ""
@@ -295,6 +303,7 @@ Partial Class SetUpGamesUserControl
 		'ClearGameAppOptionsButton
 		'
 		Me.ClearGameAppOptionsButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.ClearGameAppOptionsButton.ButtonCanBeFocused = True
 		Me.ClearGameAppOptionsButton.Location = New System.Drawing.Point(697, 101)
 		Me.ClearGameAppOptionsButton.Name = "ClearGameAppOptionsButton"
 		Me.ClearGameAppOptionsButton.Size = New System.Drawing.Size(75, 23)
@@ -306,6 +315,7 @@ Partial Class SetUpGamesUserControl
 		'BrowseForGameAppPathFileNameButton
 		'
 		Me.BrowseForGameAppPathFileNameButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.BrowseForGameAppPathFileNameButton.ButtonCanBeFocused = True
 		Me.BrowseForGameAppPathFileNameButton.Location = New System.Drawing.Point(697, 72)
 		Me.BrowseForGameAppPathFileNameButton.Name = "BrowseForGameAppPathFileNameButton"
 		Me.BrowseForGameAppPathFileNameButton.Size = New System.Drawing.Size(75, 23)
@@ -325,6 +335,7 @@ Partial Class SetUpGamesUserControl
 		Me.GameAppPathFileNameTextBox.Multiline = False
 		Me.GameAppPathFileNameTextBox.Name = "GameAppPathFileNameTextBox"
 		Me.GameAppPathFileNameTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+		Me.GameAppPathFileNameTextBox.SelectionEnabled = True
 		Me.GameAppPathFileNameTextBox.Size = New System.Drawing.Size(579, 22)
 		Me.GameAppPathFileNameTextBox.TabIndex = 29
 		Me.GameAppPathFileNameTextBox.Text = ""
@@ -353,6 +364,7 @@ Partial Class SetUpGamesUserControl
 		'BrowseForUnpackerPathFileNameButton
 		'
 		Me.BrowseForUnpackerPathFileNameButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.BrowseForUnpackerPathFileNameButton.ButtonCanBeFocused = True
 		Me.BrowseForUnpackerPathFileNameButton.Location = New System.Drawing.Point(697, 246)
 		Me.BrowseForUnpackerPathFileNameButton.Name = "BrowseForUnpackerPathFileNameButton"
 		Me.BrowseForUnpackerPathFileNameButton.Size = New System.Drawing.Size(75, 23)
@@ -372,6 +384,7 @@ Partial Class SetUpGamesUserControl
 		Me.PackerPathFileNameTextBox.Multiline = False
 		Me.PackerPathFileNameTextBox.Name = "PackerPathFileNameTextBox"
 		Me.PackerPathFileNameTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+		Me.PackerPathFileNameTextBox.SelectionEnabled = True
 		Me.PackerPathFileNameTextBox.Size = New System.Drawing.Size(589, 22)
 		Me.PackerPathFileNameTextBox.TabIndex = 17
 		Me.PackerPathFileNameTextBox.Text = ""
@@ -390,6 +403,7 @@ Partial Class SetUpGamesUserControl
 		'BrowseForViewerPathFileNameButton
 		'
 		Me.BrowseForViewerPathFileNameButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.BrowseForViewerPathFileNameButton.ButtonCanBeFocused = True
 		Me.BrowseForViewerPathFileNameButton.Location = New System.Drawing.Point(697, 188)
 		Me.BrowseForViewerPathFileNameButton.Name = "BrowseForViewerPathFileNameButton"
 		Me.BrowseForViewerPathFileNameButton.Size = New System.Drawing.Size(75, 23)
@@ -409,6 +423,7 @@ Partial Class SetUpGamesUserControl
 		Me.ViewerPathFileNameTextBox.Multiline = False
 		Me.ViewerPathFileNameTextBox.Name = "ViewerPathFileNameTextBox"
 		Me.ViewerPathFileNameTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+		Me.ViewerPathFileNameTextBox.SelectionEnabled = True
 		Me.ViewerPathFileNameTextBox.Size = New System.Drawing.Size(589, 22)
 		Me.ViewerPathFileNameTextBox.TabIndex = 14
 		Me.ViewerPathFileNameTextBox.Text = ""
@@ -416,6 +431,7 @@ Partial Class SetUpGamesUserControl
 		'
 		'CloneGameSetupButton
 		'
+		Me.CloneGameSetupButton.ButtonCanBeFocused = True
 		Me.CloneGameSetupButton.Location = New System.Drawing.Point(6, 275)
 		Me.CloneGameSetupButton.Name = "CloneGameSetupButton"
 		Me.CloneGameSetupButton.Size = New System.Drawing.Size(75, 23)
@@ -435,6 +451,7 @@ Partial Class SetUpGamesUserControl
 		Me.GameNameTextBox.Multiline = False
 		Me.GameNameTextBox.Name = "GameNameTextBox"
 		Me.GameNameTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+		Me.GameNameTextBox.SelectionEnabled = True
 		Me.GameNameTextBox.Size = New System.Drawing.Size(717, 22)
 		Me.GameNameTextBox.TabIndex = 1
 		Me.GameNameTextBox.Text = ""
@@ -451,6 +468,7 @@ Partial Class SetUpGamesUserControl
 		'
 		'DeleteGameSetupButton
 		'
+		Me.DeleteGameSetupButton.ButtonCanBeFocused = True
 		Me.DeleteGameSetupButton.Location = New System.Drawing.Point(87, 275)
 		Me.DeleteGameSetupButton.Name = "DeleteGameSetupButton"
 		Me.DeleteGameSetupButton.Size = New System.Drawing.Size(75, 23)
@@ -462,6 +480,7 @@ Partial Class SetUpGamesUserControl
 		'BrowseForGamePathFileNameButton
 		'
 		Me.BrowseForGamePathFileNameButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.BrowseForGamePathFileNameButton.ButtonCanBeFocused = True
 		Me.BrowseForGamePathFileNameButton.Location = New System.Drawing.Point(697, 130)
 		Me.BrowseForGamePathFileNameButton.Name = "BrowseForGamePathFileNameButton"
 		Me.BrowseForGamePathFileNameButton.Size = New System.Drawing.Size(75, 23)
@@ -481,6 +500,7 @@ Partial Class SetUpGamesUserControl
 		Me.GamePathFileNameTextBox.Multiline = False
 		Me.GamePathFileNameTextBox.Name = "GamePathFileNameTextBox"
 		Me.GamePathFileNameTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+		Me.GamePathFileNameTextBox.SelectionEnabled = True
 		Me.GamePathFileNameTextBox.Size = New System.Drawing.Size(589, 22)
 		Me.GamePathFileNameTextBox.TabIndex = 3
 		Me.GamePathFileNameTextBox.Text = ""
@@ -499,6 +519,7 @@ Partial Class SetUpGamesUserControl
 		'BrowseForCompilerPathFileNameButton
 		'
 		Me.BrowseForCompilerPathFileNameButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.BrowseForCompilerPathFileNameButton.ButtonCanBeFocused = True
 		Me.BrowseForCompilerPathFileNameButton.Location = New System.Drawing.Point(697, 159)
 		Me.BrowseForCompilerPathFileNameButton.Name = "BrowseForCompilerPathFileNameButton"
 		Me.BrowseForCompilerPathFileNameButton.Size = New System.Drawing.Size(75, 23)
@@ -518,6 +539,7 @@ Partial Class SetUpGamesUserControl
 		Me.CompilerPathFileNameTextBox.Multiline = False
 		Me.CompilerPathFileNameTextBox.Name = "CompilerPathFileNameTextBox"
 		Me.CompilerPathFileNameTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+		Me.CompilerPathFileNameTextBox.SelectionEnabled = True
 		Me.CompilerPathFileNameTextBox.Size = New System.Drawing.Size(589, 22)
 		Me.CompilerPathFileNameTextBox.TabIndex = 6
 		Me.CompilerPathFileNameTextBox.Text = ""
@@ -535,6 +557,7 @@ Partial Class SetUpGamesUserControl
 		'GoBackButton
 		'
 		Me.GoBackButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+		Me.GoBackButton.ButtonCanBeFocused = True
 		Me.GoBackButton.Enabled = False
 		Me.GoBackButton.Location = New System.Drawing.Point(706, 520)
 		Me.GoBackButton.Name = "GoBackButton"
@@ -579,6 +602,7 @@ Partial Class SetUpGamesUserControl
 		'
 		'Panel1
 		'
+		Me.Panel1.BackColor = System.Drawing.SystemColors.Control
 		Me.Panel1.Controls.Add(Me.GameSetupComboUserControl)
 		Me.Panel1.Controls.Add(Me.GoBackButton)
 		Me.Panel1.Controls.Add(Me.AddLibraryPathButton)
@@ -591,10 +615,9 @@ Partial Class SetUpGamesUserControl
 		Me.Panel1.Controls.Add(Me.AddGameSetupButton)
 		Me.Panel1.Controls.Add(Me.GameGroupBox)
 		Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+		Me.Panel1.ForeColor = System.Drawing.SystemColors.ControlText
 		Me.Panel1.Location = New System.Drawing.Point(0, 0)
 		Me.Panel1.Name = "Panel1"
-		Me.Panel1.SelectedIndex = -1
-		Me.Panel1.SelectedValue = Nothing
 		Me.Panel1.Size = New System.Drawing.Size(784, 546)
 		Me.Panel1.TabIndex = 17
 		'
@@ -602,20 +625,17 @@ Partial Class SetUpGamesUserControl
 		'
 		Me.GameSetupComboUserControl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
 			Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-		Me.GameSetupComboUserControl.DataSource = Nothing
 		Me.GameSetupComboUserControl.Font = New System.Drawing.Font("Segoe UI", 8.25!)
 		Me.GameSetupComboUserControl.IsReadOnly = True
 		Me.GameSetupComboUserControl.Location = New System.Drawing.Point(3, 3)
 		Me.GameSetupComboUserControl.MaxDropDownItems = 30
 		Me.GameSetupComboUserControl.MultipleInputsIsAllowed = False
 		Me.GameSetupComboUserControl.Name = "GameSetupComboUserControl"
-		Me.GameSetupComboUserControl.SelectedIndex = -1
 		Me.GameSetupComboUserControl.Size = New System.Drawing.Size(697, 22)
 		Me.GameSetupComboUserControl.TabIndex = 53
 		Me.GameSetupComboUserControl.TextHistoryIsKept = False
 		Me.GameSetupComboUserControl.TextHistoryMaxSize = 15
 		Me.GameSetupComboUserControl.TextIsPathFileNames = False
-		Me.GameSetupComboUserControl.ValueMember = ""
 		'
 		'SetUpGamesUserControl
 		'

@@ -65,6 +65,8 @@ Public Class PanelEx
         Me.theControlHasShown = False
 
         Me.theSelectedIndex = -1
+
+        Me.UpdateTheme()
     End Sub
 
 #End Region
@@ -101,6 +103,18 @@ Public Class PanelEx
     '		Me.theAutoScroll = Value
     '	End Set
     'End Property
+
+    <Browsable(True)>
+    <Category("Appearance")>
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+    Public Overloads Property BackColor As Color
+        Get
+            Return MyBase.BackColor
+        End Get
+        Set
+            MyBase.BackColor = Value
+        End Set
+    End Property
 
     'Public Property IsReadOnly() As Boolean
     '	Get
@@ -182,6 +196,19 @@ Public Class PanelEx
 
 #Region "Widget Event Handlers"
 
+    Protected Overrides Sub OnHandleCreated(ByVal e As System.EventArgs)
+        MyBase.OnHandleCreated(e)
+        ' [04-Feb-2026] Me.DesignMode is unreliable in nested widgets.
+        'If Not Me.DesignMode Then
+        Me.Init()
+        'End If
+    End Sub
+
+    Protected Overrides Sub OnHandleDestroyed(e As EventArgs)
+        Me.Free()
+        MyBase.OnHandleDestroyed(e)
+    End Sub
+
     Protected Overloads Overrides Sub OnControlAdded(ByVal e As ControlEventArgs)
         If TypeOf e.Control Is RadioButton Then
             Dim radioButton As RadioButton = CType(e.Control, RadioButton)
@@ -205,19 +232,6 @@ Public Class PanelEx
             RemoveHandler radioButton.CheckedChanged, AddressOf Me.RadioButton_CheckedChanged
         End If
         MyBase.OnControlRemoved(e)
-    End Sub
-
-    Protected Overrides Sub OnHandleCreated(ByVal e As System.EventArgs)
-        MyBase.OnHandleCreated(e)
-        ' [04-Feb-2026] Me.DesignMode is unreliable in nested widgets.
-        'If Not Me.DesignMode Then
-        Me.Init()
-        'End If
-    End Sub
-
-    Protected Overrides Sub OnHandleDestroyed(e As EventArgs)
-        Me.Free()
-        MyBase.OnHandleDestroyed(e)
     End Sub
 
     Protected Overrides Sub OnMouseWheel(e As MouseEventArgs)
@@ -493,10 +507,11 @@ Public Class PanelEx
             'Me.theNonClientPaddingColor = Color.Pink
             Me.theNonClientPaddingColor = WidgetDeepBackColor
             Me.ForeColor = theme.EnabledForeColor
-            Me.BackColor = theme.EnabledBackColor
+            'MyBase.BackColor = theme.EnabledBackColor
+            MyBase.BackColor = Color.Red
         Else
             Me.ForeColor = Control.DefaultForeColor
-            Me.BackColor = Control.DefaultBackColor
+            MyBase.BackColor = Control.DefaultBackColor
         End If
     End Sub
 

@@ -20,11 +20,19 @@ Public Class ComboUserControl
 		Me.theBorderStyle = BorderStyle.FixedSingle
 		Me.theControlIsReadOnly = False
 		Me.theComboPanelBorderColor = Color.Red
+		Me.theMouseIsOverWidget = False
 		Me.CreateContextMenu()
 
 		' IMPORTANT: Need to assign the BackColor here so that a later assignment covers the entire TextBox.
 		'            Without this first assignment, the later assignment to SystemColors.Control does not cover the top two rows of pixels.
 		Me.ComboTextBox.BackColor = SystemColors.Control
+
+		' Disable the textbox but prevent automatic changing of text color.
+		Me.ComboTextBox.SelectionEnabled = False
+		Me.ComboTextBox.ReadOnly = True
+		Me.ComboTextBox.Cursor = Cursors.Default
+		Me.ComboTextBox.ShortcutsEnabled = False
+		Me.ComboTextBox.TabStop = False
 
 		Me.theMultipleInputsIsAllowed = True
 		Me.MultipleInputsDropDownButton.Visible = Me.theMultipleInputsIsAllowed
@@ -40,6 +48,7 @@ Public Class ComboUserControl
 		Me.theTextIsPathFileNames = False
 		Me.TextHistoryDropDownButton.SpecialImage = ButtonEx.SpecialImageType.DownArrow
 		'Me.TextHistoryDropDownButton.BackColor = WidgetConstants.WidgetDeepBackColor
+		Me.TextHistoryDropDownButton.ButtonCanBeFocused = False
 		'Me.TextHistoryDataGridView.BackColor = WidgetConstants.WidgetBackColor
 		Me.TextHistoryDataGridView.AutoGenerateColumns = False
 
@@ -57,17 +66,6 @@ Public Class ComboUserControl
 		If TheApp Is Nothing Then
 			Exit Sub
 		End If
-
-		'If Me.theOriginalFont Is Nothing Then
-		'    Me.Font = New Font(SystemFonts.MessageBoxFont.Name, 8.25)
-		'    'NOTE: Font gets changed at some point after changing style, messing up when cue banner is turned off, 
-		'    '      so save the Font before changing style.
-		'    Me.theOriginalFont = New System.Drawing.Font(Me.Font.FontFamily, Me.Font.Size, Me.Font.Style, Me.Font.Unit)
-
-		'    SetStyle(ControlStyles.AllPaintingInWmPaint, True)
-		'    SetStyle(ControlStyles.DoubleBuffer, True)
-		'    SetStyle(ControlStyles.UserPaint, True)
-		'End If
 
 		Me.InitMultipleInputsPopop()
 		Me.InitTextHistoryPopop()
@@ -399,6 +397,18 @@ Public Class ComboUserControl
 		MyBase.OnHandleDestroyed(e)
 	End Sub
 
+	'Protected Overrides Sub OnMouseEnter(e As EventArgs)
+	'	MyBase.OnMouseEnter(e)
+	'	Me.theMouseIsOverWidget = True
+	'	Me.Highlight()
+	'End Sub
+
+	'Protected Overrides Sub OnMouseLeave(e As EventArgs)
+	'	MyBase.OnMouseLeave(e)
+	'	Me.theMouseIsOverWidget = False
+	'	Me.Diminish()
+	'End Sub
+
 	'Protected Overrides Sub OnPaint(e As PaintEventArgs)
 	'	MyBase.OnPaint(e)
 
@@ -485,7 +495,9 @@ Public Class ComboUserControl
 			theme = TheApp.Settings.SelectedAppTheme.ComboUserControlTheme
 		End If
 		If theme IsNot Nothing Then
-			If Me.Enabled Then
+			If Me.theMouseIsOverWidget Then
+				Me.theBorderColor = theme.FocusBorderColor
+			ElseIf Me.Enabled Then
 				Me.theBorderColor = theme.EnabledBorderColor
 			Else
 				Me.theBorderColor = theme.DisabledBorderColor
@@ -520,15 +532,32 @@ Public Class ComboUserControl
 			Try
 				Using g As Graphics = Graphics.FromHdc(hDC)
 					Dim aRect As Rectangle = Rectangle.Truncate(g.VisibleClipBounds)
+					Dim textRect As Rectangle = aRect
+					textRect.Width -= Me.TextHistoryDropDownButton.Width
+					Dim buttonRect As Rectangle = aRect
+					buttonRect.X = Me.ComboTextBox.Width
+					buttonRect.Width -= Me.ComboTextBox.Width
 					If VisualStyleRenderer.IsSupported Then
-						'ButtonRenderer.DrawParentBackground(g, aRect, Me)
-						'' Inflate because Button border is deflated by 1 pixel.
-						'aRect.Inflate(1, 1)
-						'ButtonRenderer.DrawButton(g, aRect, PushButtonState.Normal)
-						'ComboBoxRenderer.DrawTextBox(g, aRect, "", Me.Font, ComboBoxState.Normal)
-						'------
-						' This draws a border closest to what it looks like on Win11 for Crowbar 0.74.
-						ComboBoxRenderer.DrawDropDownButton(g, aRect, ComboBoxState.Normal)
+						If Me.theMouseIsOverWidget Then
+							'Using borderColorPen As New Pen(Color.Red)
+							'	'NOTE: DrawRectangle width and height are interpreted as the right and bottom pixels to draw.
+							'	g.DrawRectangle(borderColorPen, aRect.Left, aRect.Top, aRect.Width - 1, aRect.Height - 1)
+							'End Using
+							'ComboBoxRenderer.DrawTextBox(g, aRect, Me.ComboTextBox.Text, Me.Font, ComboBoxState.Hot)
+							'ComboBoxRenderer.DrawTextBox(g, textRect, Me.ComboTextBox.Text, Me.Font, ComboBoxState.Hot)
+							'ComboBoxRenderer.DrawDropDownButton(g, buttonRect, ComboBoxState.Hot)
+							ComboBoxRenderer.DrawDropDownButton(g, aRect, ComboBoxState.Hot)
+						Else
+							'ComboBoxRenderer.DrawTextBox(g, aRect, Me.ComboTextBox.Text, Me.Font, ComboBoxState.Normal)
+							'ComboBoxRenderer.DrawTextBox(g, textRect, Me.ComboTextBox.Text, Me.Font, ComboBoxState.Normal)
+							'ComboBoxRenderer.DrawDropDownButton(g, buttonRect, ComboBoxState.Normal)
+							' This draws a border closest to what it looks like on Win11 for Crowbar 0.74.
+							ComboBoxRenderer.DrawDropDownButton(g, aRect, ComboBoxState.Normal)
+							'Using borderColorPen As New Pen(Color.Red)
+							'	'NOTE: DrawRectangle width and height are interpreted as the right and bottom pixels to draw.
+							'	g.DrawRectangle(borderColorPen, aRect.Left, aRect.Top, aRect.Width - 1, aRect.Height - 1)
+							'End Using
+						End If
 					Else
 						g.Clear(SystemColors.ControlLight)
 					End If
@@ -612,13 +641,13 @@ Public Class ComboUserControl
 	End Sub
 
 	Private Sub ComboTextBox_MouseEnter(sender As Object, e As EventArgs) Handles ComboTextBox.MouseEnter
+		Me.theMouseIsOverWidget = True
 		Me.Highlight()
-		Me.TextHistoryDropDownButton.Highlight()
 	End Sub
 
 	Private Sub ComboTextBox_MouseLeave(sender As Object, e As EventArgs) Handles ComboTextBox.MouseLeave
+		Me.theMouseIsOverWidget = False
 		Me.Diminish()
-		Me.TextHistoryDropDownButton.Diminish()
 	End Sub
 
 	Private Sub ComboTextBox_MouseWheel(sender As Object, e As MouseEventArgs) Handles ComboTextBox.MouseWheel
@@ -693,11 +722,13 @@ Public Class ComboUserControl
 	' This event is not raised when dropdown list is showing.
 	Private Sub TextHistoryDropDownButton_MouseEnter(sender As Object, e As EventArgs) Handles TextHistoryDropDownButton.MouseEnter
 		'Me.thePointerIsOverTheDropDownButton = True
+		Me.theMouseIsOverWidget = True
 		Me.Highlight()
 	End Sub
 
 	Private Sub TextHistoryDropDownButton_MouseLeave(sender As Object, e As EventArgs) Handles TextHistoryDropDownButton.MouseLeave
 		'Me.thePointerIsOverTheDropDownButton = False
+		Me.theMouseIsOverWidget = False
 		Me.Diminish()
 	End Sub
 
@@ -745,9 +776,12 @@ Public Class ComboUserControl
 		If theme IsNot Nothing Then
 			Me.ForeColor = theme.EnabledForeColor
 			Me.BackColor = theme.EnabledBackColor
+			''Me.ComboTextBox.Visible = True
+			'Me.ComboTextBox.Visible = False
 		Else
 			Me.ForeColor = Control.DefaultForeColor
 			Me.BackColor = Control.DefaultBackColor
+			'Me.ComboTextBox.Visible = False
 		End If
 	End Sub
 
@@ -767,35 +801,33 @@ Public Class ComboUserControl
 	End Sub
 
 	Private Sub Highlight()
-		Dim theme As ComboUserControlTheme = Nothing
-		' This check prevents problems with viewing and saving Forms in VS Designer.
-		If TheApp IsNot Nothing Then
-			theme = TheApp.Settings.SelectedAppTheme.ComboUserControlTheme
-		End If
-		If theme IsNot Nothing Then
-			Me.theBorderColor = theme.FocusBorderColor
-			'Else
-			'    Me.theBorderColor = WidgetConstants.Windows10GlobalAccentColor
-		End If
-		''NOTE: Raise the OnNonClientCalcSize and OnNonClientPaint "events".
-		'Win32Api.SetWindowPos(Me.Handle, IntPtr.Zero, 0, 0, 0, 0, Win32Api.SWP.SWP_FRAMECHANGED Or Win32Api.SWP.SWP_NOMOVE Or Win32Api.SWP.SWP_NOSIZE Or Win32Api.SWP.SWP_NOZORDER)
-		Me.Invalidate()
+		'Dim theme As ComboUserControlTheme = Nothing
+		'' This check prevents problems with viewing and saving Forms in VS Designer.
+		'If TheApp IsNot Nothing Then
+		'	theme = TheApp.Settings.SelectedAppTheme.ComboUserControlTheme
+		'End If
+		'If theme IsNot Nothing Then
+		'NOTE: Raise the OnNonClientCalcSize and OnNonClientPaint "events".
+		Win32Api.SetWindowPos(Me.Handle, IntPtr.Zero, 0, 0, 0, 0, Win32Api.SWP.SWP_FRAMECHANGED Or Win32Api.SWP.SWP_NOMOVE Or Win32Api.SWP.SWP_NOSIZE Or Win32Api.SWP.SWP_NOZORDER)
+		'	'Else
+		'	'	Me.Invalidate()
+		'End If
+		Me.Refresh()
 	End Sub
 
 	Private Sub Diminish()
-		Dim theme As ComboUserControlTheme = Nothing
-		' This check prevents problems with viewing and saving Forms in VS Designer.
-		If TheApp IsNot Nothing Then
-			theme = TheApp.Settings.SelectedAppTheme.ComboUserControlTheme
-		End If
-		If theme IsNot Nothing Then
-			Me.theBorderColor = theme.EnabledBorderColor
-			'Else
-			'    Me.theBorderColor = WidgetConstants.WidgetDisabledTextColor
-		End If
-		''NOTE: Raise the OnNonClientCalcSize and OnNonClientPaint "events".
-		'Win32Api.SetWindowPos(Me.Handle, IntPtr.Zero, 0, 0, 0, 0, Win32Api.SWP.SWP_FRAMECHANGED Or Win32Api.SWP.SWP_NOMOVE Or Win32Api.SWP.SWP_NOSIZE Or Win32Api.SWP.SWP_NOZORDER)
-		Me.Invalidate()
+		'Dim theme As ComboUserControlTheme = Nothing
+		'' This check prevents problems with viewing and saving Forms in VS Designer.
+		'If TheApp IsNot Nothing Then
+		'	theme = TheApp.Settings.SelectedAppTheme.ComboUserControlTheme
+		'End If
+		'If theme IsNot Nothing Then
+		'NOTE: Raise the OnNonClientCalcSize and OnNonClientPaint "events".
+		Win32Api.SetWindowPos(Me.Handle, IntPtr.Zero, 0, 0, 0, 0, Win32Api.SWP.SWP_FRAMECHANGED Or Win32Api.SWP.SWP_NOMOVE Or Win32Api.SWP.SWP_NOSIZE Or Win32Api.SWP.SWP_NOZORDER)
+		'	'Else
+		'	'	Me.Invalidate()
+		'End If
+		Me.Refresh()
 	End Sub
 
 	Private Sub InitMultipleInputsPopop()
@@ -990,10 +1022,10 @@ Public Class ComboUserControl
 	Private NonClientPadding As Padding
 	Private theBorderColor As Color
 	Private theBorderStyle As BorderStyle
-	'Private theOriginalFont As Font
 	Protected theControlIsReadOnly As Boolean
 	Protected theComboPanelBorderColor As Color
 	Protected theDefaultSize As Size
+	Protected theMouseIsOverWidget As Boolean
 
 	Private WithEvents CustomMenu As ContextMenuStrip
 	Private WithEvents UndoToolStripMenuItem As New ToolStripMenuItem("&Undo")

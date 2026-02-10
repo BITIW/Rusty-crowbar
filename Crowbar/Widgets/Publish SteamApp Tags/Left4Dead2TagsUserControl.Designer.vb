@@ -789,7 +789,6 @@ Partial Class Left4Dead2TagsUserControl
         'PanelEx1
         '
         Me.PanelEx1.AutoScroll = True
-        Me.PanelEx1.BackColor = System.Drawing.Color.FromArgb(CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer), CType(CType(45, Byte), Integer))
         Me.PanelEx1.Controls.Add(Me.SurvivorsCheckBox)
         Me.PanelEx1.Controls.Add(Me.PillsCheckBox)
         Me.PanelEx1.Controls.Add(Me.OtherCheckBox)

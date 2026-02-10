@@ -1,5 +1,6 @@
 Imports System.ComponentModel
 Imports System.Runtime.InteropServices
+Imports System.Windows.Forms.VisualStyles
 
 Public Class RichTextBoxEx
 	Inherits RichTextBox
@@ -15,16 +16,6 @@ Public Class RichTextBoxEx
 		'NOTE: Disable to use custom.
 		MyBase.BorderStyle = BorderStyle.None
 		MyBase.ScrollBars = RichTextBoxScrollBars.None
-
-		'Me.ForeColor = WidgetTextColor
-		'Me.BackColor = WidgetDeepBackColor
-		'Me.SelectionColor = WidgetTextColor
-		'Me.SelectionBackColor = WidgetDeepSelectedBackColor
-		'Me.theNonClientPaddingColor = WidgetDeepBackColor
-		'TEST:
-		'Me.theNonClientPaddingColor = Color.Pink
-		'Me.theBorderColor = WidgetHighBackColor
-		'Me.theBorderStyle = BorderStyle.FixedSingle
 
 		Me.HorizontalScrollbar = New ScrollBarEx()
 		Me.Controls.Add(Me.HorizontalScrollbar)
@@ -74,6 +65,7 @@ Public Class RichTextBoxEx
 		' Internal var for RichTextBox.MultiLine.
 		Me.theControlIsBehavingAsMultiLine = True
 
+		Me.theSelectionIsEnabled = True
 		Me.theCueBannerText = ""
 		Me.theTextAlignment = HorizontalAlignment.Left
 
@@ -109,6 +101,7 @@ Public Class RichTextBoxEx
 
 	<Browsable(True)>
 	<Category("Appearance")>
+	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
 	Public Overloads Property BackColor As Color
 		Get
 			Return MyBase.BackColor
@@ -121,6 +114,7 @@ Public Class RichTextBoxEx
 
 	<Browsable(True)>
 	<Category("Appearance")>
+	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
 	Public Overloads Property BorderColor As Color
 		Get
 			Return Me.theBorderColor
@@ -135,6 +129,7 @@ Public Class RichTextBoxEx
 	<Category("Appearance")>
 	<Description("Colorable BorderStyle.")>
 	<DefaultValue(BorderStyle.FixedSingle)>
+	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
 	Public Overloads Property BorderStyle As BorderStyle
 		Get
 			Return Me.theBorderStyle
@@ -166,19 +161,6 @@ Public Class RichTextBoxEx
 		End Get
 		Set
 			MyBase.ReadOnly = Value
-
-			'Dim theme As RichTextBoxTheme = Nothing
-			'' This check prevents problems with viewing and saving Forms in VS Designer.
-			'If TheApp IsNot Nothing Then
-			'	theme = TheApp.Settings.SelectedAppTheme.RichTextBoxTheme
-			'End If
-			'If theme IsNot Nothing AndAlso Me.theThemeIsUsed Then
-			'	If MyBase.[ReadOnly] Then
-			'		MyBase.BackColor = theme.DisabledBackColor
-			'	Else
-			'		MyBase.BackColor = theme.EnabledBackColor
-			'	End If
-			'End If
 		End Set
 	End Property
 
@@ -191,6 +173,15 @@ Public Class RichTextBoxEx
 		End Get
 		Set
 			Me.theScrollBars = Value
+		End Set
+	End Property
+
+	Public Property SelectionEnabled As Boolean
+		Get
+			Return Me.theSelectionIsEnabled
+		End Get
+		Set
+			Me.theSelectionIsEnabled = Value
 		End Set
 	End Property
 
@@ -227,10 +218,6 @@ Public Class RichTextBoxEx
 
 	Protected Overrides Sub OnHandleCreated(e As EventArgs)
 		MyBase.OnHandleCreated(e)
-		' [04-Feb-2026] Me.DesignMode is unreliable in nested widgets.
-		'If Not Me.DesignMode Then
-		Me.Init()
-		'End If
 
 		If Me.theOriginalFont Is Nothing Then
 			Me.Font = New Font(SystemFonts.MessageBoxFont.Name, 8.25)
@@ -238,6 +225,11 @@ Public Class RichTextBoxEx
 			'      so save the Font before changing style.
 			Me.theOriginalFont = New System.Drawing.Font(Me.Font.FontFamily, Me.Font.Size, Me.Font.Style, Me.Font.Unit)
 		End If
+
+		' [04-Feb-2026] Me.DesignMode is unreliable in nested widgets.
+		'If Not Me.DesignMode Then
+		Me.Init()
+		'End If
 
 		' Sometimes this is True for unknown reason, so force it to False.
 		MyBase.AutoWordSelection = False
@@ -249,6 +241,11 @@ Public Class RichTextBoxEx
 	End Sub
 
 	Protected Overrides Sub OnGotFocus(e As EventArgs)
+		' This 'If' block prevents selection of text, as wanted in ComboUserControl.
+		If Not Me.theSelectionIsEnabled Then
+			MyBase.Enabled = False
+			MyBase.Enabled = True
+		End If
 		MyBase.OnGotFocus(e)
 		Me.Invalidate()
 	End Sub
@@ -917,19 +914,36 @@ Public Class RichTextBoxEx
 		Dim hDC As IntPtr = Win32Api.GetWindowDC(Me.Handle)
 		Try
 			Using g As Graphics = Graphics.FromHdc(hDC)
-				Dim aRect As RectangleF = g.VisibleClipBounds
+				Dim aRectF As RectangleF = g.VisibleClipBounds
+
+				' Draw background.
 				Using backColorBrush As New SolidBrush(Me.BackColor)
-					g.FillRectangle(backColorBrush, aRect)
+					g.FillRectangle(backColorBrush, aRectF)
 				End Using
-				' Draw border.
-				If Me.theBorderStyle = BorderStyle.FixedSingle Then
-					'Using borderColorPen As New Pen(WidgetDisabledTextColor)
-					Using borderColorPen As New Pen(Me.theBorderColor)
-						'NOTE: DrawRectangle width and height are interpreted as the right and bottom pixels to draw.
-						aRect.Width -= 1
-						aRect.Height -= 1
-						g.DrawRectangle(borderColorPen, aRect.Left, aRect.Top, aRect.Width, aRect.Height)
-					End Using
+
+				Dim theme As RichTextBoxTheme = Nothing
+				' This check prevents problems with viewing and saving Forms in VS Designer.
+				If TheApp IsNot Nothing Then
+					theme = TheApp.Settings.SelectedAppTheme.RichTextBoxTheme
+				End If
+				If theme IsNot Nothing Then
+					' Draw border.
+					If Me.theBorderStyle = BorderStyle.FixedSingle Then
+						'Using borderColorPen As New Pen(WidgetDisabledTextColor)
+						Using borderColorPen As New Pen(Me.theBorderColor)
+							'NOTE: DrawRectangle width and height are interpreted as the right and bottom pixels to draw.
+							aRectF.Width -= 1
+							aRectF.Height -= 1
+							g.DrawRectangle(borderColorPen, aRectF.Left, aRectF.Top, aRectF.Width, aRectF.Height)
+						End Using
+					End If
+				Else
+					' This 'Else' section is needed because Windows does not seem to paint non-client areas for unknown reason.
+					' Draw border.
+					If VisualStyleRenderer.IsSupported Then
+						Dim aRect As Rectangle = Rectangle.Truncate(aRectF)
+						TextBoxRenderer.DrawTextBox(g, aRect, TextBoxState.Normal)
+					End If
 				End If
 			End Using
 		Finally
@@ -1038,12 +1052,14 @@ Public Class RichTextBoxEx
 			Me.SetStyle(ControlStyles.DoubleBuffer, True)
 			Me.SetStyle(ControlStyles.UserPaint, True)
 		Else
-			Me.ForeColor = DefaultForeColor
-			MyBase.BackColor = DefaultBackColor
+			Me.ForeColor = SystemColors.WindowText
+			MyBase.BackColor = SystemColors.Window
 
 			Me.SetStyle(ControlStyles.AllPaintingInWmPaint, False)
 			Me.SetStyle(ControlStyles.DoubleBuffer, False)
 			Me.SetStyle(ControlStyles.UserPaint, False)
+
+			Me.Font = Me.theOriginalFont
 		End If
 	End Sub
 
@@ -1227,6 +1243,7 @@ Public Class RichTextBoxEx
 
 	Private theBorderStyle As BorderStyle
 	Private theControlIsBehavingAsMultiLine As Boolean
+	Private theSelectionIsEnabled As Boolean
 	Private theScrollBars As RichTextBoxScrollBars
 
 	Private WithEvents CustomMenu As ContextMenuStrip
