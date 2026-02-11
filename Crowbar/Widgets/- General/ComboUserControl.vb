@@ -23,10 +23,6 @@ Public Class ComboUserControl
 		Me.theMouseIsOverWidget = False
 		Me.CreateContextMenu()
 
-		' IMPORTANT: Need to assign the BackColor here so that a later assignment covers the entire TextBox.
-		'            Without this first assignment, the later assignment to SystemColors.Control does not cover the top two rows of pixels.
-		Me.ComboTextBox.BackColor = SystemColors.Control
-
 		' Disable the textbox but prevent automatic changing of text color.
 		Me.ComboTextBox.SelectionEnabled = False
 		Me.ComboTextBox.ReadOnly = True

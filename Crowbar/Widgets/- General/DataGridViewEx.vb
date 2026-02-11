@@ -13,7 +13,7 @@ Public Class DataGridViewEx
         MyBase.ScrollBars = Windows.Forms.ScrollBars.None
 
         'Me.thePaddingColor = WidgetDeepBackColor
-        Me.theNonClientPaddingColor = WidgetDeepBackColor
+        'Me.theNonClientPaddingColor = WidgetDeepBackColor
         'TEST:
         'Me.theNonClientPaddingColor = Color.Pink
 
@@ -277,27 +277,27 @@ Public Class DataGridViewEx
             Dim g As Graphics = e.Graphics
             Dim cellRect As Rectangle = e.CellBounds
 
-            ' RowIndex = -1 for header cell.
-            If e.RowIndex = -1 AndAlso e.ColumnIndex > -1 Then
-                Me.ColumnHeadersDefaultCellStyle.ForeColor = theme.EnabledForeColor
-                Me.ColumnHeadersDefaultCellStyle.BackColor = theme.EnabledBackColor
+            '' RowIndex = -1 for header cell.
+            'If e.RowIndex = -1 AndAlso e.ColumnIndex > -1 Then
+            '    Me.ColumnHeadersDefaultCellStyle.ForeColor = theme.EnabledForeColor
+            '    Me.ColumnHeadersDefaultCellStyle.BackColor = theme.EnabledBackColor
 
-                '' Set settings for cell borders.
-                'Me.GridColor = Color.Red
-                'Me.EnableHeadersVisualStyles = False
-                'Me.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single
-                'Me.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single
-                'Me.CellBorderStyle = DataGridViewCellBorderStyle.Single
+            '    '' Set settings for cell borders.
+            '    'Me.GridColor = Color.Red
+            '    'Me.EnableHeadersVisualStyles = False
+            '    'Me.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single
+            '    'Me.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single
+            '    'Me.CellBorderStyle = DataGridViewCellBorderStyle.Single
 
-                '' Draw header cell border.
-                'Dim headerBorderColor As Color = Color.Red
-                'Using borderColorPen As New Pen(headerBorderColor, 1)
-                '    ' Draw the left border.
-                '    e.Graphics.DrawLine(borderColorPen, cellRect.Left - 1, cellRect.Top, cellRect.Left - 1, cellRect.Bottom)
-                '    ' Draw the bottom border.
-                '    e.Graphics.DrawLine(borderColorPen, cellRect.Left, cellRect.Bottom - 1, cellRect.Right, cellRect.Bottom - 1)
-                'End Using
-            End If
+            '    '' Draw header cell border.
+            '    'Dim headerBorderColor As Color = Color.Red
+            '    'Using borderColorPen As New Pen(headerBorderColor, 1)
+            '    '    ' Draw the left border.
+            '    '    e.Graphics.DrawLine(borderColorPen, cellRect.Left - 1, cellRect.Top, cellRect.Left - 1, cellRect.Bottom)
+            '    '    ' Draw the bottom border.
+            '    '    e.Graphics.DrawLine(borderColorPen, cellRect.Left, cellRect.Bottom - 1, cellRect.Right, cellRect.Bottom - 1)
+            '    'End Using
+            'End If
             If (e.RowIndex > -1) AndAlso (e.ColumnIndex > -1) Then
                 If TypeOf Me.Columns(e.ColumnIndex) Is DataGridViewRadioButtonColumn Then
                     e.PaintBackground(e.CellBounds, False)
@@ -689,8 +689,8 @@ Public Class DataGridViewEx
         Select Case m.Msg
             Case Win32Api.WindowsMessages.WM_NCCALCSIZE
                 Me.OnNonClientCalcSize(m)
-            Case Win32Api.WindowsMessages.WM_NCPAINT
-                Me.OnNonClientPaint(m)
+                'Case Win32Api.WindowsMessages.WM_NCPAINT
+                '    Me.OnNonClientPaint(m)
         End Select
 
         MyBase.WndProc(m)
@@ -718,27 +718,27 @@ Public Class DataGridViewEx
         End If
     End Sub
 
-    Private Sub OnNonClientPaint(ByRef m As Message)
-        Dim theme As DataGridViewTheme = Nothing
-        ' This check prevents problems with viewing and saving Forms in VS Designer.
-        If TheApp IsNot Nothing Then
-            theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
-        End If
-        If theme IsNot Nothing Then
-            Dim hDC As IntPtr = Win32Api.GetWindowDC(Me.Handle)
-            Try
-                Using g As Graphics = Graphics.FromHdc(hDC)
-                    Using backColorBrush As New SolidBrush(Color.Pink)
-                        Dim aRect As RectangleF = g.VisibleClipBounds
-                        g.FillRectangle(backColorBrush, aRect)
-                    End Using
-                End Using
-            Finally
-                Win32Api.ReleaseDC(Me.Handle, hDC)
-            End Try
-            m.Result = IntPtr.Zero
-        End If
-    End Sub
+    'Private Sub OnNonClientPaint(ByRef m As Message)
+    '    Dim theme As DataGridViewTheme = Nothing
+    '    ' This check prevents problems with viewing and saving Forms in VS Designer.
+    '    If TheApp IsNot Nothing Then
+    '        theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
+    '    End If
+    '    If theme IsNot Nothing Then
+    '        Dim hDC As IntPtr = Win32Api.GetWindowDC(Me.Handle)
+    '        Try
+    '            Using g As Graphics = Graphics.FromHdc(hDC)
+    '                Using backColorBrush As New SolidBrush(Color.Pink)
+    '                    Dim aRect As RectangleF = g.VisibleClipBounds
+    '                    g.FillRectangle(backColorBrush, aRect)
+    '                End Using
+    '            End Using
+    '        Finally
+    '            Win32Api.ReleaseDC(Me.Handle, hDC)
+    '        End Try
+    '        m.Result = IntPtr.Zero
+    '    End If
+    'End Sub
 
 #End Region
 
@@ -781,9 +781,13 @@ Public Class DataGridViewEx
                 Me.GridColor = theme.DisabledForeColor
                 Me.BackgroundColor = theme.DisabledBackColor
             End If
+            Me.ColumnHeadersDefaultCellStyle.ForeColor = theme.EnabledForeColor
+            Me.ColumnHeadersDefaultCellStyle.BackColor = theme.EnabledBackColor
         Else
             Me.GridColor = SystemColors.ControlDark
             Me.BackgroundColor = SystemColors.AppWorkspace
+            Me.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.WindowText
+            Me.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.Control
         End If
     End Sub
 
@@ -951,7 +955,7 @@ Public Class DataGridViewEx
     Private theScrollBars As ScrollBars
 
     Private NonClientPadding As Padding
-    Private theNonClientPaddingColor As Color
+    'Private theNonClientPaddingColor As Color
 
     Private WithEvents CustomHorizontalScrollbar As ScrollBarEx
     Private WithEvents CustomVerticalScrollBar As ScrollBarEx

@@ -507,8 +507,8 @@ Public Class PanelEx
             'Me.theNonClientPaddingColor = Color.Pink
             Me.theNonClientPaddingColor = WidgetDeepBackColor
             Me.ForeColor = theme.EnabledForeColor
-            'MyBase.BackColor = theme.EnabledBackColor
-            MyBase.BackColor = Color.Red
+            MyBase.BackColor = theme.EnabledBackColor
+            'MyBase.BackColor = Color.Red
         Else
             Me.ForeColor = Control.DefaultForeColor
             MyBase.BackColor = Control.DefaultBackColor

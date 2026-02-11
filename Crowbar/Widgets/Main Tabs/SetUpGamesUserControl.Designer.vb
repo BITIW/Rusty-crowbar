@@ -199,9 +199,7 @@ Partial Class SetUpGamesUserControl
 		'
 		'EngineComboUserControl
 		'
-		Me.EngineComboUserControl.BackColor = System.Drawing.SystemColors.Control
 		Me.EngineComboUserControl.Font = New System.Drawing.Font("Segoe UI", 8.25!)
-		Me.EngineComboUserControl.ForeColor = System.Drawing.SystemColors.ControlText
 		Me.EngineComboUserControl.IsReadOnly = False
 		Me.EngineComboUserControl.Location = New System.Drawing.Point(55, 45)
 		Me.EngineComboUserControl.MaxDropDownItems = 30
@@ -602,7 +600,6 @@ Partial Class SetUpGamesUserControl
 		'
 		'Panel1
 		'
-		Me.Panel1.BackColor = System.Drawing.SystemColors.Control
 		Me.Panel1.Controls.Add(Me.GameSetupComboUserControl)
 		Me.Panel1.Controls.Add(Me.GoBackButton)
 		Me.Panel1.Controls.Add(Me.AddLibraryPathButton)
@@ -615,7 +612,6 @@ Partial Class SetUpGamesUserControl
 		Me.Panel1.Controls.Add(Me.AddGameSetupButton)
 		Me.Panel1.Controls.Add(Me.GameGroupBox)
 		Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-		Me.Panel1.ForeColor = System.Drawing.SystemColors.ControlText
 		Me.Panel1.Location = New System.Drawing.Point(0, 0)
 		Me.Panel1.Name = "Panel1"
 		Me.Panel1.Size = New System.Drawing.Size(784, 546)

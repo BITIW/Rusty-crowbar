@@ -807,6 +807,8 @@ Public Class RichTextBoxEx
 		g.ResetClip()
 	End Sub
 
+	' Need the following line for OnPaint() to be called by Windows:
+	'	Me.SetStyle(ControlStyles.UserPaint, True)
 	Protected Overrides Sub OnPaintBackground(e As PaintEventArgs)
 		'NOTE: Completely override painting by OS.
 		'MyBase.OnPaintBackground(e)
@@ -823,10 +825,13 @@ Public Class RichTextBoxEx
 
 		' Draw background.
 		Using backColorBrush As New SolidBrush(Me.BackColor)
-			'Using backColorBrush As New SolidBrush(Color.Red)
 			Dim aRect As Rectangle = Me.ClientRectangle
 			e.Graphics.FillRectangle(backColorBrush, aRect)
 		End Using
+		'Using backColorBrush As New SolidBrush(Color.Red)
+		'	Dim aRect As Rectangle = Me.ClientRectangle
+		'	e.Graphics.FillRectangle(backColorBrush, aRect)
+		'End Using
 	End Sub
 
 	Protected Overrides Sub OnSizeChanged(e As EventArgs)
@@ -921,15 +926,14 @@ Public Class RichTextBoxEx
 					g.FillRectangle(backColorBrush, aRectF)
 				End Using
 
+				' Draw border.
 				Dim theme As RichTextBoxTheme = Nothing
 				' This check prevents problems with viewing and saving Forms in VS Designer.
 				If TheApp IsNot Nothing Then
 					theme = TheApp.Settings.SelectedAppTheme.RichTextBoxTheme
 				End If
 				If theme IsNot Nothing Then
-					' Draw border.
 					If Me.theBorderStyle = BorderStyle.FixedSingle Then
-						'Using borderColorPen As New Pen(WidgetDisabledTextColor)
 						Using borderColorPen As New Pen(Me.theBorderColor)
 							'NOTE: DrawRectangle width and height are interpreted as the right and bottom pixels to draw.
 							aRectF.Width -= 1
@@ -938,11 +942,13 @@ Public Class RichTextBoxEx
 						End Using
 					End If
 				Else
-					' This 'Else' section is needed because Windows does not seem to paint non-client areas for unknown reason.
-					' Draw border.
-					If VisualStyleRenderer.IsSupported Then
-						Dim aRect As Rectangle = Rectangle.Truncate(aRectF)
-						TextBoxRenderer.DrawTextBox(g, aRect, TextBoxState.Normal)
+					If Me.theBorderStyle = BorderStyle.FixedSingle Then
+						Using borderColorPen As New Pen(Me.theBorderColor)
+							'NOTE: DrawRectangle width and height are interpreted as the right and bottom pixels to draw.
+							aRectF.Width -= 1
+							aRectF.Height -= 1
+							g.DrawRectangle(borderColorPen, aRectF.Left, aRectF.Top, aRectF.Width, aRectF.Height)
+						End Using
 					End If
 				End If
 			End Using

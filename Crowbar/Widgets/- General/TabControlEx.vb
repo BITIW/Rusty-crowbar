@@ -1,3 +1,5 @@
+Imports System.ComponentModel
+
 Public Class TabControlEx
 	Inherits System.Windows.Forms.TabControl
 
@@ -50,6 +52,7 @@ Public Class TabControlEx
 	'	End Set
 	'End Property
 
+	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
 	Public Property TabBackColor1() As Color
 		Get
 			Return Me.theTabBackColor1
@@ -59,6 +62,7 @@ Public Class TabControlEx
 		End Set
 	End Property
 
+	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
 	Public Property TabBackColor2() As Color
 		Get
 			Return Me.theTabBackColor2
@@ -68,6 +72,7 @@ Public Class TabControlEx
 		End Set
 	End Property
 
+	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
 	Public Property SelectedTabBackColor() As Color
 		Get
 			Return Me.theSelectedTabBackColor
@@ -77,6 +82,7 @@ Public Class TabControlEx
 		End Set
 	End Property
 
+	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
 	Public Property TabPageForeColor() As Color
 		Get
 			Return Me.theTabPageForeColor
@@ -86,6 +92,7 @@ Public Class TabControlEx
 		End Set
 	End Property
 
+	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
 	Public Property TabPageBackColor() As Color
 		Get
 			Return Me.theTabPageBackColor

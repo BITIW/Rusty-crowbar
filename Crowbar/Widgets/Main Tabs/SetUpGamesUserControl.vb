@@ -10,7 +10,7 @@ Public Class SetUpGamesUserControl
 		' This call is required by the Windows Form Designer.
 		InitializeComponent()
 
-		Me.UpdateTheme()
+		'Me.UpdateTheme()
 	End Sub
 
 	Protected Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -456,10 +456,13 @@ Public Class SetUpGamesUserControl
 #Region "Core Event Handlers"
 
 	Private Sub AppSettings_PropertyChanged(ByVal sender As Object, ByVal e As System.ComponentModel.PropertyChangedEventArgs)
-		If e.PropertyName = "AppThemeName" Then
-			Me.UpdateTheme()
-			Me.Refresh()
-		ElseIf e.PropertyName = "SteamAppPathFileName" Then
+		'If e.PropertyName = "AppThemeName" Then
+		'	Me.UpdateTheme()
+		'	Me.Refresh()
+		'ElseIf e.PropertyName = "SteamAppPathFileName" Then
+		'	Me.UpdateUseCounts()
+		'End If
+		If e.PropertyName = "SteamAppPathFileName" Then
 			Me.UpdateUseCounts()
 		End If
 	End Sub
@@ -498,20 +501,20 @@ Public Class SetUpGamesUserControl
 
 #Region "Private Methods"
 
-	Private Sub UpdateTheme()
-		Dim theme As PanelTheme = Nothing
-		If TheApp IsNot Nothing Then
-			theme = TheApp.Settings.SelectedAppTheme.PanelTheme
-		End If
-		If theme IsNot Nothing Then
-			Me.ForeColor = theme.EnabledForeColor
-			'Me.BackColor = theme.EnabledBackColor
-			MyBase.BackColor = Color.Red
-		Else
-			Me.ForeColor = Control.DefaultForeColor
-			Me.BackColor = Control.DefaultBackColor
-		End If
-	End Sub
+	'Private Sub UpdateTheme()
+	'	Dim theme As PanelTheme = Nothing
+	'	If TheApp IsNot Nothing Then
+	'		theme = TheApp.Settings.SelectedAppTheme.PanelTheme
+	'	End If
+	'	If theme IsNot Nothing Then
+	'		Me.ForeColor = theme.EnabledForeColor
+	'		MyBase.BackColor = theme.EnabledBackColor
+	'		'MyBase.BackColor = Color.Red
+	'	Else
+	'		Me.ForeColor = Control.DefaultForeColor
+	'		MyBase.BackColor = Control.DefaultBackColor
+	'	End If
+	'End Sub
 
 	Private Sub UpdateWidgets()
 		Dim gameSetupCount As Integer
