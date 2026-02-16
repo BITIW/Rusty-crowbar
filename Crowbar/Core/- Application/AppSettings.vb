@@ -395,8 +395,10 @@ Public Class AppSettings
 			Return Me.theUnpackOutputFullPath
 		End Get
 		Set(ByVal value As String)
-			Me.theUnpackOutputFullPath = value
-			NotifyPropertyChanged("UnpackOutputFullPath")
+			If Me.theUnpackOutputFullPath <> value Then
+				Me.theUnpackOutputFullPath = value
+				NotifyPropertyChanged("UnpackOutputFullPath")
+			End If
 		End Set
 	End Property
 

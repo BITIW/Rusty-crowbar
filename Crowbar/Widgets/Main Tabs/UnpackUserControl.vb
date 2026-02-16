@@ -371,20 +371,6 @@ Public Class UnpackUserControl
 	'	End If
 	'End Sub
 
-	'NOTE: This is only needed because TreeView BackColor does not automatically change when Windows Theme is switched.
-	Private Sub PackageTreeView_SystemColorsChanged(sender As Object, e As EventArgs) Handles PackageTreeView.SystemColorsChanged
-		Dim theme As TreeViewTheme = Nothing
-		' This check prevents problems with viewing and saving Forms in VS Designer.
-		If TheApp IsNot Nothing Then
-			theme = TheApp.Settings.SelectedAppTheme.TreeViewTheme
-		End If
-		If theme IsNot Nothing Then
-			Me.PackageTreeView.BackColor = theme.EnabledBackColor
-		Else
-			Me.PackageTreeView.BackColor = Control.DefaultBackColor
-		End If
-	End Sub
-
 	Private Sub CustomMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles CustomMenu.Opening
 		Me.DeleteSearchToolStripMenuItem.Enabled = Me.PackageTreeView.SelectedNode IsNot Nothing AndAlso Me.PackageTreeView.SelectedNode.Text.StartsWith("<Found>")
 		Me.DeleteAllSearchesToolStripMenuItem.Enabled = Me.theSearchCount > 0

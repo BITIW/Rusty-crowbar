@@ -1,4 +1,5 @@
-﻿Imports System.Runtime.InteropServices
+﻿Imports System.ComponentModel
+Imports System.Runtime.InteropServices
 
 Public Class ListViewEx
 	Inherits ListView
@@ -9,6 +10,8 @@ Public Class ListViewEx
 		MyBase.New()
 
 		Me.BorderStyle = BorderStyle.None
+		Me.theBorderStyle = BorderStyle.FixedSingle
+		Me.theBorderWidth = 1
 		Me.OwnerDraw = True
 		MyBase.Scrollable = True
 
@@ -17,7 +20,6 @@ Public Class ListViewEx
 		Me.theFillerColumnIsResizing = False
 		Me.theListViewIsResizing = False
 
-		Me.theNonClientPaddingColor = WidgetDeepBackColor
 		Me.theScrollingIsActive = False
 		Me.theMouseWheelHasMoved = False
 
@@ -67,6 +69,38 @@ Public Class ListViewEx
 #End Region
 
 #Region "Properties"
+
+	<Browsable(True)>
+	<Category("Appearance")>
+	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+	Public Overloads Property BorderColor As Color
+		Get
+			Return Me.theBorderColor
+		End Get
+		Set
+			Me.theBorderColor = Value
+		End Set
+	End Property
+
+	<Browsable(True)>
+	<Category("Appearance")>
+	<Description("Colorable BorderStyle.")>
+	<DefaultValue(BorderStyle.FixedSingle)>
+	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+	Public Overloads Property BorderStyle As BorderStyle
+		Get
+			Return Me.theBorderStyle
+		End Get
+		Set
+			Me.theBorderStyle = Value
+
+			If Me.theBorderStyle = Windows.Forms.BorderStyle.None Then
+				Me.theBorderWidth = 0
+			ElseIf Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+				Me.theBorderWidth = 1
+			End If
+		End Set
+	End Property
 
 #End Region
 
@@ -153,37 +187,37 @@ Public Class ListViewEx
 	End Sub
 
 	Protected Overrides Sub OnSizeChanged(e As EventArgs)
-		If Not Me.theListViewIsResizing AndAlso Me.Columns.Count > 0 Then
-			Me.theListViewIsResizing = True
+		'If Not Me.theListViewIsResizing AndAlso Me.Columns.Count > 0 Then
+		'	Me.theListViewIsResizing = True
 
-			'Dim columnsTotalWidth As Integer = 0
-			'For i As Integer = 0 To Me.Columns.Count - 2
-			'	columnsTotalWidth += Me.Columns(i).Width
-			'	'= CInt((colPercentage * PackageListView.ClientRectangle.Width))
-			'Next
-			'If columnsTotalWidth < Me.Width Then
-			'	Me.Columns(Me.Columns.Count - 1).Width = Me.Width - columnsTotalWidth
-			'End If
+		'	'Dim columnsTotalWidth As Integer = 0
+		'	'For i As Integer = 0 To Me.Columns.Count - 2
+		'	'	columnsTotalWidth += Me.Columns(i).Width
+		'	'	'= CInt((colPercentage * PackageListView.ClientRectangle.Width))
+		'	'Next
+		'	'If columnsTotalWidth < Me.Width Then
+		'	'	Me.Columns(Me.Columns.Count - 1).Width = Me.Width - columnsTotalWidth
+		'	'End If
 
-			'If Me.FillerColumn Is Nothing Then
-			'	Me.FillerColumn = Me.Columns.Add("", 1)
-			'End If
+		'	'If Me.FillerColumn Is Nothing Then
+		'	'	Me.FillerColumn = Me.Columns.Add("", 1)
+		'	'End If
 
-			'Dim hDC As IntPtr = Win32Api.GetWindowDC(Me.Handle)
-			'Try
-			'	Using g As Graphics = Graphics.FromHdc(hDC)
-			'		Using backColorBrush As New SolidBrush(Color.Red)
-			'			Dim aRect As RectangleF = Me.ClientRectangle
-			'			g.ResetClip()
-			'			g.FillRectangle(backColorBrush, aRect)
-			'		End Using
-			'	End Using
-			'Finally
-			'	Win32Api.ReleaseDC(Me.Handle, hDC)
-			'End Try
+		'	'Dim hDC As IntPtr = Win32Api.GetWindowDC(Me.Handle)
+		'	'Try
+		'	'	Using g As Graphics = Graphics.FromHdc(hDC)
+		'	'		Using backColorBrush As New SolidBrush(Color.Red)
+		'	'			Dim aRect As RectangleF = Me.ClientRectangle
+		'	'			g.ResetClip()
+		'	'			g.FillRectangle(backColorBrush, aRect)
+		'	'		End Using
+		'	'	End Using
+		'	'Finally
+		'	'	Win32Api.ReleaseDC(Me.Handle, hDC)
+		'	'End Try
 
-			Me.theListViewIsResizing = False
-		End If
+		'	Me.theListViewIsResizing = False
+		'End If
 
 		'NOTE: Need this "If" to prevent unneeded resizing and painting when scrolling.
 		If Not Me.theScrollingIsActive Then
@@ -193,6 +227,8 @@ Public Class ListViewEx
 			'NOTE: Raise the OnNonClientCalcSize and OnNonClientPaint "events".
 			Win32Api.SetWindowPos(Me.Handle, IntPtr.Zero, 0, 0, 0, 0, Win32Api.SWP.SWP_FRAMECHANGED Or Win32Api.SWP.SWP_NOMOVE Or Win32Api.SWP.SWP_NOSIZE Or Win32Api.SWP.SWP_NOZORDER)
 			Me.UpdateScrollbars()
+			''NOTE: Raise the OnNonClientCalcSize and OnNonClientPaint "events".
+			'Win32Api.SetWindowPos(Me.Handle, IntPtr.Zero, 0, 0, 0, 0, Win32Api.SWP.SWP_FRAMECHANGED Or Win32Api.SWP.SWP_NOMOVE Or Win32Api.SWP.SWP_NOSIZE Or Win32Api.SWP.SWP_NOZORDER)
 		End If
 	End Sub
 
@@ -337,30 +373,18 @@ Public Class ListViewEx
 	End Sub
 
 	'Private Sub OnNonClientPaint(ByRef m As Message)
-	'	' Set background color here in case user changes theme while app is open.
-	'	Dim theme As ListViewTheme = Nothing
-	'	' This check prevents problems with viewing and saving Forms in VS Designer.
-	'	If TheApp IsNot Nothing Then
-	'		theme = TheApp.Settings.SelectedAppTheme.ListViewTheme
-	'	End If
-	'	If theme IsNot Nothing Then
-	'		Me.BackColor = theme.EnabledBackColor
-	'	Else
-	'		Me.BackColor = SystemColors.Control
-	'	End If
-
-	'	'Dim hDC As IntPtr = Win32Api.GetWindowDC(Me.Handle)
-	'	'Try
-	'	'	Using g As Graphics = Graphics.FromHdc(hDC)
-	'	'		Using backColorBrush As New SolidBrush(Color.Red)
-	'	'			Dim aRect As RectangleF = g.VisibleClipBounds
-	'	'			g.FillRectangle(backColorBrush, aRect)
-	'	'		End Using
-	'	'	End Using
-	'	'Finally
-	'	'	Win32Api.ReleaseDC(Me.Handle, hDC)
-	'	'End Try
-	'	'm.Result = IntPtr.Zero
+	'	Dim hDC As IntPtr = Win32Api.GetWindowDC(Me.Handle)
+	'	Try
+	'		Using g As Graphics = Graphics.FromHdc(hDC)
+	'			Using backColorBrush As New SolidBrush(Me.theBorderColor)
+	'				Dim aRect As RectangleF = g.VisibleClipBounds
+	'				g.FillRectangle(backColorBrush, aRect)
+	'			End Using
+	'		End Using
+	'	Finally
+	'		Win32Api.ReleaseDC(Me.Handle, hDC)
+	'	End Try
+	'	m.Result = IntPtr.Zero
 	'End Sub
 
 	'Private Sub OnClientPaint(ByRef m As Message)
@@ -387,121 +411,133 @@ Public Class ListViewEx
 	'	m.Result = IntPtr.Zero
 	'End Sub
 
-	Private Sub HorizontalScrollbar_ValueChanged(ByVal sender As Object, ByVal e As ScrollValueEventArgs) Handles CustomHorizontalScrollbar.ValueChanged
-		'Me.UpdateScrolling(e.Value, 0)
-		'------
-		'Dim horizontalValue As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_HORZ)
-		'If e.Value < horizontalValue Then
-		'	If horizontalValue - e.Value <= 18 Then
-		'		Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_LINELEFT, IntPtr.Zero)
-		'	Else
-		'		Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_PAGELEFT, IntPtr.Zero)
-		'	End If
-		'ElseIf e.Value > horizontalValue Then
-		'	If e.Value - horizontalValue <= 18 Then
-		'		Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_LINERIGHT, IntPtr.Zero)
-		'	Else
-		'		Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_PAGERIGHT, IntPtr.Zero)
-		'	End If
-		'End If
-		'------
-		'' Does not move internal scrollbar or contents.
-		'If e.Value >= 0 Then
-		'	Dim thumbValue As UInt32 = CUInt(e.Value * &H10000 + Win32Api.SB.SB_THUMBPOSITION)
-		'	Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, thumbValue, IntPtr.Zero)
-		'End If
-		'------
-		'' Does not move contents.
-		'Dim thumbValue As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_HORZ)
-		'Win32Api.SetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_HORZ, e.Value, True)
-		'------
-		Dim scrollInfo As Win32Api.SCROLLINFO
-		Dim lRet As Integer
-		scrollInfo.cbSize = Marshal.SizeOf(scrollInfo)
-		scrollInfo.fMask = Win32Api.SIF_ALL
-		lRet = Win32Api.GetScrollInfo(Me.Handle, Win32Api.ScrollBarType.SB_HORZ, scrollInfo)
-		Dim pageChange As Integer = 0
-		If lRet > 0 Then
-			pageChange = scrollInfo.nPage
-		End If
-		Dim thumbValue As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_HORZ)
-		Dim value As Integer = e.Value \ 6
-		Dim currentThumbValue As Integer = thumbValue \ 6
-		If value < currentThumbValue Then
-			If currentThumbValue - value <= pageChange Then
-				For i As Integer = currentThumbValue To value + 1 Step -1
-					Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_LINELEFT, IntPtr.Zero)
-				Next
-			Else
-				Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_PAGELEFT, IntPtr.Zero)
+	Private Sub CustomHorizontalScrollbar_ValueChanged(ByVal sender As Object, ByVal e As ScrollValueEventArgs) Handles CustomHorizontalScrollbar.ValueChanged
+		If Not Me.theScrollingIsActive Then
+			Me.theScrollingIsActive = True
+
+			'Me.UpdateScrolling(e.Value, 0)
+			'------
+			'Dim horizontalValue As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_HORZ)
+			'If e.Value < horizontalValue Then
+			'	If horizontalValue - e.Value <= 18 Then
+			'		Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_LINELEFT, IntPtr.Zero)
+			'	Else
+			'		Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_PAGELEFT, IntPtr.Zero)
+			'	End If
+			'ElseIf e.Value > horizontalValue Then
+			'	If e.Value - horizontalValue <= 18 Then
+			'		Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_LINERIGHT, IntPtr.Zero)
+			'	Else
+			'		Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_PAGERIGHT, IntPtr.Zero)
+			'	End If
+			'End If
+			'------
+			'' Does not move internal scrollbar or contents.
+			'If e.Value >= 0 Then
+			'	Dim thumbValue As UInt32 = CUInt(e.Value * &H10000 + Win32Api.SB.SB_THUMBPOSITION)
+			'	Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, thumbValue, IntPtr.Zero)
+			'End If
+			'------
+			'' Does not move contents.
+			'Dim thumbValue As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_HORZ)
+			'Win32Api.SetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_HORZ, e.Value, True)
+			'------
+			Dim scrollInfo As Win32Api.SCROLLINFO
+			Dim lRet As Integer
+			scrollInfo.cbSize = Marshal.SizeOf(scrollInfo)
+			scrollInfo.fMask = Win32Api.SIF_ALL
+			lRet = Win32Api.GetScrollInfo(Me.Handle, Win32Api.ScrollBarType.SB_HORZ, scrollInfo)
+			Dim pageChange As Integer = 0
+			If lRet > 0 Then
+				pageChange = scrollInfo.nPage
 			End If
-		ElseIf value > currentThumbValue Then
-			If value - currentThumbValue <= pageChange Then
-				For i As Integer = currentThumbValue To value - 1
-					Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_LINERIGHT, IntPtr.Zero)
-				Next
-			Else
-				Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_PAGERIGHT, IntPtr.Zero)
+			Dim thumbValue As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_HORZ)
+			Dim value As Integer = e.Value \ 6
+			Dim currentThumbValue As Integer = thumbValue \ 6
+			If value < currentThumbValue Then
+				If currentThumbValue - value <= pageChange Then
+					For i As Integer = currentThumbValue To value + 1 Step -1
+						Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_LINELEFT, IntPtr.Zero)
+					Next
+				Else
+					Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_PAGELEFT, IntPtr.Zero)
+				End If
+			ElseIf value > currentThumbValue Then
+				If value - currentThumbValue <= pageChange Then
+					For i As Integer = currentThumbValue To value - 1
+						Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_LINERIGHT, IntPtr.Zero)
+					Next
+				Else
+					Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_HSCROLL, Win32Api.SB.SB_PAGERIGHT, IntPtr.Zero)
+				End If
 			End If
+
+			Me.theScrollingIsActive = False
 		End If
 	End Sub
 
-	Private Sub VerticalScrollBar_ValueChanged(ByVal sender As Object, ByVal e As ScrollValueEventArgs) Handles CustomVerticalScrollBar.ValueChanged
-		'Me.UpdateScrolling(0, e.Value)
-		'------
-		'Dim aNode As TreeNode = Me.TopNode
-		'Dim visibleIndex As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_VERT)
-		'While aNode IsNot Nothing AndAlso visibleIndex < e.Value
-		'	aNode = aNode.NextVisibleNode
-		'	visibleIndex += 1
-		'End While
-		'While aNode IsNot Nothing AndAlso visibleIndex > e.Value
-		'	aNode = aNode.PrevVisibleNode
-		'	visibleIndex -= 1
-		'End While
-		'Me.TopNode = aNode
-		'------
-		'' Does not move internal scrollbar or contents.
-		'Dim thumbValue As UInt32 = CUInt(e.Value * &H10000 + Win32Api.SB.SB_THUMBPOSITION)
-		'Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, thumbValue, IntPtr.Zero)
-		'------
-		'' Does not move internal scrollbar or contents.
-		'Dim thumbValue As UInt32 = CUInt(e.Value * &H10000 + Win32Api.SB.SB_THUMBTRACK)
-		'Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, thumbValue, IntPtr.Zero)
-		'------
-		'' Does not move contents.
-		'Dim thumbValue As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_VERT)
-		'Win32Api.SetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_VERT, e.Value, True)
-		'------
-		' Works -- scrolls internal scrollbar and contents.
-		Dim scrollInfo As Win32Api.SCROLLINFO
-		Dim lRet As Integer
-		scrollInfo.cbSize = Marshal.SizeOf(scrollInfo)
-		scrollInfo.fMask = Win32Api.SIF_ALL
-		lRet = Win32Api.GetScrollInfo(Me.Handle, Win32Api.ScrollBarType.SB_VERT, scrollInfo)
-		Dim pageChange As Integer = 0
-		If lRet > 0 Then
-			pageChange = scrollInfo.nPage
-		End If
-		Dim thumbValue As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_VERT)
-		Dim value As Integer = e.Value
-		Dim currentThumbValue As Integer = thumbValue
-		If value < currentThumbValue Then
-			If currentThumbValue - value < pageChange Then
-				For i As Integer = currentThumbValue - 1 To value Step -1
-					Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, Win32Api.SB.SB_LINEUP, IntPtr.Zero)
-				Next
-			Else
-				Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, Win32Api.SB.SB_PAGEUP, IntPtr.Zero)
+	Private Sub CustomVerticalScrollBar_ValueChanged(ByVal sender As Object, ByVal e As ScrollValueEventArgs) Handles CustomVerticalScrollBar.ValueChanged
+		If Not Me.theScrollingIsActive Then
+			Me.theScrollingIsActive = True
+
+			'Me.UpdateScrolling(0, e.Value)
+			'------
+			'Dim aNode As TreeNode = Me.TopNode
+			'Dim visibleIndex As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_VERT)
+			'While aNode IsNot Nothing AndAlso visibleIndex < e.Value
+			'	aNode = aNode.NextVisibleNode
+			'	visibleIndex += 1
+			'End While
+			'While aNode IsNot Nothing AndAlso visibleIndex > e.Value
+			'	aNode = aNode.PrevVisibleNode
+			'	visibleIndex -= 1
+			'End While
+			'Me.TopNode = aNode
+			'------
+			'' Does not move internal scrollbar or contents.
+			'Dim thumbValue As UInt32 = CUInt(e.Value * &H10000 + Win32Api.SB.SB_THUMBPOSITION)
+			'Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, thumbValue, IntPtr.Zero)
+			'------
+			'' Does not move internal scrollbar or contents.
+			'Dim thumbValue As UInt32 = CUInt(e.Value * &H10000 + Win32Api.SB.SB_THUMBTRACK)
+			'Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, thumbValue, IntPtr.Zero)
+			'------
+			'' Does not move contents.
+			'Dim thumbValue As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_VERT)
+			'Win32Api.SetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_VERT, e.Value, True)
+			'------
+			' Works -- scrolls internal scrollbar and contents.
+			Dim scrollInfo As Win32Api.SCROLLINFO
+			Dim lRet As Integer
+			scrollInfo.cbSize = Marshal.SizeOf(scrollInfo)
+			scrollInfo.fMask = Win32Api.SIF_ALL
+			lRet = Win32Api.GetScrollInfo(Me.Handle, Win32Api.ScrollBarType.SB_VERT, scrollInfo)
+			Dim pageChange As Integer = 0
+			If lRet > 0 Then
+				pageChange = scrollInfo.nPage
 			End If
-		ElseIf value > currentThumbValue Then
-			If value - currentThumbValue < pageChange Then
-				For i As Integer = currentThumbValue + 1 To value
-					Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, Win32Api.SB.SB_LINEDOWN, IntPtr.Zero)
-				Next
-			Else
-				Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, Win32Api.SB.SB_PAGEDOWN, IntPtr.Zero)
+			Dim thumbValue As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_VERT)
+			Dim value As Integer = e.Value
+			Dim currentThumbValue As Integer = thumbValue
+			If value < currentThumbValue Then
+				If currentThumbValue - value < pageChange Then
+					For i As Integer = currentThumbValue - 1 To value Step -1
+						Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, Win32Api.SB.SB_LINEUP, IntPtr.Zero)
+					Next
+				Else
+					Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, Win32Api.SB.SB_PAGEUP, IntPtr.Zero)
+				End If
+			ElseIf value > currentThumbValue Then
+				If value - currentThumbValue < pageChange Then
+					For i As Integer = currentThumbValue + 1 To value
+						Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, Win32Api.SB.SB_LINEDOWN, IntPtr.Zero)
+					Next
+				Else
+					Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, Win32Api.SB.SB_PAGEDOWN, IntPtr.Zero)
+				End If
 			End If
+
+			Me.theScrollingIsActive = False
 		End If
 	End Sub
 
@@ -526,15 +562,23 @@ Public Class ListViewEx
 
 	Private Sub UpdateTheme()
 		Dim theme As ListViewTheme = Nothing
+		' This check prevents problems with viewing and saving Forms in VS Designer.
 		If TheApp IsNot Nothing Then
 			theme = TheApp.Settings.SelectedAppTheme.ListViewTheme
 		End If
 		If theme IsNot Nothing Then
 			Me.ForeColor = theme.EnabledForeColor
 			MyBase.BackColor = theme.EnabledBackColor
+			Me.theBorderColor = theme.EnabledBorderColor
+
+			Me.CustomHorizontalScrollbar.RightAndBottomBorderColor = Me.theBorderColor
+			Me.CustomVerticalScrollBar.RightAndBottomBorderColor = Me.theBorderColor
+			Me.ScrollbarCornerPanel.BackColor = Me.BackColor
+			Me.ScrollbarCornerPanel.RightAndBottomBorderColor = Me.theBorderColor
 		Else
 			Me.ForeColor = SystemColors.ControlText
 			MyBase.BackColor = SystemColors.Control
+			Me.theBorderColor = SystemColors.WindowFrame
 		End If
 	End Sub
 
@@ -542,6 +586,7 @@ Public Class ListViewEx
 		If Me.DesignMode Then
 			Exit Sub
 		End If
+
 		Dim theme As ListViewTheme = Nothing
 		' This check prevents problems with viewing and saving Forms in VS Designer.
 		If TheApp IsNot Nothing Then
@@ -584,14 +629,19 @@ Public Class ListViewEx
 				scrollBarInfo.cbSize = Marshal.SizeOf(scrollBarInfo.[GetType]())
 				Dim resultIsSuccess As Boolean = Win32Api.GetScrollBarInfo(Me.Handle, Win32Api.OBJID_VSCROLL, scrollBarInfo)
 				If (scrollBarInfo.scrollbar And Win32Api.STATE_SYSTEM_INVISIBLE) = 0 Then
-					'right += scrollBarInfo.dxyLineButton
-					right += scrollBarInfo.dxyLineButton - ScrollBarEx.Consts.ScrollBarSize
+					right += ScrollBarEx.Consts.ScrollBarSize - scrollBarInfo.dxyLineButton
 				End If
 				resultIsSuccess = Win32Api.GetScrollBarInfo(Me.Handle, Win32Api.OBJID_HSCROLL, scrollBarInfo)
 				If (scrollBarInfo.scrollbar And Win32Api.STATE_SYSTEM_INVISIBLE) = 0 Then
-					'bottom += scrollBarInfo.dxyLineButton
-					bottom += scrollBarInfo.dxyLineButton - ScrollBarEx.Consts.ScrollBarSize
+					bottom += ScrollBarEx.Consts.ScrollBarSize - scrollBarInfo.dxyLineButton
 				End If
+			End If
+
+			If Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+				left += 1
+				top += 1
+				right += 1
+				bottom += 1
 			End If
 
 			Me.NonClientPadding = New Padding(left, top, right, bottom)
@@ -602,17 +652,15 @@ Public Class ListViewEx
 		rect.Left += padding.Left
 		rect.Top += padding.Top
 
-		'rect.Right -= padding.Right
-		'rect.Bottom -= padding.Bottom
-		'------
-		rect.Right += padding.Right
-		rect.Bottom += padding.Bottom
+		rect.Right -= padding.Right
+		rect.Bottom -= padding.Bottom
 	End Sub
 
 	Private Sub UpdateScrollbars()
 		If Me.DesignMode Then
 			Exit Sub
 		End If
+
 		Dim theme As ListViewTheme = Nothing
 		' This check prevents problems with viewing and saving Forms in VS Designer.
 		If TheApp IsNot Nothing Then
@@ -623,19 +671,24 @@ Public Class ListViewEx
 			Me.UpdateVerticalScrollbar()
 
 			If Me.CustomHorizontalScrollbar.Visible AndAlso Me.CustomVerticalScrollBar.Visible Then
-				'Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
-				'Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Height - ScrollBarEx.Consts.ScrollBarSize)
-				'------
-				'Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width - 1 - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
-				'Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.Height - 1 - ScrollBarEx.Consts.ScrollBarSize)
-				'------
-				Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
-				Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
+				If Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+					Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth)
+					Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
 
+					Me.ScrollbarCornerPanel.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth, ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth)
+					Me.ScrollbarCornerPanel.RightAndBottomBorderWidth = 1
+				Else
+					Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
+					Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
+
+					Me.ScrollbarCornerPanel.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
+					Me.ScrollbarCornerPanel.RightAndBottomBorderWidth = 0
+				End If
 				'NOTE: Assign to Parent so it can draw over non-client area.
 				Me.ScrollbarCornerPanel.Parent = Me.Parent
 				Me.ScrollbarCornerPanel.BringToFront()
-				Dim aPoint As New Point(Me.Width - ScrollBarEx.Consts.ScrollBarSize, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
+				'Dim aPoint As New Point(Me.Width - ScrollBarEx.Consts.ScrollBarSize, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
+				Dim aPoint As New Point(Me.ClientRectangle.Width, Me.ClientRectangle.Height)
 				'NOTE: Location must be relative to Parent.
 				aPoint = Me.PointToScreen(aPoint)
 				aPoint = Me.ScrollbarCornerPanel.Parent.PointToClient(aPoint)
@@ -672,7 +725,6 @@ Public Class ListViewEx
 					Me.CustomHorizontalScrollbar.Minimum = scrollInfo.nMin
 					Me.CustomHorizontalScrollbar.Maximum = scrollInfo.nMax
 					Me.CustomHorizontalScrollbar.Value = scrollInfo.nTrackPos
-					'Me.CustomHorizontalScrollbar.ViewSize = scrollInfo.nPage
 					Me.CustomHorizontalScrollbar.ViewSize = Me.ClientRectangle.Width
 					Me.CustomHorizontalScrollbar.SmallChange = 6
 					Me.CustomHorizontalScrollbar.LargeChange = scrollInfo.nPage
@@ -682,12 +734,17 @@ Public Class ListViewEx
 				Me.CustomHorizontalScrollbar.Parent = Me.Parent
 				Me.CustomHorizontalScrollbar.BringToFront()
 				Dim aPoint As New Point(Me.ClientRectangle.Left, Me.ClientRectangle.Height)
-				'Dim aPoint As New Point(Me.ClientRectangle.Left, Me.ClientRectangle.Height - ScrollBarEx.Consts.ScrollBarSize)
 				'NOTE: Location must be relative to Parent.
 				aPoint = Me.PointToScreen(aPoint)
 				aPoint = Me.CustomHorizontalScrollbar.Parent.PointToClient(aPoint)
 				Me.CustomHorizontalScrollbar.Location = aPoint
-				Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width, ScrollBarEx.Consts.ScrollBarSize)
+				If Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+					Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width, ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth)
+					Me.CustomHorizontalScrollbar.RightAndBottomBorderWidth = 1
+				Else
+					Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width, ScrollBarEx.Consts.ScrollBarSize)
+					Me.CustomHorizontalScrollbar.RightAndBottomBorderWidth = 0
+				End If
 				Me.CustomHorizontalScrollbar.Show()
 
 				Me.theScrollingIsActive = False
@@ -739,12 +796,17 @@ Public Class ListViewEx
 				Me.CustomVerticalScrollBar.Parent = Me.Parent
 				Me.CustomVerticalScrollBar.BringToFront()
 				Dim aPoint As New Point(Me.ClientRectangle.Width, Me.ClientRectangle.Top)
-				'Dim aPoint As New Point(Me.ClientRectangle.Width - ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Top)
 				'NOTE: Location must be relative to Parent.
 				aPoint = Me.PointToScreen(aPoint)
 				aPoint = Me.CustomVerticalScrollBar.Parent.PointToClient(aPoint)
 				Me.CustomVerticalScrollBar.Location = aPoint
-				Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Height)
+				If Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+					Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth, Me.ClientRectangle.Height)
+					Me.CustomVerticalScrollBar.RightAndBottomBorderWidth = 1
+				Else
+					Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Height)
+					Me.CustomVerticalScrollBar.RightAndBottomBorderWidth = 0
+				End If
 				Me.CustomVerticalScrollBar.Show()
 
 				Me.theScrollingIsActive = False
@@ -760,9 +822,11 @@ Public Class ListViewEx
 
 #Region "Data"
 
+	Private theBorderColor As Color
+	Private theBorderStyle As BorderStyle
+	Private theBorderWidth As Integer
 	'Private ListViewHeader As NativeListViewHeader = Nothing
 	Private NonClientPadding As Padding
-	Private theNonClientPaddingColor As Color
 	Private WithEvents CustomHorizontalScrollbar As ScrollBarEx
 	Private WithEvents CustomVerticalScrollBar As ScrollBarEx
 	Private ScrollbarCornerPanel As PanelEx
@@ -792,12 +856,12 @@ Public Class ListViewEx
 
 	'	Protected Overrides Sub WndProc(ByRef m As System.Windows.Forms.Message)
 	'		Select Case m.Msg
-	'			'Case Win32Api.WindowsMessages.WM_ERASEBKGND
-	'			'	Me.OnEraseBackground()
-	'			'	m.Result = CType(1, IntPtr)
-	'			'	Return
+	'			Case Win32Api.WindowsMessages.WM_ERASEBKGND
+	'				Me.OnEraseBackground()
+	'				m.Result = CType(1, IntPtr)
+	'				Return
 	'			Case Win32Api.WindowsMessages.WM_PAINT
-	'				Me.OnClientPaint(m)
+	'				'Me.OnClientPaint(m)
 	'				m.Result = IntPtr.Zero
 	'				Return
 	'		End Select
@@ -826,30 +890,30 @@ Public Class ListViewEx
 	'		End Try
 	'	End Sub
 
-	'	Private Sub OnClientPaint(m As Message)
-	'		Dim columnsTotalWidth As Integer = 0
-	'		For i As Integer = 0 To Me.theListViewEx.Columns.Count - 1
-	'			columnsTotalWidth += Me.theListViewEx.Columns(i).Width
-	'		Next
-	'		Dim rect As New Rectangle(columnsTotalWidth, 0, Me.theListViewEx.Width - columnsTotalWidth, Me.theListViewEx.Font.Height + 4)
-	'		Dim headerRect As New Rectangle()
-	'		Dim blah As Integer = Win32Api.GetWindowRect(Me.Handle, headerRect)
-	'		Dim hDC As IntPtr
-	'		If m.WParam <> IntPtr.Zero Then
-	'			hDC = m.WParam
-	'		Else
-	'			hDC = Win32Api.GetWindowDC(Me.Handle)
-	'		End If
-	'		Try
-	'			Using g As Graphics = Graphics.FromHdc(hDC)
-	'				Using backColorBrush As New SolidBrush(Color.Red)
-	'					g.FillRectangle(backColorBrush, headerRect)
-	'				End Using
-	'			End Using
-	'		Finally
-	'			Win32Api.ReleaseDC(Me.Handle, hDC)
-	'		End Try
-	'	End Sub
+	'	'Private Sub OnClientPaint(m As Message)
+	'	'	Dim columnsTotalWidth As Integer = 0
+	'	'	For i As Integer = 0 To Me.theListViewEx.Columns.Count - 1
+	'	'		columnsTotalWidth += Me.theListViewEx.Columns(i).Width
+	'	'	Next
+	'	'	Dim rect As New Rectangle(columnsTotalWidth, 0, Me.theListViewEx.Width - columnsTotalWidth, Me.theListViewEx.Font.Height + 4)
+	'	'	Dim headerRect As New Rectangle()
+	'	'	Dim blah As Integer = Win32Api.GetWindowRect(Me.Handle, headerRect)
+	'	'	Dim hDC As IntPtr
+	'	'	If m.WParam <> IntPtr.Zero Then
+	'	'		hDC = m.WParam
+	'	'	Else
+	'	'		hDC = Win32Api.GetWindowDC(Me.Handle)
+	'	'	End If
+	'	'	Try
+	'	'		Using g As Graphics = Graphics.FromHdc(hDC)
+	'	'			Using backColorBrush As New SolidBrush(Color.Red)
+	'	'				g.FillRectangle(backColorBrush, headerRect)
+	'	'			End Using
+	'	'		End Using
+	'	'	Finally
+	'	'		Win32Api.ReleaseDC(Me.Handle, hDC)
+	'	'	End Try
+	'	'End Sub
 
 	'	Private theListViewEx As ListViewEx
 

@@ -1,7 +1,10 @@
 ﻿Imports System.ComponentModel
+Imports System.Runtime.InteropServices
 
 Public Class ScrollBarEx
 	Inherits Control
+
+#Region "Create and Destroy"
 
 	Public Sub New()
 		SetStyle(ControlStyles.OptimizedDoubleBuffer Or ControlStyles.ResizeRedraw Or ControlStyles.UserPaint, True)
@@ -13,7 +16,17 @@ Public Class ScrollBarEx
 		_scrollTimer = New Timer()
 		_scrollTimer.Interval = Consts.SmallChangeStartDelay
 		AddHandler _scrollTimer.Tick, AddressOf ScrollTimerTick
+
+		Me.theRightAndBottomBorderWidth = 0
 	End Sub
+
+#End Region
+
+#Region "Init and Free"
+
+#End Region
+
+#Region "Properties"
 
 	<Category("Behavior")>
 	<Description("The orientation type of the scrollbar.")>
@@ -134,6 +147,91 @@ Public Class ScrollBarEx
 			Return Cursors.Arrow
 		End Get
 	End Property
+
+	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+	Public Property RightAndBottomBorderWidth() As Integer
+		Get
+			Return Me.theRightAndBottomBorderWidth
+		End Get
+		Set(ByVal value As Integer)
+			If Me.theRightAndBottomBorderWidth <> value Then
+				Me.theRightAndBottomBorderWidth = value
+			End If
+		End Set
+	End Property
+
+	<DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+	Public Property RightAndBottomBorderColor() As Color
+		Get
+			Return Me.theRightAndBottomBorderColor
+		End Get
+		Set(ByVal value As Color)
+			If Me.theRightAndBottomBorderColor <> value Then
+				Me.theRightAndBottomBorderColor = value
+			End If
+		End Set
+	End Property
+
+#End Region
+
+#Region "Methods"
+
+	Public Sub ScrollTo(ByVal position As Integer)
+		Value = position
+	End Sub
+
+	Public Sub ScrollToPhysical(ByVal positionInPixels As Integer)
+		Dim isVert As Boolean = (_scrollOrientation = DarkScrollOrientation.Vertical)
+		Dim trackAreaSize As Integer = If(isVert, _trackArea.Height - _thumbArea.Height, _trackArea.Width - _thumbArea.Width)
+		Dim positionRatio As Double = CSng(positionInPixels) / CSng(trackAreaSize)
+		Dim viewScrollSize As Integer = (Maximum - ViewSize)
+		Dim newValue As Integer = CInt((positionRatio * viewScrollSize))
+		Value = newValue
+	End Sub
+
+	Public Sub ScrollBy(ByVal offset As Integer)
+		Dim newValue As Integer = Value + offset
+		ScrollTo(newValue)
+		'Console.WriteLine("ScrollBy " + newValue.ToString())
+	End Sub
+
+	Public Sub ScrollByPhysical(ByVal offsetInPixels As Integer)
+		Dim isVert As Boolean = _scrollOrientation = DarkScrollOrientation.Vertical
+		Dim thumbPos As Integer = If(isVert, (_thumbArea.Top - _trackArea.Top), (_thumbArea.Left - _trackArea.Left))
+		Dim newPosition As Integer = thumbPos - offsetInPixels
+		ScrollToPhysical(newPosition)
+	End Sub
+
+	Public Sub UpdateScrollBar()
+		Dim area As Rectangle = ClientRectangle
+
+		If _scrollOrientation = DarkScrollOrientation.Vertical Then
+			_upArrowArea = New Rectangle(area.Left, area.Top, Consts.ArrowButtonSize, Consts.ArrowButtonSize)
+			_downArrowArea = New Rectangle(area.Left, area.Bottom - Consts.ArrowButtonSize, Consts.ArrowButtonSize, Consts.ArrowButtonSize)
+		ElseIf _scrollOrientation = DarkScrollOrientation.Horizontal Then
+			_upArrowArea = New Rectangle(area.Left, area.Top, Consts.ArrowButtonSize, Consts.ArrowButtonSize)
+			_downArrowArea = New Rectangle(area.Right - Consts.ArrowButtonSize, area.Top, Consts.ArrowButtonSize, Consts.ArrowButtonSize)
+		End If
+
+		If _scrollOrientation = DarkScrollOrientation.Vertical Then
+			_trackArea = New Rectangle(area.Left, area.Top + Consts.ArrowButtonSize, area.Width, area.Height - (Consts.ArrowButtonSize * 2))
+		ElseIf _scrollOrientation = DarkScrollOrientation.Horizontal Then
+			_trackArea = New Rectangle(area.Left + Consts.ArrowButtonSize, area.Top, area.Width - (Consts.ArrowButtonSize * 2), area.Height)
+		End If
+
+		UpdateThumb()
+		Invalidate()
+	End Sub
+
+#End Region
+
+#Region "Events"
+
+	Public Event ValueChanged As EventHandler(Of ScrollValueEventArgs)
+
+#End Region
+
+#Region "Widget Event Handlers"
 
 	Protected Overrides Sub OnResize(ByVal e As EventArgs)
 		MyBase.OnResize(e)
@@ -311,112 +409,6 @@ Public Class ScrollBarEx
 		End If
 	End Sub
 
-	Private Sub ScrollTimerTick(ByVal sender As Object, ByVal e As EventArgs)
-		If Not _upArrowClicked AndAlso Not _downArrowClicked AndAlso Not _verticalTrackAreaClicked AndAlso Not _horizontalTrackAreaClicked Then
-			_scrollTimer.Enabled = False
-			_scrollTimer.Interval = Consts.SmallChangeStartDelay
-			Return
-		End If
-
-		'_scrollTimer.Interval = 150
-		_scrollTimer.Interval = 75
-
-		If _upArrowClicked Then
-			'ScrollBy(-1)
-			Me.ScrollBy(-Me.theSmallChange)
-		ElseIf _downArrowClicked Then
-			'ScrollBy(1)
-			Me.ScrollBy(Me.theSmallChange)
-		ElseIf _verticalTrackAreaClicked Then
-			Me.ScrollBy(Me.theLargeChange * _directionFactor)
-		ElseIf _horizontalTrackAreaClicked Then
-			Me.ScrollBy(Me.theLargeChange * _directionFactor)
-		End If
-	End Sub
-
-	Public Sub ScrollTo(ByVal position As Integer)
-		Value = position
-	End Sub
-
-	Public Sub ScrollToPhysical(ByVal positionInPixels As Integer)
-		Dim isVert As Boolean = (_scrollOrientation = DarkScrollOrientation.Vertical)
-		Dim trackAreaSize As Integer = If(isVert, _trackArea.Height - _thumbArea.Height, _trackArea.Width - _thumbArea.Width)
-		Dim positionRatio As Double = CSng(positionInPixels) / CSng(trackAreaSize)
-		Dim viewScrollSize As Integer = (Maximum - ViewSize)
-		Dim newValue As Integer = CInt((positionRatio * viewScrollSize))
-		Value = newValue
-	End Sub
-
-	Public Sub ScrollBy(ByVal offset As Integer)
-		Dim newValue As Integer = Value + offset
-		ScrollTo(newValue)
-		'Console.WriteLine("ScrollBy " + newValue.ToString())
-	End Sub
-
-	Public Sub ScrollByPhysical(ByVal offsetInPixels As Integer)
-		Dim isVert As Boolean = _scrollOrientation = DarkScrollOrientation.Vertical
-		Dim thumbPos As Integer = If(isVert, (_thumbArea.Top - _trackArea.Top), (_thumbArea.Left - _trackArea.Left))
-		Dim newPosition As Integer = thumbPos - offsetInPixels
-		ScrollToPhysical(newPosition)
-	End Sub
-
-	Public Sub UpdateScrollBar()
-		Dim area As Rectangle = ClientRectangle
-
-		If _scrollOrientation = DarkScrollOrientation.Vertical Then
-			_upArrowArea = New Rectangle(area.Left, area.Top, Consts.ArrowButtonSize, Consts.ArrowButtonSize)
-			_downArrowArea = New Rectangle(area.Left, area.Bottom - Consts.ArrowButtonSize, Consts.ArrowButtonSize, Consts.ArrowButtonSize)
-		ElseIf _scrollOrientation = DarkScrollOrientation.Horizontal Then
-			_upArrowArea = New Rectangle(area.Left, area.Top, Consts.ArrowButtonSize, Consts.ArrowButtonSize)
-			_downArrowArea = New Rectangle(area.Right - Consts.ArrowButtonSize, area.Top, Consts.ArrowButtonSize, Consts.ArrowButtonSize)
-		End If
-
-		If _scrollOrientation = DarkScrollOrientation.Vertical Then
-			_trackArea = New Rectangle(area.Left, area.Top + Consts.ArrowButtonSize, area.Width, area.Height - (Consts.ArrowButtonSize * 2))
-		ElseIf _scrollOrientation = DarkScrollOrientation.Horizontal Then
-			_trackArea = New Rectangle(area.Left + Consts.ArrowButtonSize, area.Top, area.Width - (Consts.ArrowButtonSize * 2), area.Height)
-		End If
-
-		UpdateThumb()
-		Invalidate()
-	End Sub
-
-	Private Sub UpdateThumb(ByVal Optional forceRefresh As Boolean = False)
-		If ViewSize >= Maximum Then
-			Return
-		End If
-		Dim maximumValue As Integer = Maximum - ViewSize
-		If Value > maximumValue Then
-			Value = maximumValue
-		End If
-		_viewContentRatio = CSng(ViewSize) / CSng(Maximum)
-		Dim viewAreaSize As Integer = Maximum - ViewSize
-		Dim positionRatio As Double = CSng(Value) / CSng(viewAreaSize)
-
-		If _scrollOrientation = DarkScrollOrientation.Vertical Then
-			Dim thumbSize As Integer = CInt((_trackArea.Height * _viewContentRatio))
-			If thumbSize < Consts.MinimumThumbSize Then
-				thumbSize = Consts.MinimumThumbSize
-			End If
-			Dim trackAreaSize As Integer = _trackArea.Height - thumbSize
-			Dim thumbPosition As Integer = CInt((trackAreaSize * positionRatio))
-			_thumbArea = New Rectangle(_trackArea.Left + 3, _trackArea.Top + thumbPosition, Consts.ScrollBarSize - 6, thumbSize)
-		ElseIf _scrollOrientation = DarkScrollOrientation.Horizontal Then
-			Dim thumbSize As Integer = CInt((_trackArea.Width * _viewContentRatio))
-			If thumbSize < Consts.MinimumThumbSize Then
-				thumbSize = Consts.MinimumThumbSize
-			End If
-			Dim trackAreaSize As Integer = _trackArea.Width - thumbSize
-			Dim thumbPosition As Integer = CInt((trackAreaSize * positionRatio))
-			_thumbArea = New Rectangle(_trackArea.Left + thumbPosition, _trackArea.Top + 3, thumbSize, Consts.ScrollBarSize - 6)
-		End If
-
-		If forceRefresh Then
-			Invalidate()
-			Update()
-		End If
-	End Sub
-
 	Protected Overrides Sub OnPaint(ByVal e As PaintEventArgs)
 		Dim g As Graphics = e.Graphics
 
@@ -459,9 +451,153 @@ Public Class ScrollBarEx
 				g.FillRectangle(b, _thumbArea)
 			End Using
 		End If
+
+		' Paint right and bottom borders.
+		If Me.theRightAndBottomBorderWidth > 0 Then
+			Using borderColorPen As New Pen(Me.theRightAndBottomBorderColor, Me.theRightAndBottomBorderWidth)
+				' - 1 for 0-based coord
+				Dim rightBottomPoint As New Point(Me.ClientRectangle.Right - 1, Me.ClientRectangle.Bottom - 1)
+				If Me._scrollOrientation = DarkScrollOrientation.Horizontal Then
+					Dim leftBottomPoint As New Point(0, Me.ClientRectangle.Bottom - 1)
+					borderColorPen.Alignment = Drawing2D.PenAlignment.Outset
+					g.DrawLine(borderColorPen, leftBottomPoint, rightBottomPoint)
+				Else
+					Dim rightTopPoint As New Point(Me.ClientRectangle.Right - 1, 0)
+					borderColorPen.Alignment = Drawing2D.PenAlignment.Inset
+					g.DrawLine(borderColorPen, rightTopPoint, rightBottomPoint)
+				End If
+			End Using
+		End If
 	End Sub
 
-	Public Event ValueChanged As EventHandler(Of ScrollValueEventArgs)
+	Protected Overrides Sub OnPaintBackground(ByVal e As PaintEventArgs)
+		Dim g As Graphics = e.Graphics
+		Dim rect As Rectangle = e.ClipRectangle
+		Using b As New SolidBrush(Me.BackColor)
+			g.FillRectangle(b, rect)
+		End Using
+		'If Me._scrollOrientation = DarkScrollOrientation.Vertical Then
+		'	Using p As New Pen(Color.Red)
+		'		Dim point1 As New Point(rect.Left + rect.Width, rect.Top)
+		'		Dim point2 As New Point(point1.X, rect.Top + rect.Height)
+		'		g.DrawLine(p, point1, point2)
+		'	End Using
+		'End If
+	End Sub
+
+	'Protected Overrides Sub WndProc(ByRef m As Message)
+	'	Select Case m.Msg
+	'		Case Win32Api.WindowsMessages.WM_NCCALCSIZE
+	'			Me.OnNonClientCalcSize(m)
+	'	End Select
+
+	'	MyBase.WndProc(m)
+	'End Sub
+
+#End Region
+
+#Region "Child Widget Event Handlers"
+
+#End Region
+
+#Region "Private Methods"
+
+	Private Sub ScrollTimerTick(ByVal sender As Object, ByVal e As EventArgs)
+		If Not _upArrowClicked AndAlso Not _downArrowClicked AndAlso Not _verticalTrackAreaClicked AndAlso Not _horizontalTrackAreaClicked Then
+			_scrollTimer.Enabled = False
+			_scrollTimer.Interval = Consts.SmallChangeStartDelay
+			Return
+		End If
+
+		'_scrollTimer.Interval = 150
+		_scrollTimer.Interval = 75
+
+		If _upArrowClicked Then
+			'ScrollBy(-1)
+			Me.ScrollBy(-Me.theSmallChange)
+		ElseIf _downArrowClicked Then
+			'ScrollBy(1)
+			Me.ScrollBy(Me.theSmallChange)
+		ElseIf _verticalTrackAreaClicked Then
+			Me.ScrollBy(Me.theLargeChange * _directionFactor)
+		ElseIf _horizontalTrackAreaClicked Then
+			Me.ScrollBy(Me.theLargeChange * _directionFactor)
+		End If
+	End Sub
+
+	Private Sub UpdateThumb(ByVal Optional forceRefresh As Boolean = False)
+		If ViewSize >= Maximum Then
+			Return
+		End If
+		Dim maximumValue As Integer = Maximum - ViewSize
+		If Value > maximumValue Then
+			Value = maximumValue
+		End If
+		_viewContentRatio = CSng(ViewSize) / CSng(Maximum)
+		Dim viewAreaSize As Integer = Maximum - ViewSize
+		Dim positionRatio As Double = CSng(Value) / CSng(viewAreaSize)
+
+		If _scrollOrientation = DarkScrollOrientation.Vertical Then
+			Dim thumbSize As Integer = CInt((_trackArea.Height * _viewContentRatio))
+			If thumbSize < Consts.MinimumThumbSize Then
+				thumbSize = Consts.MinimumThumbSize
+			End If
+			Dim trackAreaSize As Integer = _trackArea.Height - thumbSize
+			Dim thumbPosition As Integer = CInt((trackAreaSize * positionRatio))
+			'_thumbArea = New Rectangle(_trackArea.Left + 3, _trackArea.Top + thumbPosition, Consts.ScrollBarSize - 6, thumbSize)
+			_thumbArea = New Rectangle(_trackArea.Left + CInt(Math.Truncate(0.5 * (Consts.ScrollBarSize - Me.theThumbWidth))), _trackArea.Top + thumbPosition, Me.theThumbWidth, thumbSize)
+		ElseIf _scrollOrientation = DarkScrollOrientation.Horizontal Then
+			Dim thumbSize As Integer = CInt((_trackArea.Width * _viewContentRatio))
+			If thumbSize < Consts.MinimumThumbSize Then
+				thumbSize = Consts.MinimumThumbSize
+			End If
+			Dim trackAreaSize As Integer = _trackArea.Width - thumbSize
+			Dim thumbPosition As Integer = CInt((trackAreaSize * positionRatio))
+			'_thumbArea = New Rectangle(_trackArea.Left + thumbPosition, _trackArea.Top + 3, thumbSize, Consts.ScrollBarSize - 6)
+			_thumbArea = New Rectangle(_trackArea.Left + thumbPosition, _trackArea.Top + CInt(Math.Truncate(0.5 * (Consts.ScrollBarSize - Me.theThumbWidth))), thumbSize, Me.theThumbWidth)
+		End If
+
+		If forceRefresh Then
+			Invalidate()
+			Update()
+		End If
+	End Sub
+
+	'Private Sub OnNonClientCalcSize(ByRef m As Message)
+	'	If CInt(m.WParam) = 0 Then
+	'		Dim rect As Win32Api.RECT = CType(Marshal.PtrToStructure(m.LParam, GetType(Win32Api.RECT)), Win32Api.RECT)
+	'		If Me._scrollOrientation = DarkScrollOrientation.Vertical Then
+	'			rect.Right += 1
+	'		Else
+	'			rect.Bottom += 1
+	'		End If
+	'		Marshal.StructureToPtr(rect, m.LParam, False)
+	'		m.Result = IntPtr.Zero
+	'	ElseIf CInt(m.WParam) = 1 Then
+	'		Dim nccsp As Win32Api.NCCALCSIZE_PARAMS = CType(Marshal.PtrToStructure(m.LParam, GetType(Win32Api.NCCALCSIZE_PARAMS)), Win32Api.NCCALCSIZE_PARAMS)
+	'		If Me._scrollOrientation = DarkScrollOrientation.Vertical Then
+	'			nccsp.rect0.Right += 1
+	'		Else
+	'			nccsp.rect0.Bottom += 1
+	'		End If
+	'		Marshal.StructureToPtr(nccsp, m.LParam, False)
+	'		m.Result = IntPtr.Zero
+	'	End If
+	'End Sub
+
+#End Region
+
+#Region "Data"
+
+	Class Consts
+		' Must use same size as default scrollbar to prevent default one from drawing over custom border (when default larger than custom scrollbar).
+		'Public Shared ScrollBarSize As Integer = SystemInformation.VerticalScrollBarWidth
+		Public Shared ScrollBarSize As Integer = 11
+		Public Shared ArrowButtonSize As Integer = 11
+		Public Shared MinimumThumbSize As Integer = 11
+		'Public Shared SmallChangeStartDelay As Integer = 500
+		Public Shared SmallChangeStartDelay As Integer = 250
+	End Class
 
 	Public Enum DarkScrollOrientation
 		Vertical
@@ -476,6 +612,7 @@ Public Class ScrollBarEx
 	Private _trackArea As Rectangle
 	Private _viewContentRatio As Single
 	Private _thumbArea As Rectangle
+	Private theThumbWidth As Integer = 5
 	Private _upArrowArea As Rectangle
 	Private _downArrowArea As Rectangle
 	Private _thumbHot As Boolean
@@ -495,12 +632,9 @@ Public Class ScrollBarEx
 	Private theSmallChange As Integer
 	Private ReadOnly _DefaultCursor As Cursor
 
-	Class Consts
-		Public Shared ScrollBarSize As Integer = 15
-		Public Shared ArrowButtonSize As Integer = 15
-		Public Shared MinimumThumbSize As Integer = 11
-		'Public Shared SmallChangeStartDelay As Integer = 500
-		Public Shared SmallChangeStartDelay As Integer = 250
-	End Class
+	Private theRightAndBottomBorderWidth As Integer
+	Private theRightAndBottomBorderColor As Color
+
+#End Region
 
 End Class
