@@ -36,7 +36,7 @@ Partial Class UnpackUserControl
 		Me.ContentsGroupBoxFillPanel = New Crowbar.PanelEx()
 		Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
 		Me.PackageTreeView = New Crowbar.TreeViewEx()
-		Me.PackageListView = New Crowbar.ListViewEx()
+		Me.PackageDataGridView = New Crowbar.DataGridViewEx()
 		Me.Panel3 = New Crowbar.PanelEx()
 		Me.SelectionPathTextBox = New Crowbar.RichTextBoxEx()
 		Me.ToolStrip1 = New Crowbar.ToolStripEx()
@@ -425,7 +425,7 @@ Partial Class UnpackUserControl
 		'
 		'SplitContainer3.Panel2
 		'
-		Me.SplitContainer3.Panel2.Controls.Add(Me.PackageListView)
+		Me.SplitContainer3.Panel2.Controls.Add(Me.PackageDataGridView)
 		Me.SplitContainer3.Size = New System.Drawing.Size(538, 279)
 		Me.SplitContainer3.SplitterDistance = 250
 		Me.SplitContainer3.TabIndex = 6
@@ -444,23 +444,23 @@ Partial Class UnpackUserControl
 		Me.PackageTreeView.Size = New System.Drawing.Size(244, 273)
 		Me.PackageTreeView.TabIndex = 0
 		'
-		'PackageListView
+		'PackageDataGridView
 		'
-		Me.PackageListView.AllowColumnReorder = True
-		Me.PackageListView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-		Me.PackageListView.Dock = System.Windows.Forms.DockStyle.Fill
-		Me.PackageListView.FullRowSelect = True
-		Me.PackageListView.HideSelection = False
-		Me.PackageListView.Location = New System.Drawing.Point(0, 0)
-		Me.PackageListView.Name = "PackageListView"
-		Me.PackageListView.OwnerDraw = True
-		Me.PackageListView.ShowGroups = False
-		Me.PackageListView.Size = New System.Drawing.Size(284, 279)
-		Me.PackageListView.SmallImageList = Me.ImageList1
-		Me.PackageListView.Sorting = System.Windows.Forms.SortOrder.Ascending
-		Me.PackageListView.TabIndex = 1
-		Me.PackageListView.UseCompatibleStateImageBehavior = False
-		Me.PackageListView.View = System.Windows.Forms.View.Details
+		Me.PackageDataGridView.AllowUserToOrderColumns = True
+		Me.PackageDataGridView.AllowUserToResizeColumns = True
+		Me.PackageDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+		Me.PackageDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
+		Me.PackageDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+		Me.PackageDataGridView.Dock = System.Windows.Forms.DockStyle.Fill
+		Me.PackageDataGridView.EnableHeadersVisualStyles = False
+		Me.PackageDataGridView.ReadOnly = True
+		Me.PackageDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect
+		Me.PackageDataGridView.Location = New System.Drawing.Point(0, 0)
+		Me.PackageDataGridView.Name = "PackageDataGridView"
+		Me.PackageDataGridView.ShowCellErrors = False
+		Me.PackageDataGridView.ShowRowErrors = False
+		Me.PackageDataGridView.Size = New System.Drawing.Size(284, 279)
+		Me.PackageDataGridView.TabIndex = 1
 		'
 		'Panel3
 		'
@@ -856,16 +856,16 @@ Partial Class UnpackUserControl
 	Friend WithEvents PackagePathFileNameTextBox As Crowbar.RichTextBoxEx
 	Friend WithEvents Options_LogSplitContainer As System.Windows.Forms.SplitContainer
 	Friend WithEvents UseAllInDecompileButton As ButtonEx
-    Friend WithEvents UnpackComboBox As ComboUserControl
-    Friend WithEvents CancelUnpackButton As ButtonEx
+	Friend WithEvents UnpackComboBox As ComboUserControl
+	Friend WithEvents CancelUnpackButton As ButtonEx
 	Friend WithEvents SkipCurrentPackageButton As ButtonEx
 	Friend WithEvents UnpackButton As ButtonEx
 	Friend WithEvents OptionsGroupBox As GroupBoxEx
 	Friend WithEvents UseInDecompileButton As ButtonEx
 	Friend WithEvents UseInPreviewButton As ButtonEx
 	Friend WithEvents UnpackerLogTextBox As Crowbar.RichTextBoxEx
-    Friend WithEvents UnpackedFilesComboBox As ComboUserControl
-    Friend WithEvents GotoUnpackedFileButton As ButtonEx
+	Friend WithEvents UnpackedFilesComboBox As ComboUserControl
+	Friend WithEvents GotoUnpackedFileButton As ButtonEx
 	Friend WithEvents ContentsGroupBox As GroupBoxEx
 	Friend WithEvents PackageTreeView As Crowbar.TreeViewEx
 	Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
@@ -875,11 +875,11 @@ Partial Class UnpackUserControl
 	Friend WithEvents SelectAllModelsAndMaterialsFoldersCheckBox As CheckBoxEx
 	Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
 	Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents GameSetupComboBox As ComboUserControl
-    Friend WithEvents EditGameSetupButton As ButtonEx
+	Friend WithEvents GameSetupComboBox As ComboUserControl
+	Friend WithEvents EditGameSetupButton As ButtonEx
 	Friend WithEvents LogFileCheckBox As CheckBoxEx
 	Friend WithEvents OptionsGroupBoxFillPanel As PanelEx
-	Friend WithEvents PackageListView As ListViewEx
+	Friend WithEvents PackageDataGridView As DataGridViewEx
 	Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
 	Friend WithEvents GameModelsOutputPathTextBox As Crowbar.RichTextBoxEx
 	Friend WithEvents GotoOutputPathButton As ButtonEx

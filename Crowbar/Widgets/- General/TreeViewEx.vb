@@ -768,22 +768,22 @@ Public Class TreeViewEx
 				'NOTE: Assign to Parent so it can draw over non-client area.
 				Me.ScrollbarCornerPanel.Parent = Me.Parent
 				Me.ScrollbarCornerPanel.BringToFront()
-				' +1 for TreeView padding
+				' TreeView padding removes the -1 normally needed when width and height are used for Location.
 				Dim aPoint As New Point(Me.ClientRectangle.Width, Me.ClientRectangle.Height)
 				'NOTE: Location must be relative to Parent.
 				aPoint = Me.PointToScreen(aPoint)
 				aPoint = Me.ScrollbarCornerPanel.Parent.PointToClient(aPoint)
 				Me.ScrollbarCornerPanel.Location = aPoint
-				Me.ScrollbarCornerPanel.Visible = True
+				Me.ScrollbarCornerPanel.Show()
 			Else
-				Me.ScrollbarCornerPanel.Visible = False
+				Me.ScrollbarCornerPanel.Hide()
 			End If
 		Else
 			Me.theScrollingIsActive = True
 			Me.CustomHorizontalScrollbar.Hide()
 			Me.CustomVerticalScrollBar.Hide()
+			Me.ScrollbarCornerPanel.Hide()
 			Me.theScrollingIsActive = False
-			Me.ScrollbarCornerPanel.Visible = False
 		End If
 	End Sub
 

@@ -9,8 +9,10 @@ Public Class DataGridViewEx
     Public Sub New()
         MyBase.New()
 
-        'NOTE: Disable to use custom.
-        MyBase.ScrollBars = Windows.Forms.ScrollBars.None
+        ' Override BorderStyle to allow custom border width.
+        MyBase.BorderStyle = BorderStyle.None
+        Me.theBorderStyle = BorderStyle.FixedSingle
+        Me.theBorderWidth = 1
 
         Me.CustomHorizontalScrollbar = New ScrollBarEx()
         Me.Controls.Add(Me.CustomHorizontalScrollbar)
@@ -31,6 +33,12 @@ Public Class DataGridViewEx
         Me.CustomVerticalScrollBar.TabIndex = 7
         Me.CustomVerticalScrollBar.Text = "CustomVerticalScrollBar"
         Me.CustomVerticalScrollBar.Visible = False
+
+        Me.ScrollbarCornerPanel = New PanelEx()
+        Me.Controls.Add(Me.ScrollbarCornerPanel)
+        Me.ScrollbarCornerPanel.Name = "ScrollbarCornerPanel"
+        Me.ScrollbarCornerPanel.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
+        Me.ScrollbarCornerPanel.Visible = False
 
         Me.theControlHasShown = False
 
@@ -101,6 +109,38 @@ Public Class DataGridViewEx
         End Set
     End Property
 
+    <Browsable(True)>
+    <Category("Appearance")>
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+    Public Overloads Property BorderColor As Color
+        Get
+            Return Me.theBorderColor
+        End Get
+        Set
+            Me.theBorderColor = Value
+        End Set
+    End Property
+
+    <Browsable(True)>
+    <Category("Appearance")>
+    <Description("Colorable BorderStyle.")>
+    <DefaultValue(BorderStyle.FixedSingle)>
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+    Public Overloads Property BorderStyle As BorderStyle
+        Get
+            Return Me.theBorderStyle
+        End Get
+        Set
+            Me.theBorderStyle = Value
+
+            If Me.theBorderStyle = Windows.Forms.BorderStyle.None Then
+                Me.theBorderWidth = 0
+            ElseIf Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+                Me.theBorderWidth = 1
+            End If
+        End Set
+    End Property
+
     Public Overloads Property DataSource() As Object
         Get
             Return MyBase.DataSource
@@ -140,17 +180,17 @@ Public Class DataGridViewEx
         End Set
     End Property
 
-    <Browsable(True)>
-    <Category("Layout")>
-    <Description("Colorable scrollbars.")>
-    Public Overloads Property ScrollBars As ScrollBars
-        Get
-            Return Me.theScrollBars
-        End Get
-        Set
-            Me.theScrollBars = Value
-        End Set
-    End Property
+    '<Browsable(True)>
+    '<Category("Layout")>
+    '<Description("Colorable scrollbars.")>
+    'Public Overloads Property ScrollBars As ScrollBars
+    '    Get
+    '        Return Me.theScrollBars
+    '    End Get
+    '    Set
+    '        Me.theScrollBars = Value
+    '    End Set
+    'End Property
 
 #End Region
 
@@ -517,9 +557,12 @@ Public Class DataGridViewEx
 
     Protected Overrides Sub OnRowsRemoved(e As DataGridViewRowsRemovedEventArgs)
         MyBase.OnRowsRemoved(e)
-        'NOTE: Raise the OnNonClientCalcSize and OnNonClientPaint "events".
-        Win32Api.SetWindowPos(Me.Handle, IntPtr.Zero, 0, 0, 0, 0, Win32Api.SWP.SWP_FRAMECHANGED Or Win32Api.SWP.SWP_NOMOVE Or Win32Api.SWP.SWP_NOSIZE Or Win32Api.SWP.SWP_NOZORDER)
-        Me.UpdateScrollbars()
+        ' Prevent an exception when closing app.
+        If Me.Parent IsNot Nothing Then
+            'NOTE: Raise the OnNonClientCalcSize and OnNonClientPaint "events".
+            Win32Api.SetWindowPos(Me.Handle, IntPtr.Zero, 0, 0, 0, 0, Win32Api.SWP.SWP_FRAMECHANGED Or Win32Api.SWP.SWP_NOMOVE Or Win32Api.SWP.SWP_NOSIZE Or Win32Api.SWP.SWP_NOZORDER)
+            Me.UpdateScrollbars()
+        End If
     End Sub
 
     Protected Overrides Sub OnSelectionChanged(ByVal e As System.EventArgs)
@@ -694,8 +737,8 @@ Public Class DataGridViewEx
         Select Case m.Msg
             Case Win32Api.WindowsMessages.WM_NCCALCSIZE
                 Me.OnNonClientCalcSize(m)
-                'Case Win32Api.WindowsMessages.WM_NCPAINT
-                '    Me.OnNonClientPaint(m)
+            Case Win32Api.WindowsMessages.WM_NCPAINT
+                Me.OnNonClientPaint(m)
         End Select
 
         MyBase.WndProc(m)
@@ -723,38 +766,70 @@ Public Class DataGridViewEx
         End If
     End Sub
 
-    'Private Sub OnNonClientPaint(ByRef m As Message)
-    '    Dim theme As DataGridViewTheme = Nothing
-    '    ' This check prevents problems with viewing and saving Forms in VS Designer.
-    '    If TheApp IsNot Nothing Then
-    '        theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
-    '    End If
-    '    If theme IsNot Nothing Then
-    '        Dim hDC As IntPtr = Win32Api.GetWindowDC(Me.Handle)
-    '        Try
-    '            Using g As Graphics = Graphics.FromHdc(hDC)
-    '                Using backColorBrush As New SolidBrush(Color.Pink)
-    '                    Dim aRect As RectangleF = g.VisibleClipBounds
-    '                    g.FillRectangle(backColorBrush, aRect)
-    '                End Using
-    '            End Using
-    '        Finally
-    '            Win32Api.ReleaseDC(Me.Handle, hDC)
-    '        End Try
-    '        m.Result = IntPtr.Zero
-    '    End If
-    'End Sub
+    Private Sub OnNonClientPaint(ByRef m As Message)
+        Dim theme As DataGridViewTheme = Nothing
+        ' This check prevents problems with viewing and saving Forms in VS Designer.
+        If TheApp IsNot Nothing Then
+            theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
+        End If
+        If theme IsNot Nothing Then
+            Dim hDC As IntPtr = Win32Api.GetWindowDC(Me.Handle)
+            Try
+                Using g As Graphics = Graphics.FromHdc(hDC)
+                    ' Draw border.
+                    'Using backColorBrush As New SolidBrush(Me.theBorderColor)
+                    '	Dim aRect As RectangleF = g.VisibleClipBounds
+                    '	g.FillRectangle(backColorBrush, aRect)
+                    'End Using
+                    Using borderColorPen As New Pen(Me.theBorderColor, Me.theBorderWidth)
+                        borderColorPen.Alignment = Drawing2D.PenAlignment.Inset
+                        Dim aRect As Rectangle = Rectangle.Truncate(g.VisibleClipBounds)
+                        'NOTE: DrawRectangle width and height are interpreted as the right and bottom pixels to draw.
+                        aRect.Width -= 1
+                        aRect.Height -= 1
+                        g.DrawRectangle(borderColorPen, aRect)
+                    End Using
+                End Using
+            Finally
+                Win32Api.ReleaseDC(Me.Handle, hDC)
+            End Try
+            m.Result = IntPtr.Zero
+        End If
+    End Sub
 
 #End Region
 
 #Region "Child Widget Event Handlers"
 
-    Private Sub HorizontalScrollbar_ValueChanged(ByVal sender As Object, ByVal e As ScrollValueEventArgs) Handles CustomHorizontalScrollbar.ValueChanged
-        Me.UpdateScrolling(e.Value, 0)
+    Private Sub CustomHorizontalScrollbar_ValueChanged(ByVal sender As Object, ByVal e As ScrollValueEventArgs) Handles CustomHorizontalScrollbar.ValueChanged
+        'Me.UpdateScrolling(e.Value, 0)
+        If Not Me.theScrollingIsActive Then
+            Me.theScrollingIsActive = True
+
+            Me.HorizontalScrollingOffset = e.Value
+            'Me.Invalidate()
+
+            Me.theScrollingIsActive = False
+        End If
     End Sub
 
-    Private Sub VerticalScrollBar_ValueChanged(ByVal sender As Object, ByVal e As ScrollValueEventArgs) Handles CustomVerticalScrollBar.ValueChanged
-        Me.UpdateScrolling(0, e.Value)
+    Private Sub CustomVerticalScrollBar_ValueChanged(ByVal sender As Object, ByVal e As ScrollValueEventArgs) Handles CustomVerticalScrollBar.ValueChanged
+        'Me.UpdateScrolling(0, e.Value)
+        If Not Me.theScrollingIsActive Then
+            Me.theScrollingIsActive = True
+
+            If Me.RowCount > 0 Then
+                Dim rowHeight As Integer = Me.Rows(0).Height
+                Dim rowIndex As Integer = CInt(e.Value / rowHeight)
+                If rowIndex > Me.RowCount - 1 Then
+                    rowIndex = Me.RowCount - 1
+                End If
+                Me.FirstDisplayedScrollingRowIndex = rowIndex
+            End If
+            'Me.Invalidate()
+
+            Me.theScrollingIsActive = False
+        End If
     End Sub
 
 #End Region
@@ -779,6 +854,8 @@ Public Class DataGridViewEx
             theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
         End If
         If theme IsNot Nothing Then
+            Me.theBorderColor = theme.EnabledBorderColor
+
             If Me.Enabled Then
                 Me.GridColor = theme.EnabledBackColor
                 Me.BackgroundColor = theme.EnabledBackColor
@@ -794,9 +871,16 @@ Public Class DataGridViewEx
                 Me.DefaultCellStyle.ForeColor = theme.DisabledForeColor
                 Me.DefaultCellStyle.BackColor = theme.DisabledBackColor
             End If
+
+            MyBase.ScrollBars = Windows.Forms.ScrollBars.None
+            Me.CustomHorizontalScrollbar.RightAndBottomBorderColor = Me.theBorderColor
+            Me.CustomVerticalScrollBar.RightAndBottomBorderColor = Me.theBorderColor
+            Me.ScrollbarCornerPanel.BackColor = Me.BackColor
+            Me.ScrollbarCornerPanel.RightAndBottomBorderColor = Me.theBorderColor
         Else
+            MyBase.ScrollBars = Windows.Forms.ScrollBars.Both
             Me.GridColor = SystemColors.ControlDark
-            Me.BackgroundColor = SystemColors.AppWorkspace
+            Me.BackgroundColor = SystemColors.Control
             Me.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.WindowText
             Me.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.Control
             Me.DefaultCellStyle.ForeColor = SystemColors.WindowText
@@ -816,11 +900,7 @@ Public Class DataGridViewEx
         'Dim bottom As Integer = 2
 
         Dim contentWidth As Integer = Me.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)
-        'Dim clientWidth As Integer = Me.ClientRectangle.Width
         Dim clientWidth As Integer = Me.Width
-        'If Me.CustomVerticalScrollBar.Visible Then
-        '	clientWidth += ScrollBarEx.Consts.ScrollBarSize
-        'End If
         If contentWidth > clientWidth Then
             bottom += ScrollBarEx.Consts.ScrollBarSize
         End If
@@ -828,7 +908,6 @@ Public Class DataGridViewEx
         If rowCount > 0 Then
             'Dim contentHeight As Integer = rowCount * Me.Rows(0).Height
             Dim contentHeight As Integer = Me.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
-            'Dim clientHeight As Integer = Me.ClientRectangle.Height
             Dim clientHeight As Integer = Me.Height
             If Me.ColumnHeadersVisible Then
                 contentHeight += Me.ColumnHeadersHeight
@@ -836,6 +915,13 @@ Public Class DataGridViewEx
             If contentHeight > clientHeight Then
                 right += ScrollBarEx.Consts.ScrollBarSize
             End If
+        End If
+
+        If Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+            left += 1
+            top += 1
+            right += 1
+            bottom += 1
         End If
 
         Me.NonClientPadding = New Padding(left, top, right, bottom)
@@ -848,31 +934,73 @@ Public Class DataGridViewEx
         rect.Bottom -= padding.Bottom
     End Sub
 
-    Private Sub UpdateScrolling(ByVal leftOrRightValue As Integer, ByVal upOrDownValue As Integer)
-        If Not Me.theScrollingIsActive Then
-            Me.theScrollingIsActive = True
+    'Private Sub UpdateScrolling(ByVal leftOrRightValue As Integer, ByVal upOrDownValue As Integer)
+    '    If Not Me.theScrollingIsActive Then
+    '        Me.theScrollingIsActive = True
 
-            If Me.RowCount > 0 Then
-                Dim rowHeight As Integer = Me.Rows(0).Height
-                Dim rowIndex As Integer = CInt(upOrDownValue / rowHeight)
-                If rowIndex > Me.RowCount - 1 Then
-                    rowIndex = Me.RowCount - 1
-                End If
-                Me.FirstDisplayedScrollingRowIndex = rowIndex
-            End If
-            Me.Invalidate()
+    '        If leftOrRightValue <> 0 Then
+    '            Me.HorizontalScrollingOffset = leftOrRightValue
+    '        End If
+    '        'If upOrDownValue <> 0 Then
+    '        '    Me.VerticalScrollingOffset += upOrDownValue
+    '        'End If
+    '        If upOrDownValue <> 0 AndAlso Me.RowCount > 0 Then
+    '            Dim rowHeight As Integer = Me.Rows(0).Height
+    '            Dim rowIndex As Integer = CInt(upOrDownValue / rowHeight)
+    '            If rowIndex > Me.RowCount - 1 Then
+    '                rowIndex = Me.RowCount - 1
+    '            End If
+    '            Me.FirstDisplayedScrollingRowIndex = rowIndex
+    '        End If
+    '        Me.Invalidate()
 
-            Me.theScrollingIsActive = False
-        End If
-    End Sub
+    '        Me.theScrollingIsActive = False
+    '    End If
+    'End Sub
 
     Private Sub UpdateScrollbars()
-        Me.UpdateHorizontalScrollbar()
-        Me.UpdateVerticalScrollbar()
+        If Me.DesignMode Then
+            Exit Sub
+        End If
 
-        If Me.CustomHorizontalScrollbar.Visible AndAlso Me.CustomVerticalScrollBar.Visible Then
-            Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
-            Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
+        Dim theme As DataGridViewTheme = Nothing
+        ' This check prevents problems with viewing and saving Forms in VS Designer.
+        If TheApp IsNot Nothing Then
+            theme = TheApp.Settings.SelectedAppTheme.DataGridViewTheme
+        End If
+        If theme IsNot Nothing Then
+            Me.UpdateHorizontalScrollbar()
+            Me.UpdateVerticalScrollbar()
+
+            If Me.CustomHorizontalScrollbar.Visible AndAlso Me.CustomVerticalScrollBar.Visible Then
+                'Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
+                'Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
+                If Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+                    Me.ScrollbarCornerPanel.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth, ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth)
+                    Me.ScrollbarCornerPanel.RightAndBottomBorderWidth = 1
+                Else
+                    Me.ScrollbarCornerPanel.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
+                    Me.ScrollbarCornerPanel.RightAndBottomBorderWidth = 0
+                End If
+                'NOTE: Assign to Parent so it can draw over non-client area.
+                Me.ScrollbarCornerPanel.Parent = Me.Parent
+                Me.ScrollbarCornerPanel.BringToFront()
+                ' TreeView padding removes the -1 normally needed when width and height are used for Location.
+                Dim aPoint As New Point(Me.ClientRectangle.Width, Me.ClientRectangle.Height)
+                'NOTE: Location must be relative to Parent.
+                aPoint = Me.PointToScreen(aPoint)
+                aPoint = Me.ScrollbarCornerPanel.Parent.PointToClient(aPoint)
+                Me.ScrollbarCornerPanel.Location = aPoint
+                Me.ScrollbarCornerPanel.Show()
+            Else
+                Me.ScrollbarCornerPanel.Hide()
+            End If
+        Else
+            Me.theScrollingIsActive = True
+            Me.CustomHorizontalScrollbar.Hide()
+            Me.CustomVerticalScrollBar.Hide()
+            Me.ScrollbarCornerPanel.Hide()
+            Me.theScrollingIsActive = False
         End If
     End Sub
 
@@ -880,8 +1008,8 @@ Public Class DataGridViewEx
         'NOTE: Parent can be Nothing on exiting. Prevent the exception with this check.
         If Not Me.theScrollingIsActive AndAlso Me.Parent IsNot Nothing Then
             Dim contentWidth As Integer = Me.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)
-            'Dim clientWidth As Integer = Me.ClientRectangle.Width
-            Dim clientWidth As Integer = Me.Width
+            Dim clientWidth As Integer = Me.ClientRectangle.Width
+            'Dim clientWidth As Integer = Me.Width
             If contentWidth > clientWidth Then
                 Me.theScrollingIsActive = True
 
@@ -892,23 +1020,30 @@ Public Class DataGridViewEx
                 Me.CustomHorizontalScrollbar.SmallChange = 100
                 Me.CustomHorizontalScrollbar.LargeChange = clientWidth
 
-                Me.CustomHorizontalScrollbar.Show()
-
-                Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width, ScrollBarEx.Consts.ScrollBarSize)
                 'NOTE: Assign to Parent so it can draw over non-client area.
                 Me.CustomHorizontalScrollbar.Parent = Me.Parent
                 Me.CustomHorizontalScrollbar.BringToFront()
                 'NOTE: Point is relative to Me.ClientRectangle.
                 'Dim aPoint As New Point(Me.ClientRectangle.Left - Me.NonClientPadding.Left, Me.ClientRectangle.Height + Me.NonClientPadding.Bottom - ScrollBarEx.Consts.ScrollBarSize)
-                Dim aPoint As New Point(Me.Left - Me.NonClientPadding.Left, Me.Height + Me.NonClientPadding.Bottom - ScrollBarEx.Consts.ScrollBarSize)
+                Dim aPoint As New Point(Me.ClientRectangle.Left, Me.ClientRectangle.Height)
                 'NOTE: Location must be relative to Parent.
                 aPoint = Me.PointToScreen(aPoint)
                 aPoint = Me.CustomHorizontalScrollbar.Parent.PointToClient(aPoint)
                 Me.CustomHorizontalScrollbar.Location = aPoint
+                If Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+                    Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width, ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth)
+                    Me.CustomHorizontalScrollbar.RightAndBottomBorderWidth = 1
+                Else
+                    Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width, ScrollBarEx.Consts.ScrollBarSize)
+                    Me.CustomHorizontalScrollbar.RightAndBottomBorderWidth = 0
+                End If
+                Me.CustomHorizontalScrollbar.Show()
 
                 Me.theScrollingIsActive = False
             Else
+                Me.theScrollingIsActive = True
                 Me.CustomHorizontalScrollbar.Hide()
+                Me.theScrollingIsActive = False
             End If
         End If
     End Sub
@@ -921,8 +1056,8 @@ Public Class DataGridViewEx
                 Dim rowHeight As Integer = Me.Rows(0).Height
                 'Dim contentHeight As Integer = rowCount * rowHeight
                 Dim contentHeight As Integer = Me.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
-                'Dim clientHeight As Integer = Me.ClientRectangle.Height
-                Dim clientHeight As Integer = Me.Height
+                Dim clientHeight As Integer = Me.ClientRectangle.Height
+                'Dim clientHeight As Integer = Me.Height
                 If Me.ColumnHeadersVisible Then
                     contentHeight += Me.ColumnHeadersHeight
                     clientHeight -= Me.ColumnHeadersHeight
@@ -942,21 +1077,26 @@ Public Class DataGridViewEx
                     Me.CustomVerticalScrollBar.BringToFront()
                     'NOTE: Point is relative to Me.ClientRectangle.
                     'Dim aPoint As New Point(Me.ClientRectangle.Width + Me.NonClientPadding.Right - ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Top - Me.NonClientPadding.Top)
-                    Dim aPoint As New Point(Me.Width + Me.NonClientPadding.Right - ScrollBarEx.Consts.ScrollBarSize, Me.Top - Me.NonClientPadding.Top)
+                    Dim aPoint As New Point(Me.ClientRectangle.Width, Me.ClientRectangle.Top)
                     'NOTE: Location must be relative to Parent.
                     aPoint = Me.PointToScreen(aPoint)
                     aPoint = Me.CustomVerticalScrollBar.Parent.PointToClient(aPoint)
                     Me.CustomVerticalScrollBar.Location = aPoint
-                    Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.Height)
-
+                    If Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+                        Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth, Me.ClientRectangle.Height)
+                        Me.CustomVerticalScrollBar.RightAndBottomBorderWidth = 1
+                    Else
+                        Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Height)
+                        Me.CustomVerticalScrollBar.RightAndBottomBorderWidth = 0
+                    End If
                     Me.CustomVerticalScrollBar.Show()
 
                     Me.theScrollingIsActive = False
                 Else
+                    Me.theScrollingIsActive = True
                     Me.CustomVerticalScrollBar.Hide()
+                    Me.theScrollingIsActive = False
                 End If
-            Else
-                Me.CustomVerticalScrollBar.Hide()
             End If
         End If
     End Sub
@@ -965,19 +1105,23 @@ Public Class DataGridViewEx
 
 #Region "Data"
 
-    Private theScrollBars As ScrollBars
+    'Private theScrollBars As ScrollBars
 
+    Private theBorderColor As Color
+    Private theBorderStyle As BorderStyle
+    Private theBorderWidth As Integer
     Private NonClientPadding As Padding
     'Private theNonClientPaddingColor As Color
 
     Private WithEvents CustomHorizontalScrollbar As ScrollBarEx
     Private WithEvents CustomVerticalScrollBar As ScrollBarEx
+    Private ScrollbarCornerPanel As PanelEx
     Private theControlHasShown As Boolean
     Private theScrollingIsActive As Boolean
 
     Private theCurrentCellIsChangingBecauseOfMe As Boolean
     Private theSelectionIsChangingBecauseOfMe As Boolean
-    Private theWidgetTempOfAllowUserToAddRows As Boolean
+    'Private theWidgetTempOfAllowUserToAddRows As Boolean
 
     Private theCellWherePointerIs As DataGridViewCell
 

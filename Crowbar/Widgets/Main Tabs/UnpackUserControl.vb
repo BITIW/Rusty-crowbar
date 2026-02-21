@@ -1,6 +1,7 @@
 Imports System.IO
 Imports System.Collections.Specialized
 Imports System.ComponentModel
+Imports System.Globalization
 
 Public Class UnpackUserControl
 
@@ -63,14 +64,7 @@ Public Class UnpackUserControl
 		Me.PackageTreeView.TreeViewNodeSorter = New NodeSorter()
 		'Me.PackageTreeView.Nodes.Add("<root>", "<root>")
 
-		Me.PackageListView.Columns.Add("Name", 100)
-		Me.PackageListView.Columns.Add("Size (bytes)", 100)
-		Me.PackageListView.Columns.Add("Count", 50)
-		Me.PackageListView.Columns.Add("Type", 100)
-		Me.PackageListView.Columns.Add("Extension", 100)
-		Me.PackageListView.Columns.Add("Package", 100)
-		Me.theSortColumnIndex = 0
-		Me.PackageListView.ListViewItemSorter = New FolderAndFileListViewItemComparer(Me.theSortColumnIndex, Me.PackageListView.Sorting)
+		Me.InitPackageDataGridView()
 
 		''NOTE: The DataSource, DisplayMember, and ValueMember need to be set before DataBindings, or else an exception is raised.
 		'Me.GameSetupComboBox.DisplayMember = "GameName"
@@ -147,6 +141,113 @@ Public Class UnpackUserControl
 		Me.OutputPathComboBox.DataBindings.Clear()
 	End Sub
 
+	Private Sub InitPackageDataGridView()
+		'Me.PackageDataGridView.Columns.Add("Name", 100)
+		'Me.PackageDataGridView.Columns.Add("Size (bytes)", 100)
+		'Me.PackageDataGridView.Columns.Add("Count", 50)
+		'Me.PackageDataGridView.Columns.Add("Type", 100)
+		'Me.PackageDataGridView.Columns.Add("Extension", 100)
+		'Me.PackageDataGridView.Columns.Add("Package", 100)
+		'Me.theSortColumnIndex = 0
+		'Me.PackageDataGridView.ListViewItemSorter = New FolderAndFileListViewItemComparer(Me.theSortColumnIndex, Me.PackageDataGridView.Sorting)
+
+		Me.PackageDataGridView.AllowUserToAddRows = False
+		Me.PackageDataGridView.AllowUserToDeleteRows = False
+		Me.PackageDataGridView.AllowUserToResizeRows = False
+		Me.PackageDataGridView.RowHeadersVisible = False
+		Me.PackageDataGridView.CellBorderStyle = DataGridViewCellBorderStyle.None
+		Me.PackageDataGridView.RowTemplate.Height = 17
+
+		Me.PackageDataGridView.AutoGenerateColumns = False
+		Dim iconColumn As DataGridViewImageColumn
+
+		iconColumn = New DataGridViewImageColumn()
+		iconColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+		iconColumn.HeaderText = ""
+		iconColumn.ImageLayout = DataGridViewImageCellLayout.Normal
+		iconColumn.MinimumWidth = 17
+		iconColumn.Name = "Icon"
+		iconColumn.ReadOnly = True
+		iconColumn.SortMode = DataGridViewColumnSortMode.Automatic
+		iconColumn.Width = 17
+		Me.PackageDataGridView.Columns.Add(iconColumn)
+
+		Dim textColumn As DataGridViewTextBoxColumn
+
+		textColumn = New DataGridViewTextBoxColumn()
+		textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+		textColumn.HeaderText = "Name"
+		textColumn.MinimumWidth = 20
+		textColumn.Name = "Name"
+		textColumn.ReadOnly = True
+		textColumn.SortMode = DataGridViewColumnSortMode.Automatic
+		textColumn.Width = 100
+		Me.PackageDataGridView.Columns.Add(textColumn)
+
+		textColumn = New DataGridViewTextBoxColumn()
+		textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+		textColumn.HeaderText = "Size (bytes)"
+		textColumn.MinimumWidth = 20
+		textColumn.Name = "Size"
+		textColumn.ReadOnly = True
+		textColumn.SortMode = DataGridViewColumnSortMode.Automatic
+		textColumn.Width = 100
+		Me.PackageDataGridView.Columns.Add(textColumn)
+
+		textColumn = New DataGridViewTextBoxColumn()
+		textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+		textColumn.HeaderText = "Count"
+		textColumn.MinimumWidth = 20
+		textColumn.Name = "Count"
+		textColumn.ReadOnly = True
+		textColumn.SortMode = DataGridViewColumnSortMode.Automatic
+		textColumn.Width = 50
+		Me.PackageDataGridView.Columns.Add(textColumn)
+
+		textColumn = New DataGridViewTextBoxColumn()
+		textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+		textColumn.HeaderText = "Type"
+		textColumn.MinimumWidth = 20
+		textColumn.Name = "Type"
+		textColumn.ReadOnly = True
+		textColumn.SortMode = DataGridViewColumnSortMode.Automatic
+		textColumn.Width = 100
+		Me.PackageDataGridView.Columns.Add(textColumn)
+
+		textColumn = New DataGridViewTextBoxColumn()
+		textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+		textColumn.HeaderText = "Extension"
+		textColumn.MinimumWidth = 20
+		textColumn.Name = "Extension"
+		textColumn.ReadOnly = True
+		textColumn.SortMode = DataGridViewColumnSortMode.Automatic
+		textColumn.Width = 100
+		Me.PackageDataGridView.Columns.Add(textColumn)
+
+		textColumn = New DataGridViewTextBoxColumn()
+		textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+		textColumn.HeaderText = "Package File"
+		textColumn.MinimumWidth = 20
+		textColumn.Name = "Package"
+		textColumn.ReadOnly = True
+		textColumn.SortMode = DataGridViewColumnSortMode.Automatic
+		textColumn.Width = 100
+		Me.PackageDataGridView.Columns.Add(textColumn)
+
+		'textColumn = New DataGridViewTextBoxColumn()
+		'textColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+		'textColumn.HeaderText = "Tag"
+		'textColumn.MinimumWidth = 20
+		'textColumn.Name = "Tag"
+		'textColumn.ReadOnly = True
+		'textColumn.SortMode = DataGridViewColumnSortMode.Automatic
+		'textColumn.Visible = False
+		'textColumn.Width = 100
+		'Me.PackageDataGridView.Columns.Add(textColumn)
+
+		Me.theListRowIsBeingAdded = False
+	End Sub
+
 	Private Sub InitUnpackerOptions()
 		Me.FolderForEachPackageCheckBox.DataBindings.Add("Checked", TheApp.Settings, "UnpackFolderForEachPackageIsChecked", False, DataSourceUpdateMode.OnPropertyChanged)
 		Me.KeepFullPathCheckBox.DataBindings.Add("Checked", TheApp.Settings, "UnpackKeepFullPathIsChecked", False, DataSourceUpdateMode.OnPropertyChanged)
@@ -188,7 +289,7 @@ Public Class UnpackUserControl
 		'Me.PackageTreeView.Nodes(0).Text = "<refreshing>"
 		Me.PackageTreeView.Nodes(0).Nodes.Clear()
 		Me.PackageTreeView.Nodes(0).Tag = Nothing
-		Me.PackageListView.Items.Clear()
+		Me.PackageDataGridView.Rows.Clear()
 		Me.RefreshListingButton.Image = My.Resources.CancelRefresh
 		Me.RefreshListingButton.Tag = "Cancel"
 		Me.SkipCurrentPackageButton.Enabled = False
@@ -359,7 +460,7 @@ Public Class UnpackUserControl
 
 		'Me.UpdateSelectionPathText()
 		'Me.ShowFilesInSelectedFolder()
-		Me.PackageListView.SelectedItems.Clear()
+		Me.PackageDataGridView.ClearSelection()
 	End Sub
 
 	''NOTE: Need this because listview item stays selected when selecting its parent folder.
@@ -384,30 +485,43 @@ Public Class UnpackUserControl
 		Me.DeleteAllSearches()
 	End Sub
 
-	Private Sub PackageListView_ColumnClick(sender As Object, e As ColumnClickEventArgs) Handles PackageListView.ColumnClick
-		If e.Column <> Me.theSortColumnIndex Then
-			Me.theSortColumnIndex = e.Column
-			Me.PackageListView.Sorting = SortOrder.Ascending
-		Else
-			If Me.PackageListView.Sorting = SortOrder.Ascending Then
-				Me.PackageListView.Sorting = SortOrder.Descending
+	Private Sub PackageDataGridView_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles PackageDataGridView.CellDoubleClick
+		If e.RowIndex >= 0 Then
+			Me.OpenSelectedFolderOrFile()
+		End If
+	End Sub
+
+	Private Sub PackageDataGridView_SortCompare(ByVal sender As Object, ByVal e As DataGridViewSortCompareEventArgs) Handles PackageDataGridView.SortCompare
+		If e.Column.Name = "Name" Then
+			Dim dgv As DataGridView = CType(sender, DataGridView)
+			Dim extensionValue1 As String = CStr(dgv.Rows(e.RowIndex1).Cells("Extension").Value)
+			Dim extensionValue2 As String = CStr(dgv.Rows(e.RowIndex2).Cells("Extension").Value)
+
+			If extensionValue1 = "<Folder>" AndAlso extensionValue2 <> "<Folder>" Then
+				If dgv.SortOrder = SortOrder.Ascending Then
+					e.SortResult = -1
+				Else
+					e.SortResult = 1
+				End If
+				e.Handled = True
+			ElseIf extensionValue1 <> "<Folder>" AndAlso extensionValue2 = "<Folder>" Then
+				If dgv.SortOrder = SortOrder.Ascending Then
+					e.SortResult = 1
+				Else
+					e.SortResult = -1
+				End If
+				e.Handled = True
 			Else
-				Me.PackageListView.Sorting = SortOrder.Ascending
+				e.Handled = False
 			End If
 		End If
-
-		Me.PackageListView.ListViewItemSorter = New FolderAndFileListViewItemComparer(e.Column, Me.PackageListView.Sorting)
 	End Sub
 
-	Private Sub PackageListView_DoubleClick(sender As Object, e As EventArgs) Handles PackageListView.DoubleClick
-		Me.OpenSelectedFolderOrFile()
-	End Sub
-
-	Private Sub PackageListView_ItemDrag(sender As Object, e As ItemDragEventArgs) Handles PackageListView.ItemDrag
-		If Me.PackageListView.SelectedItems.Count > 0 Then
-			Me.RunUnpackerToExtractFiles(PackageAction.UnpackToTemp, Me.PackageListView.SelectedItems)
-		End If
-	End Sub
+	'Private Sub PackageDataGridView_ItemDrag(sender As Object, e As ItemDragEventArgs) Handles PackageDataGridView.ItemDrag
+	'	If Me.PackageDataGridView.SelectedRows.Count > 0 Then
+	'		Me.RunUnpackerToExtractFiles(PackageAction.UnpackToTemp, Me.PackageDataGridView.SelectedRows)
+	'	End If
+	'End Sub
 
 	'NOTE: Tried to show the highlight in TreeView when clicking empty space in ListView, but it did not work.
 	'Private Sub PackageListView_MouseDown(sender As Object, e As MouseEventArgs) Handles PackageListView.MouseDown
@@ -421,18 +535,54 @@ Public Class UnpackUserControl
 	'	End If
 	'End Sub
 
-	Private Sub PackageListView_KeyDown(sender As Object, e As KeyEventArgs) Handles PackageListView.KeyDown
-		If e.KeyCode = Keys.A And e.Control Then
-			Me.PackageListView.BeginUpdate()
-			For Each i As ListViewItem In Me.PackageListView.Items
-				i.Selected = True
-			Next
-			Me.PackageListView.EndUpdate()
+	'Private Sub PackageDataGridView_MouseDown(sender As Object, e As MouseEventArgs) Handles PackageDataGridView.MouseDown
+	'	' Get the row index where the mouse was clicked
+	'	Dim hitTest As DataGridView.HitTestInfo = PackageDataGridView.HitTest(e.X, e.Y)
+	'	rowIndexFromMouseDown = hitTest.RowIndex
+
+	'	' Ensure a valid row was clicked and it's the left mouse button
+	'	If rowIndexFromMouseDown <> -1 AndAlso e.Button = MouseButtons.Left Then
+	'		' Optional: Select the row if it's not already selected
+	'		If Not PackageDataGridView.Rows(rowIndexFromMouseDown).Selected Then
+	'			PackageDataGridView.ClearSelection()
+	'			PackageDataGridView.Rows(rowIndexFromMouseDown).Selected = True
+	'		End If
+	'	End If
+	'End Sub
+
+	Private Sub PackageDataGridView_MouseMove(sender As Object, e As MouseEventArgs) Handles PackageDataGridView.MouseMove
+		' Check if a row index was recorded in MouseDown and the left button is down
+		'If rowIndexFromMouseDown <> -1 AndAlso e.Button = MouseButtons.Left Then
+		'	' Check if the mouse has moved enough to initiate a drag operation
+		'	If Math.Abs(e.X - PackageDataGridView.GetCellDisplayRectangle(0, rowIndexFromMouseDown, False).X) > SystemInformation.DragSize.Width OrElse
+		'	   Math.Abs(e.Y - PackageDataGridView.GetCellDisplayRectangle(0, rowIndexFromMouseDown, False).Y) > SystemInformation.DragSize.Height Then
+
+		'		' Start the drag-and-drop operation
+		'		' Pass the row index as the data to be dragged and allow Move or Copy effects
+		'		PackageDataGridView.DoDragDrop(rowIndexFromMouseDown, DragDropEffects.Move Or DragDropEffects.Copy)
+		'	End If
+		'End If
+		If e.Button = MouseButtons.Left Then
+			If Me.PackageDataGridView.SelectedRows.Count > 0 Then
+				Me.RunUnpackerToExtractFiles(PackageAction.UnpackToTemp, Me.PackageDataGridView.SelectedRows)
+			End If
 		End If
 	End Sub
 
-	Private Sub PackageListView_SelectedIndexChanged(sender As Object, e As EventArgs) Handles PackageListView.SelectedIndexChanged
-		Me.UpdateSelectionCounts()
+	'Private Sub PackageListView_KeyDown(sender As Object, e As KeyEventArgs) Handles PackageDataGridView.KeyDown
+	'	If e.KeyCode = Keys.A And e.Control Then
+	'		Me.PackageDataGridView.BeginUpdate()
+	'		For Each i As ListViewItem In Me.PackageDataGridView.Items
+	'			i.Selected = True
+	'		Next
+	'		Me.PackageDataGridView.EndUpdate()
+	'	End If
+	'End Sub
+
+	Private Sub PackageDataGridView_SelectionChanged(sender As Object, e As EventArgs) Handles PackageDataGridView.SelectionChanged
+		If Not Me.theListRowIsBeingAdded Then
+			Me.UpdateSelectionCounts()
+		End If
 	End Sub
 
 	Private Sub FindToolStripTextBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles FindToolStripTextBox.KeyPress
@@ -450,8 +600,8 @@ Public Class UnpackUserControl
 	End Sub
 
 	Private Sub UnpackButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UnpackButton.Click
-		If Me.PackageListView.SelectedItems.Count > 0 Then
-			Me.RunUnpackerToExtractFiles(PackageAction.Unpack, Me.PackageListView.SelectedItems)
+		If Me.PackageDataGridView.SelectedRows.Count > 0 Then
+			Me.RunUnpackerToExtractFiles(PackageAction.Unpack, Me.PackageDataGridView.SelectedRows)
 		Else
 			Me.RunUnpackerToUnpackFilesInternal(PackageAction.Unpack, Nothing)
 		End If
@@ -1009,8 +1159,72 @@ Public Class UnpackUserControl
 	'	treeNode.Text = treeNode.Name + " <" + folderCountText + fileCountText + ">"
 	'End Sub
 
+	'Private Sub ShowFilesInSelectedFolder()
+	'	Me.PackageDataGridView.Items.Clear()
+
+	'	Dim selectedTreeNode As TreeNode
+	'	selectedTreeNode = Me.PackageTreeView.SelectedNode
+	'	If selectedTreeNode IsNot Nothing AndAlso selectedTreeNode.Tag IsNot Nothing Then
+	'		Dim list As List(Of PackageResourceFileNameInfo)
+	'		list = CType(selectedTreeNode.Tag, List(Of PackageResourceFileNameInfo))
+
+	'		Dim item As ListViewItem
+	'		Dim anIcon As Bitmap
+	'		For Each info As PackageResourceFileNameInfo In list
+	'			item = New ListViewItem(info.Name)
+	'			item.Tag = info
+	'			If info.IsFolder Then
+	'				'Dim treeNodeForFolder As TreeNode
+	'				'Dim listForFolder As List(Of PackageResourceFileNameInfo)
+	'				'Dim itemCountText As String
+	'				'treeNodeForFolder = selectedTreeNode.Nodes.Find(info.Name, False)(0)
+	'				'listForFolder = CType(treeNodeForFolder.Tag, List(Of PackageResourceFileNameInfo))
+	'				'itemCountText = listForFolder.Count.ToString("N0", TheApp.InternalCultureInfo)
+	'				''If listForFolder.Count = 1 Then
+	'				''	itemCountText += " item"
+	'				''Else
+	'				''	itemCountText += " items"
+	'				''End If
+	'				'item.SubItems.Add(itemCountText)
+	'				item.SubItems.Add(info.Size.ToString("N0", TheApp.InternalCultureInfo))
+	'				item.SubItems.Add(info.Count.ToString("N0", TheApp.InternalCultureInfo))
+	'			Else
+	'				item.SubItems.Add(info.Size.ToString("N0", TheApp.InternalCultureInfo))
+	'				item.SubItems.Add(info.Count.ToString("N0", TheApp.InternalCultureInfo))
+	'			End If
+	'			item.SubItems.Add(info.Type)
+	'			item.SubItems.Add(info.Extension)
+	'			item.SubItems.Add(info.ArchivePathFileName)
+
+	'			If Not Me.ImageList1.Images.ContainsKey(info.Extension) Then
+	'				If info.IsFolder Then
+	'					anIcon = Win32Api.GetShellIcon(info.Name, Win32Api.FILE_ATTRIBUTE_DIRECTORY)
+	'				Else
+	'					anIcon = Win32Api.GetShellIcon(info.Name)
+	'				End If
+	'				Me.ImageList1.Images.Add(info.Extension, anIcon)
+	'			End If
+	'			item.ImageKey = info.Extension
+
+	'			If Not info.ArchivePathFileNameExists Then
+	'				item.ForeColor = SystemColors.GrayText
+	'				'item.BackColor = SystemColors
+	'			End If
+
+	'			Me.PackageDataGridView.Items.Add(item)
+	'		Next
+
+	'		Me.PackageDataGridView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+	'	End If
+
+	'	Me.UpdateSelectionCounts()
+	'End Sub
+
 	Private Sub ShowFilesInSelectedFolder()
-		Me.PackageListView.Items.Clear()
+		' Wrap with this Boolean to prevent unwanted SelectionChanged handling.
+		Me.theListRowIsBeingAdded = True
+
+		Me.PackageDataGridView.Rows.Clear()
 
 		Dim selectedTreeNode As TreeNode
 		selectedTreeNode = Me.PackageTreeView.SelectedNode
@@ -1018,33 +1232,25 @@ Public Class UnpackUserControl
 			Dim list As List(Of PackageResourceFileNameInfo)
 			list = CType(selectedTreeNode.Tag, List(Of PackageResourceFileNameInfo))
 
-			Dim item As ListViewItem
+			Dim row As DataGridViewRow
 			Dim anIcon As Bitmap
 			For Each info As PackageResourceFileNameInfo In list
-				item = New ListViewItem(info.Name)
-				item.Tag = info
-				If info.IsFolder Then
-					'Dim treeNodeForFolder As TreeNode
-					'Dim listForFolder As List(Of PackageResourceFileNameInfo)
-					'Dim itemCountText As String
-					'treeNodeForFolder = selectedTreeNode.Nodes.Find(info.Name, False)(0)
-					'listForFolder = CType(treeNodeForFolder.Tag, List(Of PackageResourceFileNameInfo))
-					'itemCountText = listForFolder.Count.ToString("N0", TheApp.InternalCultureInfo)
-					''If listForFolder.Count = 1 Then
-					''	itemCountText += " item"
-					''Else
-					''	itemCountText += " items"
-					''End If
-					'item.SubItems.Add(itemCountText)
-					item.SubItems.Add(info.Size.ToString("N0", TheApp.InternalCultureInfo))
-					item.SubItems.Add(info.Count.ToString("N0", TheApp.InternalCultureInfo))
-				Else
-					item.SubItems.Add(info.Size.ToString("N0", TheApp.InternalCultureInfo))
-					item.SubItems.Add(info.Count.ToString("N0", TheApp.InternalCultureInfo))
-				End If
-				item.SubItems.Add(info.Type)
-				item.SubItems.Add(info.Extension)
-				item.SubItems.Add(info.ArchivePathFileName)
+				' Add the row first, so that the column/cell Name can be used to set its Value.
+				Dim rowIndex As Integer = Me.PackageDataGridView.Rows.Add()
+				row = Me.PackageDataGridView.Rows(rowIndex)
+
+				row.Tag = info
+				row.Cells("Name").Value = info.Name
+				'If info.IsFolder Then
+				'	item.SubItems.Add(info.Size.ToString("N0", TheApp.InternalCultureInfo))
+				'	item.SubItems.Add(info.Count.ToString("N0", TheApp.InternalCultureInfo))
+				'Else
+				row.Cells("Size").Value = info.Size.ToString("N0", TheApp.InternalCultureInfo)
+				row.Cells("Count").Value = info.Count.ToString("N0", TheApp.InternalCultureInfo)
+				'End If
+				row.Cells("Type").Value = info.Type
+				row.Cells("Extension").Value = info.Extension
+				row.Cells("Package").Value = info.ArchivePathFileName
 
 				If Not Me.ImageList1.Images.ContainsKey(info.Extension) Then
 					If info.IsFolder Then
@@ -1054,19 +1260,33 @@ Public Class UnpackUserControl
 					End If
 					Me.ImageList1.Images.Add(info.Extension, anIcon)
 				End If
-				item.ImageKey = info.Extension
+				row.Cells("Icon").Value = Me.ImageList1.Images(info.Extension)
 
 				If Not info.ArchivePathFileNameExists Then
-					item.ForeColor = SystemColors.GrayText
+					row.DefaultCellStyle.ForeColor = SystemColors.GrayText
 					'item.BackColor = SystemColors
 				End If
-
-				Me.PackageListView.Items.Add(item)
 			Next
 
-			Me.PackageListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+			' If the DataGridView is not currently sorted, then sortedColumn is Nothing.
+			Dim sortedColumn As DataGridViewColumn = Me.PackageDataGridView.SortedColumn
+			If sortedColumn Is Nothing Then
+				Me.PackageDataGridView.Sort(Me.PackageDataGridView.Columns("Name"), ListSortDirection.Ascending)
+			Else
+				Dim direction As ListSortDirection
+				If Me.PackageDataGridView.SortOrder = SortOrder.Ascending Then
+					direction = ListSortDirection.Ascending
+				Else
+					direction = ListSortDirection.Descending
+				End If
+				Me.PackageDataGridView.Sort(sortedColumn, direction)
+			End If
+
+			Me.PackageDataGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
+			Me.PackageDataGridView.ClearSelection()
 		End If
 
+		Me.theListRowIsBeingAdded = False
 		Me.UpdateSelectionCounts()
 	End Sub
 
@@ -1233,13 +1453,13 @@ Public Class UnpackUserControl
 			list = CType(selectedTreeNode.Tag, List(Of PackageResourceFileNameInfo))
 
 			'fileCount = list.Count
-			For Each item As ListViewItem In Me.PackageListView.Items
-				totalFileCount += CType(item.Tag, PackageResourceFileNameInfo).Count
+			For Each row As DataGridViewRow In Me.PackageDataGridView.Rows
+				totalFileCount += CType(row.Tag, PackageResourceFileNameInfo).Count
 			Next
 
-			For Each item As ListViewItem In Me.PackageListView.SelectedItems
-				selectedFileCount += CType(item.Tag, PackageResourceFileNameInfo).Count
-				selectedByteCount += CType(item.Tag, PackageResourceFileNameInfo).Size
+			For Each row As DataGridViewRow In Me.PackageDataGridView.SelectedRows
+				selectedFileCount += CType(row.Tag, PackageResourceFileNameInfo).Count
+				selectedByteCount += CType(row.Tag, PackageResourceFileNameInfo).Size
 			Next
 		End If
 		'Me.UpdateSelectionCountsRecursive(selectedTreeNode, fileCount, sizeTotal)
@@ -1319,11 +1539,11 @@ Public Class UnpackUserControl
 	End Function
 
 	Private Sub OpenSelectedFolderOrFile()
-		Dim selectedItem As ListViewItem
-		selectedItem = Me.PackageListView.SelectedItems(0)
+		Dim selectedRow As DataGridViewRow
+		selectedRow = Me.PackageDataGridView.SelectedRows(0)
 
 		Dim resourceInfo As PackageResourceFileNameInfo
-		resourceInfo = CType(selectedItem.Tag, PackageResourceFileNameInfo)
+		resourceInfo = CType(selectedRow.Tag, PackageResourceFileNameInfo)
 
 		If resourceInfo.IsFolder Then
 			Dim selectedTreeNode As TreeNode
@@ -1342,10 +1562,10 @@ Public Class UnpackUserControl
 		End If
 	End Sub
 
-	Private Sub RunUnpackerToExtractFiles(ByVal unpackerAction As PackageAction, ByVal selectedItems As ListView.SelectedListViewItemCollection)
+	Private Sub RunUnpackerToExtractFiles(ByVal unpackerAction As PackageAction, ByVal selectedItems As DataGridViewSelectedRowCollection)
 		Dim selectedResourceInfo As PackageResourceFileNameInfo
 		Dim selectedResourceInfos As New List(Of PackageResourceFileNameInfo)
-		For Each selectedItem As ListViewItem In selectedItems
+		For Each selectedItem As DataGridViewRow In selectedItems
 			selectedResourceInfo = CType(selectedItem.Tag, PackageResourceFileNameInfo)
 			selectedResourceInfos.Add(selectedResourceInfo)
 		Next
@@ -1415,7 +1635,7 @@ Public Class UnpackUserControl
 			dragDropDataObject.SetFileDropList(pathAndFileNameCollection)
 
 			Dim result As DragDropEffects
-			result = Me.PackageListView.DoDragDrop(dragDropDataObject, DragDropEffects.Move)
+			result = Me.PackageDataGridView.DoDragDrop(dragDropDataObject, DragDropEffects.Move)
 			TheApp.Unpacker.DeleteTempUnpackFolder()
 
 			RemoveHandler TheApp.Unpacker.ProgressChanged, AddressOf Me.UnpackerBackgroundWorker_ProgressChanged
@@ -1461,15 +1681,17 @@ Public Class UnpackUserControl
 	Private theUnpackedRelativePathFileNames As BindingListEx(Of String)
 	Private theOutputPathOrOutputFileName As String
 
-	Private theSortColumnIndex As Integer
+	'Private theSortColumnIndex As Integer
 
-	Private thePackEntries As List(Of Integer)
-	Private theGivenHardLinkFileName As String
+	'Private thePackEntries As List(Of Integer)
+	'Private theGivenHardLinkFileName As String
 
 	Private thePackageCount As Integer
 	Private theArchivePathFileName As String
 	Private theArchivePathFileNameExists As Boolean
 	Private theEntryIndex As Integer
+	Private theListRowIsBeingAdded As Boolean
+	Private theHeaderWasDoubleClicked As Boolean
 
 	Private theSearchBackgroundWorker As BackgroundWorker
 	Private theSelectedTreeNode As TreeNode

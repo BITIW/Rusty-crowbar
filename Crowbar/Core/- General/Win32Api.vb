@@ -516,7 +516,8 @@ Public Class Win32Api
 
 		bmp = Nothing
 		shfi = New SHFILEINFO()
-		ret = SHGetFileInfo(path, fileAttributes, shfi, Marshal.SizeOf(shfi), SHGFI_USEFILEATTRIBUTES Or SHGFI_ICON)
+		' Must use SHGFI_SMALLICON for the icons to show correctly in Details view.
+		ret = SHGetFileInfo(path, fileAttributes, shfi, Marshal.SizeOf(shfi), SHGFI_USEFILEATTRIBUTES Or SHGFI_ICON Or SHGFI_SMALLICON)
 		If ret <> IntPtr.Zero Then
 			bmp = System.Drawing.Icon.FromHandle(shfi.hIcon).ToBitmap
 			DestroyIcon(shfi.hIcon)
