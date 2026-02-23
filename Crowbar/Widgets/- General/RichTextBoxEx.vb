@@ -13,7 +13,8 @@ Public Class RichTextBoxEx
 		MyBase.DetectUrls = True
 		'NOTE: Make sure MultiLine is True because single-line is visually glitched.
 		MyBase.Multiline = True
-		'NOTE: Disable to use custom.
+
+		'NOTE: Disable to use custom. Must have these 2 lines here to prevent exception at startup.
 		MyBase.BorderStyle = BorderStyle.None
 		MyBase.ScrollBars = RichTextBoxScrollBars.None
 
@@ -358,7 +359,7 @@ Public Class RichTextBoxEx
 			If Not Me.theControlIsBehavingAsMultiLine AndAlso Not Me.WordWrap Then
 				' Draw full text.
 
-				TextRenderer.DrawText(g, Me.Text, Me.theOriginalFont, Me.GetPositionFromCharIndex(0), Me.ForeColor, Me.BackColor, Me.theTextFormatFlags)
+				TextRenderer.DrawText(g, Me.Text, Me.theOriginalFont, Me.GetPositionFromCharIndex(0), Me.ForeColor, MyBase.BackColor, Me.theTextFormatFlags)
 
 				If Me.SelectionLength > 0 Then
 					Me.DrawSelectedText(g, Me.SelectionStart, Me.GetFirstCharIndexFromLine(0), Me.SelectionStart + Me.SelectionLength - 1)
@@ -777,7 +778,7 @@ Public Class RichTextBoxEx
 		'	formatFlags = formatFlags Or TextFormatFlags.HorizontalCenter
 		'End If
 
-		TextRenderer.DrawText(g, Me.Text.Substring(startOfLineCharIndex, endOfLineCharIndex - startOfLineCharIndex + 1), Me.theOriginalFont, textLinePositionRect, Me.ForeColor, Me.BackColor, Me.theTextFormatFlags)
+		TextRenderer.DrawText(g, Me.Text.Substring(startOfLineCharIndex, endOfLineCharIndex - startOfLineCharIndex + 1), Me.theOriginalFont, textLinePositionRect, Me.ForeColor, MyBase.BackColor, Me.theTextFormatFlags)
 		g.ResetClip()
 	End Sub
 
@@ -835,7 +836,7 @@ Public Class RichTextBoxEx
 		'End Using
 
 		' Draw background.
-		Using backColorBrush As New SolidBrush(Me.BackColor)
+		Using backColorBrush As New SolidBrush(MyBase.BackColor)
 			Dim aRect As Rectangle = Me.ClientRectangle
 			e.Graphics.FillRectangle(backColorBrush, aRect)
 		End Using
@@ -848,12 +849,15 @@ Public Class RichTextBoxEx
 	Protected Overrides Sub OnSizeChanged(e As EventArgs)
 		MyBase.OnSizeChanged(e)
 
-		If Me.theControlIsBehavingAsMultiLine AndAlso Me.theLineCount <> Me.GetLineFromCharIndex(Me.TextLength - 1) - 1 Then
-			'NOTE: Raise the OnNonClientCalcSize and OnNonClientPaint "events".
-			Win32Api.SetWindowPos(Me.Handle, IntPtr.Zero, 0, 0, 0, 0, Win32Api.SWP.SWP_FRAMECHANGED Or Win32Api.SWP.SWP_NOMOVE Or Win32Api.SWP.SWP_NOSIZE Or Win32Api.SWP.SWP_NOZORDER)
+		' This check prevents incorrect painting due to premature creation of Handle.
+		If Me.theControlHasShown Then
+			If Me.theControlIsBehavingAsMultiLine AndAlso Me.theLineCount <> Me.GetLineFromCharIndex(Me.TextLength - 1) - 1 Then
+				'NOTE: Raise the OnNonClientCalcSize and OnNonClientPaint "events".
+				Win32Api.SetWindowPos(Me.Handle, IntPtr.Zero, 0, 0, 0, 0, Win32Api.SWP.SWP_FRAMECHANGED Or Win32Api.SWP.SWP_NOMOVE Or Win32Api.SWP.SWP_NOSIZE Or Win32Api.SWP.SWP_NOZORDER)
+			End If
+			Me.Invalidate()
+			Me.UpdateScrollbars()
 		End If
-		Me.Invalidate()
-		Me.UpdateScrollbars()
 	End Sub
 
 	Protected Overrides Sub OnTextChanged(e As EventArgs)
@@ -933,7 +937,7 @@ Public Class RichTextBoxEx
 				Dim aRectF As RectangleF = g.VisibleClipBounds
 
 				' Draw background.
-				Using backColorBrush As New SolidBrush(Me.BackColor)
+				Using backColorBrush As New SolidBrush(MyBase.BackColor)
 					g.FillRectangle(backColorBrush, aRectF)
 				End Using
 
@@ -1065,7 +1069,10 @@ Public Class RichTextBoxEx
 				End If
 			End If
 
+			'NOTE: Disable to use custom.
 			MyBase.BorderStyle = BorderStyle.None
+			Me.theBorderStyle = BorderStyle.FixedSingle
+			Me.theBorderWidth = 1
 			MyBase.ScrollBars = RichTextBoxScrollBars.None
 
 			Me.SetStyle(ControlStyles.AllPaintingInWmPaint, True)
@@ -1270,7 +1277,12 @@ Public Class RichTextBoxEx
 
 #Region "Data"
 
+	Private theBorderColor As Color
 	Private theBorderStyle As BorderStyle
+	Private theBorderWidth As Integer
+	Private NonClientPadding As Padding
+	Private theThemeIsUsed As Boolean
+
 	Private theControlIsBehavingAsMultiLine As Boolean
 	Private theSelectionIsEnabled As Boolean
 	Private theScrollBars As RichTextBoxScrollBars
@@ -1293,11 +1305,6 @@ Public Class RichTextBoxEx
 	Private theCueBannerText As String
 	Private theOriginalFont As Font
 	Private theTextAlignment As HorizontalAlignment
-
-	Private NonClientPadding As Padding
-	'Private theNonClientPaddingColor As Color
-	Private theBorderColor As Color
-	Private theThemeIsUsed As Boolean
 
 	Private WithEvents HorizontalScrollbar As ScrollBarEx
 	Private WithEvents VerticalScrollbar As ScrollBarEx

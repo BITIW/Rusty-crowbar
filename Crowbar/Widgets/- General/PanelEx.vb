@@ -8,33 +8,17 @@ Public Class PanelEx
     'thisPanelEx.DataBindings.Add("SelectedIndex", theDataSourceThatHasTheIntegerProperty, "NameOfIntegerProperty", False, DataSourceUpdateMode.OnPropertyChanged)
     'thisPanelEx.DataBindings.Add("SelectedValue", theDataSourceThatHasTheEnumProperty, "NameOfEnumProperty", False, DataSourceUpdateMode.OnPropertyChanged)
 
-
 #Region "Create and Destroy"
 
     Public Sub New()
         MyBase.New()
 
-        'Me.ResizeRedraw = True
-
-        'NOTE: Hide built-in scrollbars and use custom scrollbars.
-        ' AutoScroll = False allows changing Minimum, Maximum, Value, and Visible properties of each built-in scrollbar. 
-        ' Setting the Value of a built-in scrollbar also sets its Visible to True.
-        ' AutoScrollPosition returns the negative of actual value.
-        'MyBase.AutoScroll = False
-        ''Me.HorizontalScroll.Enabled = False
-        ''Me.HorizontalScroll.Visible = False
-        ''Me.HorizontalScroll.Maximum = 0
-        ''Me.VerticalScroll.Enabled = False
-        ''Me.VerticalScroll.Visible = False
-        ''Me.VerticalScroll.Maximum = 0
-        ''MyBase.AutoScroll = True
-        'Me.theAutoScroll = False
-        'MyBase.AutoScroll = True
-        'Me.theAutoScroll = True
+        ' Override BorderStyle to allow custom border width.
+        MyBase.BorderStyle = BorderStyle.None
+        Me.theBorderStyle = BorderStyle.None
+        Me.theBorderWidth = 0
 
         Me.theScrollingIsActive = False
-        Me.theCustomHorizontalScrollbarRatio = 1
-        Me.theCustomVerticalScrollbarRatio = 1
 
         Me.CustomHorizontalScrollbar = New ScrollBarEx()
         Me.Controls.Add(Me.CustomHorizontalScrollbar)
@@ -56,15 +40,13 @@ Public Class PanelEx
         Me.CustomVerticalScrollBar.Text = "CustomVerticalScrollBar"
         Me.CustomVerticalScrollBar.Visible = False
 
-        Me.ScrollbarCornerPanel = New Panel()
+        Me.ScrollbarCornerPanel = New ScrollBarPanel()
         Me.Controls.Add(Me.ScrollbarCornerPanel)
         Me.ScrollbarCornerPanel.Name = "ScrollbarCornerPanel"
         Me.ScrollbarCornerPanel.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
         Me.ScrollbarCornerPanel.Visible = False
 
         Me.theControlHasShown = False
-
-        Me.theRightAndBottomBorderWidth = 0
 
         Me.theSelectedIndex = -1
     End Sub
@@ -92,19 +74,6 @@ Public Class PanelEx
 
 #Region "Properties"
 
-    '<Browsable(True)>
-    '<Category("Layout")>
-    '<Description("Scrollbars appear when needed.")>
-    'Public Overloads Property AutoScroll As Boolean
-    '	Get
-    '		Return Me.theAutoScroll
-    '	End Get
-    '	Set
-    '		MyBase.AutoScroll = False
-    '		Me.theAutoScroll = Value
-    '	End Set
-    'End Property
-
     <Browsable(True)>
     <Category("Appearance")>
     <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
@@ -129,22 +98,37 @@ Public Class PanelEx
         End Set
     End Property
 
-    'Public Property IsReadOnly() As Boolean
-    '	Get
-    '		Return Me.theControlIsReadOnly
-    '	End Get
-    '	Set(ByVal value As Boolean)
-    '		If Me.theControlIsReadOnly <> value Then
-    '			Me.theControlIsReadOnly = value
+    <Browsable(True)>
+    <Category("Appearance")>
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+    Public Overloads Property BorderColor As Color
+        Get
+            Return Me.theBorderColor
+        End Get
+        Set
+            Me.theBorderColor = Value
+        End Set
+    End Property
 
-    '			If Me.theControlIsReadOnly Then
-    '				Me.ForeColor = SystemColors.GrayText
-    '			Else
-    '				Me.ForeColor = SystemColors.ControlText
-    '			End If
-    '		End If
-    '	End Set
-    'End Property
+    <Browsable(True)>
+    <Category("Appearance")>
+    <Description("Colorable BorderStyle.")>
+    <DefaultValue(BorderStyle.None)>
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+    Public Overloads Property BorderStyle As BorderStyle
+        Get
+            Return Me.theBorderStyle
+        End Get
+        Set
+            Me.theBorderStyle = Value
+
+            If Me.theBorderStyle = Windows.Forms.BorderStyle.None Then
+                Me.theBorderWidth = 0
+            ElseIf Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+                Me.theBorderWidth = 1
+            End If
+        End Set
+    End Property
 
     Public ReadOnly Property RadioButtons() As RadioButton()
         Get
@@ -190,30 +174,6 @@ Public Class PanelEx
                         Exit For
                     End If
                 Next
-            End If
-        End Set
-    End Property
-
-    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
-    Public Property RightAndBottomBorderWidth() As Integer
-        Get
-            Return Me.theRightAndBottomBorderWidth
-        End Get
-        Set(ByVal value As Integer)
-            If Me.theRightAndBottomBorderWidth <> value Then
-                Me.theRightAndBottomBorderWidth = value
-            End If
-        End Set
-    End Property
-
-    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
-    Public Property RightAndBottomBorderColor() As Color
-        Get
-            Return Me.theRightAndBottomBorderColor
-        End Get
-        Set(ByVal value As Color)
-            If Me.theRightAndBottomBorderColor <> value Then
-                Me.theRightAndBottomBorderColor = value
             End If
         End Set
     End Property
@@ -286,37 +246,10 @@ Public Class PanelEx
         End If
     End Sub
 
-    ' Works without needing to call SetStyle.
-    Protected Overrides Sub OnPaint(e As PaintEventArgs)
-        'Dim theme As PanelTheme = Nothing
-        '' This check prevents problems with viewing and saving Forms in VS Designer.
-        'If TheApp IsNot Nothing Then
-        '    theme = TheApp.Settings.SelectedAppTheme.PanelTheme
-        'End If
-        'If theme IsNot Nothing Then
-        '    Me.ForeColor = WidgetTextColor
-        '    Me.BackColor = WidgetBackColor
-        'End If
-
-        ''e.Graphics.TranslateTransform(-Me.CustomHorizontalScrollbar.Value, -Me.CustomVerticalScrollBar.Value)
-
-        MyBase.OnPaint(e)
-
-        ' Paint right and bottom borders.
-        If Me.theRightAndBottomBorderWidth > 0 Then
-            Dim g As Graphics = e.Graphics
-            Using borderColorPen As New Pen(Me.theRightAndBottomBorderColor, Me.theRightAndBottomBorderWidth)
-                ' - 1 for 0-based coord
-                Dim leftBottomPoint As New Point(0, Me.ClientRectangle.Bottom - 1)
-                Dim rightBottomPoint As New Point(Me.ClientRectangle.Right - 1, Me.ClientRectangle.Bottom - 1)
-                Dim rightTopPoint As New Point(Me.ClientRectangle.Right - 1, 0)
-                borderColorPen.Alignment = Drawing2D.PenAlignment.Outset
-                g.DrawLine(borderColorPen, leftBottomPoint, rightBottomPoint)
-                borderColorPen.Alignment = Drawing2D.PenAlignment.Inset
-                g.DrawLine(borderColorPen, rightTopPoint, rightBottomPoint)
-            End Using
-        End If
-    End Sub
+    '' Works without needing to call SetStyle.
+    'Protected Overrides Sub OnPaint(e As PaintEventArgs)
+    '    MyBase.OnPaint(e)
+    'End Sub
 
     'Protected Overrides Sub OnScroll(e As ScrollEventArgs)
     '	MyBase.OnScroll(e)
@@ -333,8 +266,9 @@ Public Class PanelEx
     End Sub
 
     Protected Overrides Sub OnSizeChanged(e As EventArgs)
-        'NOTE: Need this "If" to prevent unneeded resizing and painting when scrolling.
-        If Not Me.theScrollingIsActive Then
+        ' This check prevents incorrect painting due to premature creation of Handle.
+        '    Also, prevents unneeded resizing and painting when scrolling.
+        If Me.theControlHasShown AndAlso Not Me.theScrollingIsActive Then
             MyBase.OnSizeChanged(e)
 
             'TODO: Find better way because the following 3 lines update the interface properly, but UpdateNonClientPadding() is called 2 or 3 times, and UpdateVerticalScrollbar() is called 1 or 2 times.
@@ -428,35 +362,6 @@ Public Class PanelEx
     End Sub
 
     Private Sub CustomHorizontalScrollbar_ValueChanged(ByVal sender As Object, ByVal e As ScrollValueEventArgs) Handles CustomHorizontalScrollbar.ValueChanged
-        ''Me.UpdateScrolling(e.Value, 0)
-        'If Not Me.theScrollingIsActive Then
-        '	Me.theScrollingIsActive = True
-
-        '	'If Me.HorizontalScroll.Visible Then
-        '	'	Me.HorizontalScroll.Visible = False
-        '	'End If
-        '	'Me.HorizontalScroll.Value = e.Value
-        '	'If Me.HorizontalScroll.Visible Then
-        '	'	Me.HorizontalScroll.Visible = False
-        '	'	Win32Api.ShowScrollBar(Me.Handle, 1, False)
-        '	'	Win32Api.ShowScrollBar(Me.Handle, 0, False)
-        '	'End If
-        '	'------
-        '	'NOTE: Setting AutoScrollPosition does nothing.
-        '	'Me.AutoScrollPosition = New Point(e.Value, Me.CustomVerticalScrollBar.Value)
-        '	'------
-        '	Win32Api.ShowScrollBar(Me.Handle, 0, True)
-        '	Me.HorizontalScroll.Value = e.Value
-        '	'Me.HorizontalScroll.Visible = False
-        '	Win32Api.ShowScrollBar(Me.Handle, 1, False)
-        '	Win32Api.ShowScrollBar(Me.Handle, 0, False)
-
-        '	Me.theScrollingIsActive = False
-        '	'Me.Refresh()
-        'End If
-        ''MyBase.AutoScroll = False
-        ''Me.HorizontalScroll.Visible = False
-        '------
         Dim scrollInfo As Win32Api.SCROLLINFO
         Dim lRet As Integer
         scrollInfo.cbSize = Marshal.SizeOf(scrollInfo)
@@ -464,7 +369,7 @@ Public Class PanelEx
         lRet = Win32Api.GetScrollInfo(Me.Handle, Win32Api.ScrollBarType.SB_HORZ, scrollInfo)
         Dim pageChange As Integer = 0
         If lRet > 0 Then
-            pageChange = CInt(scrollInfo.nPage * Me.theCustomHorizontalScrollbarRatio)
+            pageChange = scrollInfo.nPage
         End If
         Dim thumbValue As Integer = Win32Api.GetScrollPos(Me.Handle, Win32Api.ScrollBarType.SB_HORZ)
         Dim value As Integer = e.Value \ Me.CustomHorizontalScrollbar.SmallChange
@@ -514,8 +419,8 @@ Public Class PanelEx
         Dim currentThumbValue As Integer = thumbValue
         If value < currentThumbValue Then
             If currentThumbValue - value < pageChange Then
-                value = value \ VerticalScroll.SmallChange
-                currentThumbValue = currentThumbValue \ VerticalScroll.SmallChange
+                value \= VerticalScroll.SmallChange
+                currentThumbValue \= VerticalScroll.SmallChange
                 For i As Integer = currentThumbValue - 1 To value Step -1
                     Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, Win32Api.SB.SB_LINEUP, IntPtr.Zero)
                 Next
@@ -524,8 +429,8 @@ Public Class PanelEx
             End If
         ElseIf value > currentThumbValue Then
             If value - currentThumbValue < pageChange Then
-                value = value \ VerticalScroll.SmallChange
-                currentThumbValue = currentThumbValue \ VerticalScroll.SmallChange
+                value \= VerticalScroll.SmallChange
+                currentThumbValue \= VerticalScroll.SmallChange
                 For i As Integer = currentThumbValue + 1 To value
                     Win32Api.SendMessage(Me.Handle, Win32Api.WindowsMessages.WM_VSCROLL, Win32Api.SB.SB_LINEDOWN, IntPtr.Zero)
                 Next
@@ -556,8 +461,6 @@ Public Class PanelEx
             theme = TheApp.Settings.SelectedAppTheme.PanelTheme
         End If
         If theme IsNot Nothing Then
-            'Me.theNonClientPaddingColor = Color.Pink
-            Me.theNonClientPaddingColor = WidgetDeepBackColor
             Me.ForeColor = theme.EnabledForeColor
             MyBase.BackColor = theme.EnabledBackColor
             'MyBase.BackColor = Color.Red
@@ -576,43 +479,25 @@ Public Class PanelEx
         Dim top As Integer = 0
         Dim right As Integer = 0
         Dim bottom As Integer = 0
-        ''TEST: Use 2 for testing. Use 0 for final.
-        'Dim left As Integer = 2
-        'Dim top As Integer = 2
-        'Dim right As Integer = 2
-        'Dim bottom As Integer = 2
 
         If Me.AutoScroll Then
-            ''Dim contentWidth As Integer = Me.PreferredSize.Width - ScrollBarEx.Consts.ScrollBarSize - Me.Margin.Left
-            'Dim contentWidth As Integer = Me.PreferredSize.Width
-            'Dim clientWidth As Integer = Me.ClientRectangle.Width
-            ''Dim contentHeight As Integer = Me.PreferredSize.Height - ScrollBarEx.Consts.ScrollBarSize - Me.Margin.Top
-            'Dim contentHeight As Integer = Me.PreferredSize.Height
-            'Dim clientHeight As Integer = Me.ClientRectangle.Height
-
-            'If contentHeight > clientHeight Then
-            '	right -= ScrollBarEx.Consts.ScrollBarSize
-            '	'clientWidth -= ScrollBarEx.Consts.ScrollBarSize
-            'End If
-            'If contentWidth > clientWidth Then
-            '	bottom -= ScrollBarEx.Consts.ScrollBarSize
-            '	'clientHeight -= ScrollBarEx.Consts.ScrollBarSize
-            'End If
-
-            '------
-
             Dim scrollBarInfo As New Win32Api.SCROLLBARINFO()
             scrollBarInfo.cbSize = Marshal.SizeOf(scrollBarInfo.[GetType]())
             Dim resultIsSuccess As Boolean = Win32Api.GetScrollBarInfo(Me.Handle, Win32Api.OBJID_VSCROLL, scrollBarInfo)
             If (scrollBarInfo.scrollbar And Win32Api.STATE_SYSTEM_INVISIBLE) = 0 Then
-                'right += scrollBarInfo.dxyLineButton
-                right += scrollBarInfo.dxyLineButton - ScrollBarEx.Consts.ScrollBarSize
+                right += ScrollBarEx.Consts.ScrollBarSize - scrollBarInfo.dxyLineButton
             End If
             resultIsSuccess = Win32Api.GetScrollBarInfo(Me.Handle, Win32Api.OBJID_HSCROLL, scrollBarInfo)
             If (scrollBarInfo.scrollbar And Win32Api.STATE_SYSTEM_INVISIBLE) = 0 Then
-                'bottom += scrollBarInfo.dxyLineButton
-                bottom += scrollBarInfo.dxyLineButton - ScrollBarEx.Consts.ScrollBarSize
+                bottom += ScrollBarEx.Consts.ScrollBarSize - scrollBarInfo.dxyLineButton
             End If
+        End If
+
+        If Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+            left += 1
+            top += 1
+            right += 1
+            bottom += 1
         End If
 
         Me.NonClientPadding = New Padding(left, top, right, bottom)
@@ -622,11 +507,8 @@ Public Class PanelEx
         rect.Left += padding.Left
         rect.Top += padding.Top
 
-        'rect.Right -= padding.Right
-        'rect.Bottom -= padding.Bottom
-        '------
-        rect.Right += padding.Right
-        rect.Bottom += padding.Bottom
+        rect.Right -= padding.Right
+        rect.Bottom -= padding.Bottom
     End Sub
 
     'Private Sub UpdateScrolling(ByVal leftOrRightValue As Integer, ByVal upOrDownValue As Integer)
@@ -661,89 +543,46 @@ Public Class PanelEx
             Exit Sub
         End If
 
-        Me.UpdateHorizontalScrollbar()
-        Me.UpdateVerticalScrollbar()
+        Dim theme As PanelTheme = Nothing
+        If TheApp IsNot Nothing Then
+            theme = TheApp.Settings.SelectedAppTheme.PanelTheme
+        End If
+        If theme IsNot Nothing Then
+            Me.UpdateHorizontalScrollbar()
+            Me.UpdateVerticalScrollbar()
 
-        If Me.CustomHorizontalScrollbar.Visible AndAlso Me.CustomVerticalScrollBar.Visible Then
-            'Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
-            'Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
-            'Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width - ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
-            'Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Height - ScrollBarEx.Consts.ScrollBarSize)
-            Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width, ScrollBarEx.Consts.ScrollBarSize)
-            Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Height)
-
-            'NOTE: Assign to Parent so it can draw over non-client area.
-            Me.ScrollbarCornerPanel.Parent = Me.Parent
-            Me.ScrollbarCornerPanel.BringToFront()
-            'Dim aPoint As New Point(Me.Width - ScrollBarEx.Consts.ScrollBarSize, Me.Height - ScrollBarEx.Consts.ScrollBarSize)
-            ' Because converting to Parent coords, do not include Padding of Parent (which means do not use Me.Left and Me.Top).
-            Dim aPoint As New Point(Me.ClientRectangle.Width, Me.ClientRectangle.Height)
-            'NOTE: Location must be relative to Parent.
-            aPoint = Me.PointToScreen(aPoint)
-            aPoint = Me.ScrollbarCornerPanel.Parent.PointToClient(aPoint)
-            Me.ScrollbarCornerPanel.Location = aPoint
-            Me.ScrollbarCornerPanel.Visible = True
+            If Me.CustomHorizontalScrollbar.Visible AndAlso Me.CustomVerticalScrollBar.Visible Then
+                If Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+                    Me.ScrollbarCornerPanel.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth, ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth)
+                    Me.ScrollbarCornerPanel.RightAndBottomBorderWidth = 1
+                Else
+                    Me.ScrollbarCornerPanel.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
+                    Me.ScrollbarCornerPanel.RightAndBottomBorderWidth = 0
+                End If
+                'NOTE: Assign to Parent so it can draw over non-client area.
+                Me.ScrollbarCornerPanel.Parent = Me.Parent
+                Me.ScrollbarCornerPanel.BringToFront()
+                Dim aPoint As New Point(Me.ClientRectangle.Width, Me.ClientRectangle.Height)
+                'NOTE: Location must be relative to Parent.
+                aPoint = Me.PointToScreen(aPoint)
+                aPoint = Me.ScrollbarCornerPanel.Parent.PointToClient(aPoint)
+                Me.ScrollbarCornerPanel.Location = aPoint
+                Me.ScrollbarCornerPanel.Show()
+            Else
+                Me.ScrollbarCornerPanel.Hide()
+            End If
         Else
-            Me.ScrollbarCornerPanel.Visible = False
+            Me.theScrollingIsActive = True
+            Me.CustomHorizontalScrollbar.Hide()
+            Me.CustomVerticalScrollBar.Hide()
+            Me.ScrollbarCornerPanel.Hide()
+            Me.theScrollingIsActive = False
         End If
     End Sub
 
     Private Sub UpdateHorizontalScrollbar()
         'NOTE: Parent can be Nothing on exiting. Prevent the exception with this check.
         If Not Me.theScrollingIsActive AndAlso Me.Parent IsNot Nothing AndAlso Me.AutoScroll Then
-            ''Dim contentWidth As Integer = Me.PreferredSize.Width - ScrollBarEx.Consts.ScrollBarSize - Me.Margin.Left
-            'Dim contentWidth As Integer = Me.PreferredSize.Width
-            'Dim clientWidth As Integer = Me.ClientRectangle.Width
-            ''Dim contentHeight As Integer = Me.PreferredSize.Height
-            ''Dim clientHeight As Integer = Me.ClientRectangle.Height
-            ''If contentHeight > clientHeight AndAlso Me.theAutoScroll Then
-            ''	'clientWidth -= ScrollBarEx.Consts.ScrollBarSize
-            ''End If
-            'If contentWidth > clientWidth Then
-            '	Me.theScrollingIsActive = True
-
-            '	Me.CustomHorizontalScrollbar.Minimum = 0
-            '	Me.CustomHorizontalScrollbar.Maximum = contentWidth
-            '	'Me.CustomHorizontalScrollbar.Value = -Me.AutoScrollPosition.X
-            '	Me.CustomHorizontalScrollbar.Value = Me.HorizontalScroll.Value
-            '	Me.CustomHorizontalScrollbar.ViewSize = clientWidth
-            '	Me.CustomHorizontalScrollbar.SmallChange = 5
-            '	'Me.CustomHorizontalScrollbar.LargeChange = clientWidth - 5 * 2
-            '	Me.CustomHorizontalScrollbar.LargeChange = Me.Width - 5 * 2
-
-            '	Me.HorizontalScroll.Minimum = Me.CustomHorizontalScrollbar.Minimum
-            '	Me.HorizontalScroll.Maximum = Me.CustomHorizontalScrollbar.Maximum
-            '	Me.HorizontalScroll.SmallChange = Me.CustomHorizontalScrollbar.SmallChange
-            '	Me.HorizontalScroll.LargeChange = Me.CustomHorizontalScrollbar.LargeChange
-            '	'Me.HorizontalScroll.Visible = False
-            '	Win32Api.ShowScrollBar(Me.Handle, 0, False)
-
-            '	'NOTE: Assign to Parent so it can draw over non-client area of RichTextBoxEx.
-            '	Me.CustomHorizontalScrollbar.Parent = Me.Parent
-            '	Me.CustomHorizontalScrollbar.BringToFront()
-            '	'NOTE: Point is relative to Me.ClientRectangle.
-            '	'Dim aPoint As New Point(Me.ClientRectangle.Left - Me.NonClientPadding.Left, Me.ClientRectangle.Height + Me.NonClientPadding.Bottom - ScrollBarEx.Consts.ScrollBarSize)
-            '	'Dim aPoint As New Point(Me.ClientRectangle.Left, Me.ClientRectangle.Height - ScrollBarEx.Consts.ScrollBarSize)
-            '	'Dim aPoint As New Point(Me.ClientRectangle.Left, Me.ClientRectangle.Height)
-            '	Dim aPoint As New Point(Me.ClientRectangle.Left - 1, Me.ClientRectangle.Height + 1)
-            '	'NOTE: Location must be relative to Parent.
-            '	aPoint = Me.PointToScreen(aPoint)
-            '	aPoint = Me.Parent.PointToClient(aPoint)
-            '	Me.CustomHorizontalScrollbar.Location = aPoint
-            '	'Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.Width, ScrollBarEx.Consts.ScrollBarSize)
-            '	Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width, ScrollBarEx.Consts.ScrollBarSize)
-
-            '	Me.CustomHorizontalScrollbar.Show()
-
-            '	Me.theScrollingIsActive = False
-            'Else
-            '	Me.theScrollingIsActive = True
-            '	Me.CustomHorizontalScrollbar.Hide()
-            '	Me.theScrollingIsActive = False
-            'End If
-
-            '------
-
             Dim scrollBarInfo As New Win32Api.SCROLLBARINFO()
             scrollBarInfo.cbSize = Marshal.SizeOf(scrollBarInfo.[GetType]())
             Dim resultIsSuccess As Boolean = Win32Api.GetScrollBarInfo(Me.Handle, Win32Api.OBJID_HSCROLL, scrollBarInfo)
@@ -761,22 +600,25 @@ Public Class PanelEx
                     Me.CustomHorizontalScrollbar.Maximum = scrollInfo.nMax
                     Me.CustomHorizontalScrollbar.Value = scrollInfo.nTrackPos
                     Me.CustomHorizontalScrollbar.ViewSize = Me.ClientRectangle.Width - Me.NonClientPadding.Right
-                    Me.CustomHorizontalScrollbar.SmallChange = HorizontalScroll.SmallChange
+                    Me.CustomHorizontalScrollbar.SmallChange = Me.HorizontalScroll.SmallChange
                     Me.CustomHorizontalScrollbar.LargeChange = scrollInfo.nPage
                 End If
 
                 'NOTE: Assign to Parent so it can draw over non-client area.
                 Me.CustomHorizontalScrollbar.Parent = Me.Parent
                 Me.CustomHorizontalScrollbar.BringToFront()
-                ' Left and Top account for Padding of Parent. This might be useful for implementing wider client borders.
-                Dim aPoint As New Point(Me.Left, Me.Top + Me.ClientRectangle.Height)
-                'Dim aPoint As New Point(Me.ClientRectangle.Left, CInt(Me.ClientRectangle.Height - ScrollBarEx.Consts.ScrollBarSize))
-                'Dim aPoint As New Point(Me.ClientRectangle.Left, CInt(Me.ClientRectangle.Height - ScrollBarEx.Consts.ScrollBarSize * 0.5))
+                Dim aPoint As New Point(Me.ClientRectangle.Left, Me.ClientRectangle.Height)
                 'NOTE: Location must be relative to Parent.
                 aPoint = Me.PointToScreen(aPoint)
                 aPoint = Me.CustomHorizontalScrollbar.Parent.PointToClient(aPoint)
                 Me.CustomHorizontalScrollbar.Location = aPoint
-                Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width, ScrollBarEx.Consts.ScrollBarSize)
+                If Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+                    Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width, ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth)
+                    Me.CustomHorizontalScrollbar.RightAndBottomBorderWidth = 1
+                Else
+                    Me.CustomHorizontalScrollbar.Size = New System.Drawing.Size(Me.ClientRectangle.Width, ScrollBarEx.Consts.ScrollBarSize)
+                    Me.CustomHorizontalScrollbar.RightAndBottomBorderWidth = 0
+                End If
                 Me.CustomHorizontalScrollbar.Show()
 
                 Me.theScrollingIsActive = False
@@ -791,53 +633,6 @@ Public Class PanelEx
     Private Sub UpdateVerticalScrollbar()
         'NOTE: Parent can be Nothing on exiting. Prevent the exception with this check.
         If Not Me.theScrollingIsActive AndAlso Me.Parent IsNot Nothing AndAlso Me.AutoScroll Then
-            ''Dim contentHeight As Integer = Me.PreferredSize.Height - ScrollBarEx.Consts.ScrollBarSize - Me.Margin.Top
-            'Dim contentHeight As Integer = Me.PreferredSize.Height
-            'Dim clientHeight As Integer = Me.ClientRectangle.Height
-            'If contentHeight > clientHeight Then
-            '	Me.theScrollingIsActive = True
-
-            '	Me.CustomVerticalScrollBar.Minimum = 0
-            '	Me.CustomVerticalScrollBar.Maximum = contentHeight
-            '	'Me.CustomVerticalScrollBar.Value = -Me.AutoScrollPosition.Y
-            '	Me.CustomVerticalScrollBar.Value = Me.VerticalScroll.Value
-            '	Me.CustomVerticalScrollBar.ViewSize = clientHeight
-            '	Me.CustomVerticalScrollBar.SmallChange = 5
-            '	'Me.CustomVerticalScrollBar.LargeChange = clientHeight - 5 * 2
-            '	Me.CustomVerticalScrollBar.LargeChange = Me.Height - 5 * 2
-
-            '	Me.VerticalScroll.Minimum = Me.CustomVerticalScrollBar.Minimum
-            '	Me.VerticalScroll.Maximum = Me.CustomVerticalScrollBar.Maximum
-            '	Me.VerticalScroll.SmallChange = Me.CustomVerticalScrollBar.SmallChange
-            '	Me.VerticalScroll.LargeChange = Me.CustomVerticalScrollBar.LargeChange
-            '	'Me.VerticalScroll.Visible = False
-            '	Win32Api.ShowScrollBar(Me.Handle, 1, False)
-
-            '	'NOTE: Assign to Parent so it can draw over non-client area.
-            '	Me.CustomVerticalScrollBar.Parent = Me.Parent
-            '	Me.CustomVerticalScrollBar.BringToFront()
-            '	'NOTE: Point is relative to Me.ClientRectangle.
-            '	'Dim aPoint As New Point(Me.ClientRectangle.Width + Me.NonClientPadding.Right - ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Top - Me.NonClientPadding.Top)
-            '	'Dim aPoint As New Point(Me.ClientRectangle.Width - ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Top)
-            '	Dim aPoint As New Point(Me.ClientRectangle.Width + 1, Me.ClientRectangle.Top - 1)
-            '	'NOTE: Location must be relative to Parent.
-            '	aPoint = Me.PointToScreen(aPoint)
-            '	aPoint = Me.CustomVerticalScrollBar.Parent.PointToClient(aPoint)
-            '	Me.CustomVerticalScrollBar.Location = aPoint
-            '	'Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.Height)
-            '	Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Height)
-
-            '	Me.CustomVerticalScrollBar.Show()
-
-            '	Me.theScrollingIsActive = False
-            'Else
-            '	Me.theScrollingIsActive = True
-            '	Me.CustomVerticalScrollBar.Hide()
-            '	Me.theScrollingIsActive = False
-            'End If
-
-            '------
-
             Dim scrollBarInfo As New Win32Api.SCROLLBARINFO()
             scrollBarInfo.cbSize = Marshal.SizeOf(scrollBarInfo.[GetType]())
             Dim resultIsSuccess As Boolean = Win32Api.GetScrollBarInfo(Me.Handle, Win32Api.OBJID_VSCROLL, scrollBarInfo)
@@ -854,8 +649,7 @@ Public Class PanelEx
                     Me.CustomVerticalScrollBar.Minimum = scrollInfo.nMin
                     Me.CustomVerticalScrollBar.Maximum = scrollInfo.nMax
                     Me.CustomVerticalScrollBar.Value = scrollInfo.nTrackPos
-                    'Me.CustomVerticalScrollBar.ViewSize = Me.ClientRectangle.Height
-                    Me.CustomVerticalScrollBar.ViewSize = Me.ClientRectangle.Height - Me.NonClientPadding.Bottom
+                    Me.CustomVerticalScrollBar.ViewSize = Me.ClientRectangle.Height
                     Me.CustomVerticalScrollBar.SmallChange = VerticalScroll.SmallChange
                     Me.CustomVerticalScrollBar.LargeChange = scrollInfo.nPage
                 End If
@@ -863,15 +657,18 @@ Public Class PanelEx
                 'NOTE: Assign to Parent so it can draw over non-client area.
                 Me.CustomVerticalScrollBar.Parent = Me.Parent
                 Me.CustomVerticalScrollBar.BringToFront()
-                'Dim aPoint As New Point(Me.ClientRectangle.Width - ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Top)
-                'Dim aPoint As New Point(Me.ClientRectangle.Width, Me.Top)
-                Dim aPoint As New Point(Me.Left + Me.ClientRectangle.Width, Me.Top)
-                'Dim aPoint As New Point(Me.Width, Me.Top)
+                Dim aPoint As New Point(Me.ClientRectangle.Width, Me.ClientRectangle.Top)
                 'NOTE: Location must be relative to Parent.
                 aPoint = Me.PointToScreen(aPoint)
                 aPoint = Me.CustomVerticalScrollBar.Parent.PointToClient(aPoint)
                 Me.CustomVerticalScrollBar.Location = aPoint
-                Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Height)
+                If Me.theBorderStyle = Windows.Forms.BorderStyle.FixedSingle Then
+                    Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize + Me.theBorderWidth, Me.ClientRectangle.Height)
+                    Me.CustomVerticalScrollBar.RightAndBottomBorderWidth = 1
+                Else
+                    Me.CustomVerticalScrollBar.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, Me.ClientRectangle.Height)
+                    Me.CustomVerticalScrollBar.RightAndBottomBorderWidth = 0
+                End If
                 Me.CustomVerticalScrollBar.Show()
 
                 Me.theScrollingIsActive = False
@@ -897,24 +694,19 @@ Public Class PanelEx
 
 #Region "Data"
 
-    'Protected theControlIsReadOnly As Boolean
     Private theRadioButtonList As New System.Collections.Generic.List(Of RadioButton)()
     Private theSelectedIndex As Integer
     Private theSelectedValue As System.Enum
 
+    Private theBorderColor As Color
+    Private theBorderStyle As BorderStyle
+    Private theBorderWidth As Integer
     Private NonClientPadding As Padding
-    Private theNonClientPaddingColor As Color
-    Private theAutoScroll As Boolean
     Private WithEvents CustomHorizontalScrollbar As ScrollBarEx
     Private WithEvents CustomVerticalScrollBar As ScrollBarEx
-    Private ScrollbarCornerPanel As Panel
+    Private ScrollbarCornerPanel As ScrollBarPanel
     Private theControlHasShown As Boolean
     Private theScrollingIsActive As Boolean
-    Private theCustomHorizontalScrollbarRatio As Double
-    Private theCustomVerticalScrollbarRatio As Double
-
-    Private theRightAndBottomBorderWidth As Integer
-    Private theRightAndBottomBorderColor As Color
 
 #End Region
 

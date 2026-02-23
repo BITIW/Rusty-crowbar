@@ -48,7 +48,7 @@ Public Class TreeViewEx
 		Me.CustomVerticalScrollBar.TabIndex = 7
 		Me.CustomVerticalScrollBar.Visible = False
 
-		Me.ScrollbarCornerPanel = New PanelEx()
+		Me.ScrollbarCornerPanel = New ScrollBarPanel()
 		Me.Controls.Add(Me.ScrollbarCornerPanel)
 		Me.ScrollbarCornerPanel.Name = "ScrollbarCornerPanel"
 		Me.ScrollbarCornerPanel.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
@@ -279,8 +279,9 @@ Public Class TreeViewEx
 	'End Sub
 
 	Protected Overrides Sub OnSizeChanged(e As EventArgs)
-		'NOTE: Need this "If" to prevent unneeded resizing and painting when scrolling.
-		If Not Me.theScrollingIsActive Then
+		' This check prevents incorrect painting due to premature creation of Handle.
+		'    Also, prevents unneeded resizing and painting when scrolling.
+		If Me.theControlHasShown AndAlso Not Me.theScrollingIsActive Then
 			MyBase.OnSizeChanged(e)
 
 			''NOTE: Raise the OnNonClientCalcSize and OnNonClientPaint "events".
@@ -610,36 +611,7 @@ Public Class TreeViewEx
 		Dim top As Integer = 1
 		Dim right As Integer = 1
 		Dim bottom As Integer = 1
-		'TEST: Use 2 for testing. Use 0 for final.
-		'Dim left As Integer = 2
-		'Dim top As Integer = 2
-		'Dim right As Integer = 2
-		'Dim bottom As Integer = 2
 
-		'Dim contentSize As Size = Me.GetContentSize()
-		'Dim contentWidth As Integer = contentSize.Width
-		'Dim clientWidth As Integer = Me.ClientRectangle.Width
-		'Dim contentHeight As Integer = contentSize.Height
-		'Dim clientHeight As Integer = Me.ClientRectangle.Height
-
-		''If contentHeight > clientHeight AndAlso Me.theAutoScroll Then
-		''	right += ScrollBarEx.Consts.ScrollBarSize
-		''	clientWidth -= ScrollBarEx.Consts.ScrollBarSize
-		''End If
-		''If contentWidth > clientWidth AndAlso Me.theAutoScroll Then
-		''	bottom += ScrollBarEx.Consts.ScrollBarSize
-		''End If
-		''------
-		'If Me.Scrollable Then
-		'	If contentHeight > clientHeight Then
-		'		right += ScrollBarEx.Consts.ScrollBarSize
-		'	End If
-		'	If contentWidth > clientWidth Then
-		'		bottom += ScrollBarEx.Consts.ScrollBarSize
-		'	End If
-		'End If
-		'Win32Api.ShowScrollBar(Me.Handle, Win32Api.SB_BOTH, False)
-		'------
 		If Me.Scrollable Then
 			Dim scrollBarInfo As New Win32Api.SCROLLBARINFO()
 			scrollBarInfo.cbSize = Marshal.SizeOf(scrollBarInfo.[GetType]())
@@ -768,7 +740,6 @@ Public Class TreeViewEx
 				'NOTE: Assign to Parent so it can draw over non-client area.
 				Me.ScrollbarCornerPanel.Parent = Me.Parent
 				Me.ScrollbarCornerPanel.BringToFront()
-				' TreeView padding removes the -1 normally needed when width and height are used for Location.
 				Dim aPoint As New Point(Me.ClientRectangle.Width, Me.ClientRectangle.Height)
 				'NOTE: Location must be relative to Parent.
 				aPoint = Me.PointToScreen(aPoint)
@@ -885,7 +856,8 @@ Public Class TreeViewEx
 	'End Sub
 
 	Private Sub UpdateHorizontalScrollbar()
-		If Not Me.theScrollingIsActive AndAlso Me.Scrollable Then
+		'NOTE: Parent can be Nothing on exiting. Prevent the exception with this check.
+		If Not Me.theScrollingIsActive AndAlso Me.Parent IsNot Nothing AndAlso Me.Scrollable Then
 			'If Not Me.theScrollingIsActive Then
 			Dim scrollBarInfo As New Win32Api.SCROLLBARINFO()
 			scrollBarInfo.cbSize = Marshal.SizeOf(scrollBarInfo.[GetType]())
@@ -937,7 +909,8 @@ Public Class TreeViewEx
 	End Sub
 
 	Private Sub UpdateVerticalScrollbar()
-		If Not Me.theScrollingIsActive AndAlso Me.Scrollable Then
+		'NOTE: Parent can be Nothing on exiting. Prevent the exception with this check.
+		If Not Me.theScrollingIsActive AndAlso Me.Parent IsNot Nothing AndAlso Me.Scrollable Then
 			Dim scrollBarInfo As New Win32Api.SCROLLBARINFO()
 			scrollBarInfo.cbSize = Marshal.SizeOf(scrollBarInfo.[GetType]())
 			Dim resultIsSuccess As Boolean = Win32Api.GetScrollBarInfo(Me.Handle, Win32Api.OBJID_VSCROLL, scrollBarInfo)
@@ -1000,7 +973,7 @@ Public Class TreeViewEx
 	'Private CustomHorizontalScrollbarPopup As Popup
 	Private WithEvents CustomHorizontalScrollbar As ScrollBarEx
 	Private WithEvents CustomVerticalScrollBar As ScrollBarEx
-	Private ScrollbarCornerPanel As PanelEx
+	Private ScrollbarCornerPanel As ScrollBarPanel
 	Private theControlHasShown As Boolean
 	Private theScrollingIsActive As Boolean
 	Private theMouseWheelHasMoved As Boolean

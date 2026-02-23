@@ -31,7 +31,9 @@ Public Class SetUpGamesUserControl
 
 #Region "Init and Free"
 
-	Protected Sub Init()
+	Protected Overrides Sub Init()
+		MyBase.Init()
+
 		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
 		If TheApp Is Nothing Then
 			Exit Sub
@@ -107,9 +109,11 @@ Public Class SetUpGamesUserControl
 		AddHandler Me.SteamLibraryPathsDataGridView.ChangeToThisMacroInAllGameSetupsToolStripMenuItem.Click, AddressOf Me.ChangeToThisMacroInAllGameSetupsToolStripMenuItem_Click
 	End Sub
 
-	Protected Sub Free()
+	Protected Overrides Sub Free()
+		MyBase.Free()
+
 		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
-		If TheApp Is Nothing Then
+		If Not Me.InitHasBeenCalled OrElse TheApp Is Nothing Then
 			Exit Sub
 		End If
 
@@ -142,6 +146,9 @@ Public Class SetUpGamesUserControl
 #Region "Widget Event Handlers"
 
 	Private Sub SetUpGamesUserControl_Load(sender As Object, e As EventArgs) Handles Me.Load
+		'NOTE: This code prevents Visual Studio or Windows often inexplicably extending the right side of these widgets.
+		Workarounds.WorkaroundForFrameworkAnchorRightSizingBug(Me.GameSetupComboUserControl, Me.AddGameSetupButton)
+
 		' [04-Feb-2026] Me.DesignMode is unreliable in nested widgets.
 		'If Not Me.DesignMode Then
 		Me.Init()

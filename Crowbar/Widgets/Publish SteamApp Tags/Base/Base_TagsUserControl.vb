@@ -34,7 +34,9 @@ Public Class Base_TagsUserControl
 
 #Region "Init and Free"
 
-	Protected Overridable Sub Init()
+	Protected Overrides Sub Init()
+		MyBase.Init()
+
 		Me.theWidgets = New List(Of Control)()
 		Me.GetAllWidgets(Me.Controls)
 
@@ -65,9 +67,16 @@ Public Class Base_TagsUserControl
 		Next
 	End Sub
 
-	Private Sub Free()
+	Protected Overrides Sub Free()
+		MyBase.Free()
+
+		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
+		If Not Me.InitHasBeenCalled OrElse TheApp Is Nothing Then
+			Exit Sub
+		End If
+
 		Dim aCheckBox As CheckBoxEx
-		Dim aComboBox As ComboBoxEx
+			Dim aComboBox As ComboBoxEx
 		Dim aTextBox As Crowbar.RichTextBoxEx
 		If Me.theWidgets IsNot Nothing Then
 			For Each widget As Control In Me.theWidgets

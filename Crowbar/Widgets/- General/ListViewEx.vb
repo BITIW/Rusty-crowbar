@@ -21,7 +21,6 @@ Public Class ListViewEx
 		Me.theListViewIsResizing = False
 
 		Me.theScrollingIsActive = False
-		Me.theMouseWheelHasMoved = False
 
 		Me.CustomHorizontalScrollbar = New ScrollBarEx()
 		Me.Controls.Add(Me.CustomHorizontalScrollbar)
@@ -37,7 +36,7 @@ Public Class ListViewEx
 		Me.CustomVerticalScrollBar.TabIndex = 7
 		Me.CustomVerticalScrollBar.Visible = False
 
-		Me.ScrollbarCornerPanel = New PanelEx()
+		Me.ScrollbarCornerPanel = New ScrollBarPanel()
 		Me.Controls.Add(Me.ScrollbarCornerPanel)
 		Me.ScrollbarCornerPanel.Name = "ScrollbarCornerPanel"
 		Me.ScrollbarCornerPanel.Size = New System.Drawing.Size(ScrollBarEx.Consts.ScrollBarSize, ScrollBarEx.Consts.ScrollBarSize)
@@ -221,8 +220,9 @@ Public Class ListViewEx
 		'End If
 		'Me.ResizeLastColumn()
 
-		'NOTE: Need this "If" to prevent unneeded resizing and painting when scrolling.
-		If Not Me.theScrollingIsActive Then
+		' This check prevents incorrect painting due to premature creation of Handle.
+		'    Also, prevents unneeded resizing and painting when scrolling.
+		If Me.theControlHasShown AndAlso Not Me.theScrollingIsActive Then
 			MyBase.OnSizeChanged(e)
 
 			'NOTE: Force calling UpdateNonClientPadding() here so that the correct clientHeight is used for scrollbars.
@@ -890,10 +890,9 @@ Public Class ListViewEx
 	Private NonClientPadding As Padding
 	Private WithEvents CustomHorizontalScrollbar As ScrollBarEx
 	Private WithEvents CustomVerticalScrollBar As ScrollBarEx
-	Private ScrollbarCornerPanel As PanelEx
+	Private ScrollbarCornerPanel As ScrollBarPanel
 	Private theControlHasShown As Boolean
 	Private theScrollingIsActive As Boolean
-	Private theMouseWheelHasMoved As Boolean
 	Private theHeaderHeight As Integer
 	'Private theItemHeight As Integer
 	Private theListViewIsResizing As Boolean

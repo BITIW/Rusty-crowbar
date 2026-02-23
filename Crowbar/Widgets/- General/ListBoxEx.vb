@@ -154,8 +154,9 @@ Public Class ListBoxEx
 	End Sub
 
 	Protected Overrides Sub OnSizeChanged(e As EventArgs)
-		'NOTE: Need this "If" to prevent unneeded resizing and painting when scrolling.
-		If Not Me.theScrollingIsActive Then
+		' This check prevents incorrect painting due to premature creation of Handle.
+		'    Also, prevents unneeded resizing and painting when scrolling.
+		If Me.theControlHasShown AndAlso Not Me.theScrollingIsActive Then
 			MyBase.OnSizeChanged(e)
 
 			'NOTE: Force calling UpdateNonClientPadding() here so that the correct clientHeight is used for scrollbars.

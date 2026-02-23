@@ -55,7 +55,9 @@ Public Class ComboUserControl
 
 #Region "Init and Free"
 
-	Protected Sub Init()
+	Protected Overrides Sub Init()
+		MyBase.Init()
+
 		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
 		If TheApp Is Nothing Then
 			Exit Sub
@@ -69,9 +71,11 @@ Public Class ComboUserControl
 		AddHandler TheApp.Settings.PropertyChanged, AddressOf Me.AppSettings_PropertyChanged
 	End Sub
 
-	Protected Sub Free()
+	Protected Overrides Sub Free()
+		MyBase.Free()
+
 		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
-		If TheApp Is Nothing Then
+		If Not Me.InitHasBeenCalled OrElse TheApp Is Nothing Then
 			Exit Sub
 		End If
 
@@ -177,7 +181,6 @@ Public Class ComboUserControl
 			Return columnName
 		End Get
 		Set
-			Dim columnName As String = ""
 			If Me.TextHistoryDataGridView.DataSource IsNot Nothing AndAlso Me.TextHistoryDataGridView.Columns.Count > 0 Then
 				Dim column As DataGridViewColumn = New DataGridViewTextBoxColumn()
 				column.DataPropertyName = Value
@@ -778,6 +781,10 @@ Public Class ComboUserControl
 		Me.OnTextHistoryPopup_VisibleChanged()
 	End Sub
 
+	'Private Sub TextHistoryPopup_VisibleChanged(sender As Object, e As EventArgs) Handles TextHistoryPopupPanel.VisibleChanged
+	'	Me.OnTextHistoryPopup_VisibleChanged()
+	'End Sub
+
 #End Region
 
 #Region "Core Event Handlers"
@@ -906,12 +913,27 @@ Public Class ComboUserControl
 		End If
 	End Sub
 
+	'Private Sub InitTextHistoryPopop()
+	'	If Me.TextHistoryPopupPanel Is Nothing Then
+	'		'IMPORTANT: Avoid using an incorrect font.
+	'		Me.TextHistoryDataGridView.Font = Me.Font
+	'		Me.TextHistoryDataGridView.BindingContext = New BindingContext()
+
+	'		Me.theDropDownButtonWasClickedWhenPopupShowing = False
+	'		Me.TextHistoryPopupPanel = New PanelEx()
+	'		Me.TextHistoryPopupPanel.Controls.Add(Me.TextHistoryDataGridView)
+	'		Me.TextHistoryPopupPanel.Name = "TextHistoryPopup"
+	'		Me.TextHistoryPopupPanel.AutoScroll = False
+	'		Me.TextHistoryDataGridView.Dock = DockStyle.Fill
+	'	End If
+	'End Sub
+
 	Private Sub OnMultipleInputsButton_MouseDown()
 		If Not Me.theDropDownButtonWasClickedWhenPopupShowing Then
 			'IMPORTANT: Resize the ListBox.
 			Me.MultipleInputsDataGridView.Size = Me.MultipleInputsDataGridView.PreferredSize
 
-			Dim position As Point = New Point(0, Me.Height)
+			Dim position As New Point(0, Me.Height)
 			position = Me.PointToScreen(position)
 			Me.MultipleInputsPopup.Show(position)
 			Me.theDropDownButtonWasClickedWhenPopupShowing = True
@@ -935,15 +957,16 @@ Public Class ComboUserControl
 
 	Private Sub OnDropDownButton_MouseDown()
 		If Not Me.theDropDownButtonWasClickedWhenPopupShowing Then
-			'IMPORTANT: Resize the ListBox.
-			'Me.TextHistoryPopup.Size = Me.Size
-			Me.TextHistoryDataGridView.Height = Me.TextHistoryDataGridView.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
-			Me.TextHistoryDataGridView.Width = Me.Width
 			Dim itemCount As Integer = Me.TextHistoryDataGridView.Rows.Count
 			If itemCount > Me.theMaxDropDownItemCount Then
 				itemCount = Me.theMaxDropDownItemCount
 			End If
-			'Me.TextHistoryDataGridView.Height = Me.TextHistoryDataGridView.Rows(0).Height * (itemCount + 1)
+
+			' Not sure why, but hiding and later showing the dgv triggers the proper painting of it.
+			Me.TextHistoryDataGridView.Hide()
+			''Me.TextHistoryDataGridView.Height = Me.TextHistoryDataGridView.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
+			'Me.TextHistoryDataGridView.Width = Me.Width
+			'Me.TextHistoryDataGridView.Height = Me.TextHistoryDataGridView.Rows(0).Height * (itemCount)
 
 			' Select the list item with the textbox text, if it exists.
 			Me.theSelectedIndexIsChangingViaMe = True
@@ -951,15 +974,20 @@ Public Class ComboUserControl
 			Me.theSelectedIndexIsChangingViaMe = False
 
 			Me.TextHistoryPopup.Width = Me.Width
-			'Me.TextHistoryPopup.Height = Me.TextHistoryDataGridView.Rows(0).Height * (itemCount + 1)
+			Me.TextHistoryPopup.Height = Me.TextHistoryDataGridView.Rows(0).Height * (itemCount)
 			'Me.TextHistoryPopup.Width = Me.TextHistoryDataGridView.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)
-			Me.TextHistoryPopup.Height = Me.TextHistoryDataGridView.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
+			'Me.TextHistoryPopup.Height = Me.TextHistoryDataGridView.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
+			'Me.TextHistoryPopup.Size = Me.Size
 
 			' Use -1 for X to account for left border.
-			Dim position As Point = New Point(-1, Me.Height)
+			Dim position As New Point(-1, Me.Height)
 			position = Me.PointToScreen(position)
 			Me.TextHistoryPopup.Show(position)
+			Me.TextHistoryDataGridView.Show()
 			Me.TextHistoryDataGridView.Focus()
+			If Me.TextHistoryDataGridView.SelectedRows.Count > 0 Then
+				Me.TextHistoryDataGridView.FirstDisplayedScrollingRowIndex = Me.TextHistoryDataGridView.SelectedRows(0).Index
+			End If
 			Me.theDropDownButtonWasClickedWhenPopupShowing = True
 		Else
 			'NOTE: Make sure Popup hides because TextHistoryPopup can still be visible when user clicks very quickly.
@@ -967,6 +995,48 @@ Public Class ComboUserControl
 			Me.theDropDownButtonWasClickedWhenPopupShowing = False
 		End If
 	End Sub
+
+	'Private Sub OnDropDownButton_MouseDown()
+	'	If Not Me.theDropDownButtonWasClickedWhenPopupShowing Then
+	'		Dim itemCount As Integer = Me.TextHistoryDataGridView.Rows.Count
+	'		If itemCount > Me.theMaxDropDownItemCount Then
+	'			itemCount = Me.theMaxDropDownItemCount
+	'		End If
+
+	'		'Me.TextHistoryDataGridView.Width = Me.Width
+	'		'Me.TextHistoryDataGridView.Height = Me.TextHistoryDataGridView.Rows(0).Height * (itemCount + 1)
+	'		'Me.TextHistoryDataGridView.Height = Me.TextHistoryDataGridView.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
+
+	'		' Select the list item with the textbox text, if it exists.
+	'		Me.theSelectedIndexIsChangingViaMe = True
+	'		Me.TextHistoryDataGridView.Text = Me.ComboTextBox.Text
+	'		Me.theSelectedIndexIsChangingViaMe = False
+
+	'		Me.TextHistoryPopupPanel.Width = Me.Width
+	'		Me.TextHistoryPopupPanel.Height = Me.TextHistoryDataGridView.Rows(0).Height * (itemCount + 1)
+	'		'Me.TextHistoryPopup.Width = Me.TextHistoryDataGridView.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)
+	'		'Me.TextHistoryPopupPanel.Height = Me.TextHistoryDataGridView.Rows.GetRowsHeight(DataGridViewElementStates.Visible)
+	'		'Me.TextHistoryPopup.Size = Me.Size
+
+	'		Me.TextHistoryPopupPanel.Parent = Me.Parent
+	'		Me.TextHistoryPopupPanel.BringToFront()
+	'		' Use -1 for X to account for left border.
+	'		Dim position As New Point(-1, Me.Height)
+	'		position = Me.PointToScreen(position)
+	'		position = Me.TextHistoryPopupPanel.Parent.PointToClient(position)
+	'		Me.TextHistoryPopupPanel.Location = position
+	'		Me.TextHistoryPopupPanel.Show()
+	'		Me.TextHistoryDataGridView.Focus()
+	'		If Me.TextHistoryDataGridView.SelectedRows.Count > 0 Then
+	'			Me.TextHistoryDataGridView.FirstDisplayedScrollingRowIndex = Me.TextHistoryDataGridView.SelectedRows(0).Index
+	'		End If
+	'		Me.theDropDownButtonWasClickedWhenPopupShowing = True
+	'	Else
+	'		'NOTE: Make sure Popup hides because TextHistoryPopup can still be visible when user clicks very quickly.
+	'		Me.TextHistoryPopupPanel.Hide()
+	'		Me.theDropDownButtonWasClickedWhenPopupShowing = False
+	'	End If
+	'End Sub
 
 	Private Sub OnDropDownButton_MouseWheel(ByVal delta As Integer)
 		If Me.TextHistoryDataGridView.SelectedRows.Count > 0 Then
@@ -1000,8 +1070,21 @@ Public Class ComboUserControl
 		End If
 	End Sub
 
+	'Private Sub OnTextHistoryPopup_VisibleChanged()
+	'	If Not Me.TextHistoryPopupPanel.Visible Then
+	'		Me.TextHistoryDropDownButton.Invalidate()
+
+	'		Dim cursorPositionInClient As Point = Me.PointToClient(Cursor.Position)
+	'		Dim aControl As Control = Me.GetChildAtPoint(cursorPositionInClient)
+	'		If aControl IsNot Me.TextHistoryDropDownButton AndAlso aControl IsNot Me.ComboTextBox Then
+	'			Me.theDropDownButtonWasClickedWhenPopupShowing = False
+	'		End If
+	'	End If
+	'End Sub
+
 	Private Sub OnTextHistoryDataGridView_MouseClick()
 		Me.TextHistoryPopup.Hide()
+		'Me.TextHistoryPopupPanel.Hide()
 		Me.UpdateTextBoxWithSelectedHistoryText()
 	End Sub
 
@@ -1090,6 +1173,7 @@ Public Class ComboUserControl
 	Protected theMultipleInputsIsAllowed As Boolean
 
 	Protected WithEvents TextHistoryPopup As Popup
+	'Protected WithEvents TextHistoryPopupPanel As PanelEx
 	Protected theMaxDropDownItemCount As Integer
 	Protected theTextHistoryIsKept As Boolean
 	'Protected theTextHistory As List(Of String)

@@ -40,7 +40,9 @@ Public Class UnpackUserControl
 
 #Region "Init and Free"
 
-	Private Sub Init()
+	Protected Overrides Sub Init()
+		MyBase.Init()
+
 		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
 		If TheApp Is Nothing Then
 			Exit Sub
@@ -87,9 +89,11 @@ Public Class UnpackUserControl
 		AddHandler Me.OutputPathTextBox.DataBindings("Text").Parse, AddressOf FileManager.ParsePathFileName
 	End Sub
 
-	Private Sub Free()
+	Protected Overrides Sub Free()
+		MyBase.Free()
+
 		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
-		If TheApp Is Nothing Then
+		If Not Me.InitHasBeenCalled OrElse TheApp Is Nothing Then
 			Exit Sub
 		End If
 
@@ -704,13 +708,12 @@ Public Class UnpackUserControl
 
 			Dim foldersAndFileName() As String
 			foldersAndFileName = pathFileName.Split("/"c)
-			Dim parentTreeNode As TreeNode = Nothing
 			Dim treeNode As TreeNode = Nothing
 			Dim list As List(Of PackageResourceFileNameInfo)
 			If foldersAndFileName.Length = 1 Then
 				treeNode = Me.PackageTreeView.Nodes(0)
 			Else
-				parentTreeNode = Me.PackageTreeView.Nodes(0)
+				Dim parentTreeNode As TreeNode = Me.PackageTreeView.Nodes(0)
 				Dim resourcePathFileName As String = ""
 				For nameIndex As Integer = 0 To foldersAndFileName.Length - 2
 					Dim name As String
@@ -786,10 +789,6 @@ Public Class UnpackUserControl
 						fileExtension = fileExtension.Substring(1)
 					End If
 				End If
-				'Dim fileSize As UInt64
-				'fileSize = CULng(CLng(fields(fields.Length - 1).Remove(0, 3)))
-				Dim fileType As String
-				fileType = "<type>"
 
 				Dim resourceInfo As New PackageResourceFileNameInfo()
 				resourceInfo.PathFileName = pathFileName
@@ -1691,7 +1690,6 @@ Public Class UnpackUserControl
 	Private theArchivePathFileNameExists As Boolean
 	Private theEntryIndex As Integer
 	Private theListRowIsBeingAdded As Boolean
-	Private theHeaderWasDoubleClicked As Boolean
 
 	Private theSearchBackgroundWorker As BackgroundWorker
 	Private theSelectedTreeNode As TreeNode

@@ -8,6 +8,17 @@
 
 		' This call is required by the designer.
 		InitializeComponent()
+
+		Me.InitHasBeenCalled = False
 	End Sub
+
+	Protected Overridable Sub Init()
+		Me.InitHasBeenCalled = True
+	End Sub
+
+	Protected Overridable Sub Free()
+	End Sub
+
+	Protected InitHasBeenCalled As Boolean
 
 End Class

@@ -30,7 +30,9 @@ Public Class CompileUserControl
 
 #Region "Init and Free"
 
-	Private Sub Init()
+	Protected Overrides Sub Init()
+		MyBase.Init()
+
 		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
 		If TheApp Is Nothing Then
 			Exit Sub
@@ -109,9 +111,11 @@ Public Class CompileUserControl
 		Me.UpdateCompilerOptionDefineBonesWidgets()
 	End Sub
 
-	Private Sub Free()
+	Protected Overrides Sub Free()
+		MyBase.Free()
+
 		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
-		If TheApp Is Nothing Then
+		If Not Me.InitHasBeenCalled OrElse TheApp Is Nothing Then
 			Exit Sub
 		End If
 

@@ -35,7 +35,9 @@ Public Class DownloadUserControl
 
 #Region "Init and Free"
 
-	Private Sub Init()
+	Protected Overrides Sub Init()
+		MyBase.Init()
+
 		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
 		If TheApp Is Nothing Then
 			Exit Sub
@@ -59,10 +61,11 @@ Public Class DownloadUserControl
 		AddHandler Me.OutputPathTextBox.DataBindings("Text").Parse, AddressOf FileManager.ParsePathFileName
 	End Sub
 
-	'NOTE: Anything related to widgets raises exception because the widgets seem to have already been disposed. Not sure why though.
-	Private Sub Free()
+	Protected Overrides Sub Free()
+		MyBase.Free()
+
 		' [04-Feb-2026] Because Me.DesignMode is unreliable in nested widgets, must do this check to prevent a crash.
-		If TheApp Is Nothing Then
+		If Not Me.InitHasBeenCalled OrElse TheApp Is Nothing Then
 			Exit Sub
 		End If
 
@@ -415,7 +418,7 @@ Public Class DownloadUserControl
 
 	Private Sub OpenWorkshopPage()
 		Dim itemIdOrLink As String = Me.ItemIdTextBox.Text
-		Dim itemlink As String = ""
+		Dim itemlink As String
 		If itemIdOrLink.StartsWith(AppConstants.WorkshopLinkStart) Then
 			itemlink = itemIdOrLink
 		Else
@@ -645,7 +648,7 @@ Public Class DownloadUserControl
 			reader = New StreamReader(dataStream)
 			Dim responseFromServer As String = reader.ReadToEnd()
 
-			Dim jss As JavaScriptSerializer = New JavaScriptSerializer()
+			Dim jss As New JavaScriptSerializer()
 			Dim root As SteamRemoteStorage_PublishedFileDetails_Json = jss.Deserialize(Of SteamRemoteStorage_PublishedFileDetails_Json)(responseFromServer)
 			Dim file_url As String = root.response.publishedfiledetails(0).file_url
 			If file_url IsNot Nothing AndAlso file_url <> "" Then
@@ -691,7 +694,7 @@ Public Class DownloadUserControl
 	End Function
 
 	Private Sub DownloadViaWeb(ByVal link As String, ByVal givenFileName As String)
-		Dim uri As Uri = New Uri(link)
+		Dim uri As New Uri(link)
 
 		Dim outputPath As String
 		outputPath = Me.GetOutputPath()
@@ -782,8 +785,7 @@ Public Class DownloadUserControl
 			outputFileNameSuffix = ""
 		End If
 
-		Dim fileExtension As String = ""
-		fileExtension = Path.GetExtension(givenFileName)
+		Dim fileExtension As [String] = Path.GetExtension(givenFileName)
 
 		Dim outputFileName As String
 		outputFileName = outputFileNamePrefix + outputFileNameBase + outputFileNameSuffix + fileExtension

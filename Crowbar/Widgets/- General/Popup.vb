@@ -4,8 +4,8 @@
 	Public Sub New(ByVal content As Control)
 		MyBase.New()
 
-		' Wrap the content control in a PanelEx so the content control can use it as a Parent if needed.
-		Me.theHostPanel = New PanelEx()
+		' Wrap the content control in a Panel so the content control can use it as a Parent if needed.
+		Me.theHostPanel = New Panel()
 		'Me.theHostPanel.BackColor = Color.Red
 		Me.theHostPanel.BorderStyle = BorderStyle.None
 		Me.theHostPanel.Controls.Add(content)
@@ -18,7 +18,6 @@
 		Me.theHost.Padding = Padding.Empty
 		'IMPORTANT: Prevent showing space at the top and bottom of the host control.
 		Me.theHost.AutoSize = False
-		'Me.theHost.Dock = DockStyle.Fill
 
 		Me.ResizeRedraw = True
 		'Me.BackColor = Color.Yellow
@@ -52,6 +51,6 @@
 	End Property
 
 	Private theHost As ToolStripControlHost = Nothing
-	Private theHostPanel As PanelEx = Nothing
+	Private theHostPanel As Panel = Nothing
 
 End Class

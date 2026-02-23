@@ -270,7 +270,7 @@ Partial Class UpdateUserControl
 		Me.UpdateGroupBox.Controls.Add(Me.UpdateToNewPathCheckBox)
 		Me.UpdateGroupBox.Controls.Add(Me.UpdateCopySettingsCheckBox)
 		Me.UpdateGroupBox.Dock = System.Windows.Forms.DockStyle.Bottom
-		Me.UpdateGroupBox.IsReadOnly = False
+		Me.UpdateGroupBox.IsReadOnly = True
 		Me.UpdateGroupBox.Location = New System.Drawing.Point(0, 441)
 		Me.UpdateGroupBox.Name = "UpdateGroupBox"
 		Me.UpdateGroupBox.SelectedValue = Nothing
