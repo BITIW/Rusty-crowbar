@@ -1,12 +1,15 @@
-# Crowbar
- Crowbar - GoldSource and Source Engine Modding Tool
- 
- [Website](https://steamcommunity.com/groups/CrowbarTool)
- 
- IMPORTANT: When providing link to Crowbar, please only use the above website link, because that page provides info and links to everything related to Crowbar.
+# Rusty crowbar
+ Rusty crowbar(or crowbar-rs) - GoldSource and Source Engine Modding Tool, rewritten in Rust. Nothing more.
 
 # Building
-I currently build via Visual Basic in Visual Studio Community 2017.
-I use Debug x86 when debugging and Release x86 when releasing to public.
+Use
+```bash
+cargo b
+```
+For debug build, and 
+```bash
+cargo b -r
+```
+For release build.
 
-I tested building in Visual Studio Community 2019 on 15-Apr-2021. All I had to change were the settings from Debug Any CPU and Release Any CPU to Debug x86 and Release x86 at the top in the default toolbars.
+Port should be ~1:1 same as Crowbar + issues fixes(at time of first code commit), but some things may vary.
